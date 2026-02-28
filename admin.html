@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sales Intelligence Dashboard | Nugortech IT Ltd</title>
+    <title>SaaS Sales Dashboard | Nugortech IT Ltd</title>
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -11,12 +11,12 @@
     
     <style>
         :root {
-            --orange: #FF6B00;
-            --blue: #00A3FF;
-            --green: #10b981;
-            --red: #f43f5e;
+            --p: #FF6B00;
+            --b: #00A3FF;
+            --s: #10b981;
+            --d: #f43f5e;
             --bg: #0b0f19;
-            --card-glass: rgba(255, 255, 255, 0.03);
+            --glass: rgba(255, 255, 255, 0.03);
             --border: rgba(255, 255, 255, 0.1);
         }
 
@@ -26,9 +26,8 @@
         /* Sidebar Look */
         .sidebar { width: 280px; background: rgba(0,0,0,0.3); backdrop-filter: blur(20px); border-right: 1px solid var(--border); padding: 50px 30px; position: fixed; height: 100vh; z-index: 100; }
         .sidebar h2 { margin: 0; font-weight: 800; color: white; }
-        .sidebar .slogan { font-size: 9px; color: var(--orange); font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
+        .sidebar .slogan { font-size: 9px; color: var(--p); font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
 
-        /* Main Content Area */
         .main { margin-left: 280px; width: calc(100% - 280px); padding: 40px; }
 
         /* Powerful Stats Cards */
@@ -38,93 +37,91 @@
         .c-1 { background: linear-gradient(135deg, #00A3FF 0%, #0066FF 100%); }
         .c-2 { background: linear-gradient(135deg, #00E676 0%, #00C853 100%); color: #003300; }
         .c-3 { background: linear-gradient(135deg, #FF6B00 0%, #E65100 100%); }
-        .c-4 { background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%); } /* Commission Card */
+        .c-4 { background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%); }
         
-        .val { font-size: 28px; font-weight: 800; display: block; }
+        .val { font-size: 26px; font-weight: 800; display: block; }
         .lbl { font-size: 11px; font-weight: 700; text-transform: uppercase; opacity: 0.9; }
 
-        /* Panels */
-        .glass-panel { background: var(--card-glass); border: 1px solid var(--border); padding: 30px; border-radius: 35px; backdrop-filter: blur(10px); margin-bottom: 30px; }
-        .section-title { font-size: 18px; font-weight: 800; margin-bottom: 25px; color: var(--blue); border-left: 4px solid var(--orange); padding-left: 15px; }
+        /* Content Sections */
+        .panel-grid { display: grid; grid-template-columns: 2.2fr 1fr; gap: 25px; }
+        .panel { background: var(--glass); border: 1px solid var(--border); padding: 30px; border-radius: 35px; backdrop-filter: blur(10px); }
+        .title { font-size: 16px; font-weight: 800; margin-bottom: 25px; color: var(--b); display: flex; align-items: center; gap: 10px; }
 
-        /* Search & Controls */
+        /* Controls */
         .controls { display: grid; grid-template-columns: 1fr 1fr auto auto; gap: 12px; margin-bottom: 25px; }
         input { background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 12px 18px; border-radius: 12px; color: white; outline: none; transition: 0.3s; font-size: 13px; }
-        input:focus { border-color: var(--blue); }
-        .btn { padding: 10px 22px; border-radius: 12px; border: none; cursor: pointer; font-weight: 700; font-size: 12px; color: white; transition: 0.3s; }
-        .btn-ex { background: var(--blue); }
-        .btn-cl { background: var(--red); }
+        input:focus { border-color: var(--b); }
+        .btn { padding: 10px 22px; border-radius: 12px; border: none; cursor: pointer; font-weight: 700; color: white; transition: 0.3s; font-size: 12px; }
 
-        /* Professional Tables */
-        .table-wrap { max-height: 450px; overflow-y: auto; }
+        /* Table */
+        .table-wrap { max-height: 480px; overflow-y: auto; }
         table { width: 100%; border-collapse: collapse; text-align: left; }
-        th { padding: 15px; font-size: 10px; color: #64748b; text-transform: uppercase; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: #0b0f19; z-index: 10; }
-        td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.03); font-weight: 600; font-size: 14px; }
+        th { padding: 12px; font-size: 10px; color: #64748b; text-transform: uppercase; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: #0b0f19; }
+        td { padding: 15px 12px; border-bottom: 1px solid rgba(255,255,255,0.03); font-weight: 600; font-size: 13px; }
         
-        .comm-val { color: #00E676; font-weight: 800; }
+        .c-val { color: #00E676; }
         .del-btn { background: none; border: none; color: #f43f5e; cursor: pointer; transition: 0.3s; }
         .del-btn:hover { transform: scale(1.2); }
 
         ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: var(--blue); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: var(--b); border-radius: 10px; }
     </style>
 </head>
 <body>
 
 <div class="sidebar">
     <div style="text-align:center; margin-bottom:50px;">
-        <h2 style="margin:0;">NUGORTECH IT</h2>
+        <h2>NUGORTECH IT</h2>
         <p class="slogan">Different Creative Think</p>
     </div>
-    <div style="padding:15px; border-radius:15px; background:var(--card-glass); border:1px solid var(--blue); color:var(--blue); font-weight:800; text-align:center;">
-        <i class="fas fa-chart-line"></i> SALES DASHBOARD
+    <div style="padding:15px; border-radius:15px; background:var(--glass); border:1px solid var(--b); color:var(--b); font-weight:800; text-align:center;">
+        <i class="fas fa-rocket"></i> SALES ANALYTICS
     </div>
 </div>
 
 <div class="main">
-    <!-- Top Stats -->
     <div class="stats-grid">
-        <div class="stat-card c-1"><span class="val" id="s1">0</span><span class="lbl">Total Sales (BDT)</span></div>
-        <div class="stat-card c-2"><span class="val" id="s2">0</span><span class="lbl">Total Due</span></div>
-        <div class="stat-card c-4"><span class="val" id="s3">0</span><span class="lbl">Total Commission (5%)</span></div>
-        <div class="stat-card c-3"><span class="val" id="s4">0</span><span class="lbl">Total Active Leads</span></div>
+        <div class="stat-card c-1"><span class="val" id="s1">৳0</span><span class="lbl">Total Sales</span></div>
+        <div class="stat-card c-2"><span class="val" id="s2">৳0</span><span class="lbl">Total Due</span></div>
+        <div class="stat-card c-4"><span class="val" id="s3">৳0</span><span class="lbl">Comm. (5%)</span></div>
+        <div class="stat-card c-3"><span class="val" id="s4">0</span><span class="lbl">Total Leads</span></div>
     </div>
 
-    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 25px;">
-        <!-- Detailed Log Panel -->
-        <div class="glass-panel">
-            <div class="section-title">Sales Transaction Logs</div>
+    <div class="panel-grid">
+        <!-- Main Transaction Logs -->
+        <div class="panel">
+            <div class="title"><i class="fas fa-list-ul"></i> Transaction History</div>
             <div class="controls">
-                <input type="text" id="idSearch" placeholder="Filter ID / Name..." onkeyup="runFilter()">
-                <input type="text" id="dateSearch" placeholder="Filter Date (28-02-2026)" onkeyup="runFilter()">
-                <button class="btn btn-ex" onclick="exp()"><i class="fas fa-download"></i> CSV</button>
-                <button class="btn btn-cl" onclick="wipe()"><i class="fas fa-trash"></i></button>
+                <input type="text" id="findID" placeholder="Search Name/ID..." onkeyup="filter()">
+                <input type="text" id="findDate" placeholder="Date (28-02-2026)" onkeyup="filter()">
+                <button class="btn" style="background:var(--b)" onclick="exp()">Export</button>
+                <button class="btn" style="background:var(--d)" onclick="wipe()"><i class="fas fa-trash-can"></i></button>
             </div>
             <div class="table-wrap">
-                <table id="myTable">
-                    <thead><tr><th>Date</th><th>ID</th><th>Name</th><th>Sales</th><th>Due</th><th>5% Commission</th><th>Action</th></tr></thead>
+                <table id="mainT">
+                    <thead><tr><th>Date</th><th>Name</th><th>ID</th><th>Sales</th><th>Due</th><th>5% Comm</th><th>Del</th></tr></thead>
                     <tbody id="tbody"></tbody>
                 </table>
             </div>
         </div>
 
-        <!-- Commission Summary Panel (Employee Wise) -->
-        <div class="glass-panel">
-            <div class="section-title">Staff Commission Summary</div>
-            <div style="max-height: 480px; overflow-y: auto;">
+        <!-- Employee Summary by Name -->
+        <div class="panel">
+            <div class="title"><i class="fas fa-user-tag"></i> Summary by Name</div>
+            <div class="table-wrap">
                 <table>
-                    <thead><tr><th>Staff ID</th><th>Total Sales</th><th>Earned</th></tr></thead>
-                    <tbody id="summaryBody"></tbody>
+                    <thead><tr><th>Employee Name</th><th>Total Sales</th><th>Comm.</th></tr></thead>
+                    <tbody id="nameBody"></tbody>
                 </table>
             </div>
-            <div style="margin-top: 30px; text-align: center;">
-                <canvas id="commChart"></canvas>
+            <div style="margin-top: 30px;">
+                <canvas id="ratioChart"></canvas>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Firebase Compat SDK -->
+<!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
@@ -135,82 +132,65 @@
 
     database.ref('sales_reports').on('value', snap => {
         const tbody = document.getElementById('tbody'); tbody.innerHTML = "";
-        const sumBody = document.getElementById('summaryBody'); sumBody.innerHTML = "";
-        
+        const nameBody = document.getElementById('nameBody'); nameBody.innerHTML = "";
         const all = snap.val(); 
-        let totalSalesSum = 0, totalDueSum = 0, totalCommSum = 0, totalLeads = 0;
-        let staffReport = {}; // Object to hold summary per employee
+        
+        let tSales = 0, tDue = 0, tComm = 0, tLeads = 0;
+        let nameReport = {}; // Grouping by Name logic
 
         if (all) {
-            Object.keys(all).reverse().forEach(key => {
-                const d = all[key];
-                const sale = Number(d.sales || 0);
-                const due = Number(d.due || 0);
-                const lead = Number(d.lead || 0);
-                const comm = sale * 0.05; // 5% Calculation
+            Object.keys(all).reverse().forEach(k => {
+                const d = all[k];
+                const s = Number(d.sales || 0);
+                const du = Number(d.due || 0);
+                const l = Number(d.lead || 0);
+                const c = s * 0.05;
 
-                totalSalesSum += sale;
-                totalDueSum += due;
-                totalCommSum += comm;
-                totalLeads += lead;
+                tSales += s; tDue += du; tComm += c; tLeads += l;
 
-                // Tracking Individual Employee Progress
-                if(!staffReport[d.id]) staffReport[d.id] = { name: d.name, totalS: 0, totalC: 0 };
-                staffReport[d.id].totalS += sale;
-                staffReport[d.id].totalC += comm;
+                // Create report grouped by Name
+                if(!nameReport[d.name]) nameReport[d.name] = { ts: 0, tc: 0 };
+                nameReport[d.name].ts += s;
+                nameReport[d.name].tc += c;
 
-                // Log Table Generation
                 tbody.innerHTML += `<tr>
                     <td>${d.date}</td>
-                    <td style="color:var(--blue)">#${d.id}</td>
                     <td>${d.name}</td>
-                    <td>৳${sale.toLocaleString()}</td>
-                    <td style="color:var(--orange)">৳${due.toLocaleString()}</td>
-                    <td class="comm-val">৳${comm.toLocaleString()}</td>
-                    <td><button onclick="delOne('${key}')" class="del-btn"><i class="fas fa-trash-alt"></i></button></td>
+                    <td style="color:var(--b)">#${d.id}</td>
+                    <td>৳${s.toLocaleString()}</td>
+                    <td style="color:var(--p)">৳${du.toLocaleString()}</td>
+                    <td class="c-val">৳${c.toLocaleString()}</td>
+                    <td><button onclick="delOne('${k}')" class="del-btn"><i class="fas fa-trash-alt"></i></button></td>
                 </tr>`;
             });
 
-            // Summary Table Generation
-            Object.keys(staffReport).forEach(id => {
-                const s = staffReport[id];
-                sumBody.innerHTML += `<tr>
-                    <td title="${s.name}"><b>#${id}</b></td>
-                    <td>৳${s.totalS.toLocaleString()}</td>
-                    <td class="comm-val">৳${s.totalC.toLocaleString()}</td>
+            // Populate Name-wise Summary Table
+            Object.keys(nameReport).forEach(name => {
+                const rep = nameReport[name];
+                nameBody.innerHTML += `<tr>
+                    <td>${name}</td>
+                    <td>৳${rep.ts.toLocaleString()}</td>
+                    <td class="c-val">৳${rep.tc.toLocaleString()}</td>
                 </tr>`;
             });
         }
 
-        // Updating Stat Cards
-        document.getElementById('s1').innerText = "৳" + totalSalesSum.toLocaleString();
-        document.getElementById('s2').innerText = "৳" + totalDueSum.toLocaleString();
-        document.getElementById('s3').innerText = "৳" + totalCommSum.toLocaleString();
-        document.getElementById('s4').innerText = totalLeads;
-        
-        updateSummaryChart(totalSalesSum, totalDueSum);
+        document.getElementById('s1').innerText = "৳" + tSales.toLocaleString();
+        document.getElementById('s2').innerText = "৳" + tDue.toLocaleString();
+        document.getElementById('s3').innerText = "৳" + tComm.toLocaleString();
+        document.getElementById('s4').innerText = tLeads;
+        updateChart(tSales, tDue);
     });
 
-    function updateSummaryChart(sales, due) {
-        const ctx = document.getElementById('commChart').getContext('2d');
+    function updateChart(s, d) {
+        const ctx = document.getElementById('ratioChart').getContext('2d');
         if (chart) chart.destroy();
-        chart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Collected', 'Due'],
-                datasets: [{
-                    data: [sales - due, due],
-                    backgroundColor: ['#10b981', 'rgba(255,255,255,0.05)'],
-                    borderWidth: 0
-                }]
-            },
-            options: { cutout: '85%', plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8' } } } }
-        });
+        chart = new Chart(ctx, { type: 'doughnut', data: { labels: ['Paid', 'Due'], datasets: [{ data: [s-d, d], backgroundColor: ['#10b981', 'rgba(255,255,255,0.05)'], borderWidth: 0 }] }, options: { cutout: '85%', plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8' } } } } });
     }
 
-    function runFilter() {
-        const v1 = document.getElementById('idSearch').value.toUpperCase();
-        const v2 = document.getElementById('dateSearch').value.toUpperCase();
+    function filter() {
+        const v1 = document.getElementById('findID').value.toUpperCase();
+        const v2 = document.getElementById('findDate').value.toUpperCase();
         const rows = document.getElementById('tbody').getElementsByTagName('tr');
         for (let r of rows) {
             const txt = r.innerText.toUpperCase();
@@ -219,8 +199,8 @@
     }
 
     function exp() {
-        let csv = "\uFEFFDate,ID,Name,Sales,Due,Commission\n";
-        document.querySelectorAll("#myTable tr").forEach((row, i) => {
+        let csv = "\uFEFFDate,Name,ID,Sales,Due,Commission\n";
+        document.querySelectorAll("#mainT tr").forEach((row, i) => {
             if(i === 0 || row.style.display === "none") return;
             const cells = Array.from(row.querySelectorAll("td")).slice(0, 6).map(c => c.innerText.replace(/[৳#]/g, ""));
             csv += cells.join(",") + "\n";
@@ -228,12 +208,12 @@
         const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
-        link.download = `Nugortech_Sales_Report_${Date.now()}.csv`;
+        link.download = "Nugortech_Sales_Report.csv";
         link.click();
     }
 
-    function delOne(k) { if(confirm("Delete this transaction?")) database.ref('sales_reports/'+k).remove(); }
-    function wipe() { if(prompt("Enter Admin Pass (8087) to RESET:") === "8087") database.ref('sales_reports').remove(); }
+    function delOne(k) { if(confirm("Delete entry?")) database.ref('sales_reports/'+k).remove(); }
+    function wipe() { if(prompt("Pass?") === "8087") database.ref('sales_reports').remove(); }
 </script>
 </body>
 </html>
