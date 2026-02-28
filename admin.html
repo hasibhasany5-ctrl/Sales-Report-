@@ -3,225 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sales Intelligence Dashboard | Nugortech IT Ltd</title>
-    <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <title>SMART Analytics | Nugortech IT Ltd</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
     <style>
-        :root {
-            --p: #FF6B00; --b: #00A3FF; --s: #10b981; --d: #f43f5e; --bg: #0b0f19;
-            --glass: rgba(255, 255, 255, 0.03); --border: rgba(255, 255, 255, 0.1);
-        }
+        :root { --p: #FF6B00; --b: #00A3FF; --s: #10b981; --d: #f43f5e; --bg: #0b0f19; --glass: rgba(255, 255, 255, 0.03); }
         * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { margin: 0; background: var(--bg); color: white; display: flex; min-height: 100vh; overflow-x: hidden; }
-
-        /* Sidebar */
-        .sidebar { width: 280px; background: rgba(0,0,0,0.3); backdrop-filter: blur(20px); border-right: 1px solid var(--border); padding: 50px 30px; position: fixed; height: 100vh; z-index: 100; }
-        .logo-box { text-align: center; margin-bottom: 50px; }
-        .logo-box h2 { margin: 0; font-weight: 800; font-size: 22px; }
-        .logo-box p { font-size: 9px; color: var(--p); font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
-
-        /* Main Content */
-        .main { margin-left: 280px; width: calc(100% - 280px); padding: 40px; }
-
-        /* Real-time Filterable Stats Cards */
-        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 40px; }
-        .stat-card { padding: 25px; border-radius: 25px; border: 1px solid var(--border); transition: 0.3s; position: relative; }
-        .stat-card:hover { transform: translateY(-5px); box-shadow: 0 10px 40px rgba(0,0,0,0.4); }
-        .c-1 { background: linear-gradient(135deg, #00A3FF 0%, #0066FF 100%); }
-        .c-2 { background: linear-gradient(135deg, #FF6B00 0%, #E65100 100%); }
-        .c-3 { background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%); }
-        .c-4 { background: linear-gradient(135deg, #00E676 0%, #00C853 100%); color: #003300; }
-        
-        .val { font-size: 24px; font-weight: 800; display: block; }
-        .lbl { font-size: 10px; font-weight: 700; text-transform: uppercase; opacity: 0.9; }
-
-        /* Search Panel */
-        .glass-panel { background: var(--glass); border: 1px solid var(--border); padding: 30px; border-radius: 35px; backdrop-filter: blur(10px); margin-bottom: 30px; }
-        .controls { display: grid; grid-template-columns: 1fr 1fr auto auto; gap: 15px; margin-bottom: 25px; }
-        input { background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 12px 18px; border-radius: 12px; color: white; outline: none; transition: 0.3s; font-size: 13px; }
-        input:focus { border-color: var(--b); box-shadow: 0 0 15px rgba(0,163,255,0.2); }
-
-        .btn { padding: 10px 22px; border-radius: 12px; border: none; cursor: pointer; font-weight: 700; color: white; transition: 0.3s; }
-        .btn-ex { background: var(--b); } .btn-cl { background: var(--d); }
-
-        /* Tables */
-        .grid-2 { display: grid; grid-template-columns: 2.2fr 1fr; gap: 25px; }
-        .table-wrap { max-height: 480px; overflow-y: auto; }
+        .sidebar { width: 260px; background: rgba(0,0,0,0.3); backdrop-filter: blur(20px); border-right: 1px solid rgba(255,255,255,0.1); padding: 40px 25px; position: fixed; height: 100vh; z-index: 100; }
+        .main { margin-left: 260px; width: calc(100% - 260px); padding: 40px; }
+        .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 40px; }
+        .card { padding: 25px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); text-align: center; }
+        .c-1 { background: #007bff; } .c-2 { background: #fd7e14; } .c-3 { background: #6f42c1; } .c-4 { background: #28a745; }
+        .val { font-size: 24px; font-weight: 800; display: block; } .lbl { font-size: 9px; font-weight: 700; text-transform: uppercase; opacity: 0.8; }
+        .glass-panel { background: var(--glass); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 30px; backdrop-filter: blur(10px); }
         table { width: 100%; border-collapse: collapse; text-align: left; }
-        th { padding: 15px; font-size: 10px; color: #64748b; text-transform: uppercase; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: #0b0f19; z-index: 10; }
+        th { padding: 12px; font-size: 9px; color: #64748b; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; background: #0b0f19; }
         td { padding: 15px 12px; border-bottom: 1px solid rgba(255,255,255,0.03); font-weight: 600; font-size: 13px; }
-        
-        .c-green { color: #00E676; }
-        .del-btn { background: none; border: none; color: #f43f5e; cursor: pointer; transition: 0.3s; }
-        .del-btn:hover { transform: scale(1.2); }
-
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: var(--b); border-radius: 10px; }
+        .badge-call { background: rgba(16, 185, 129, 0.2); color: #00E676; padding: 4px 8px; border-radius: 8px; font-size: 11px; }
+        .badge-late { background: #f43f5e; color: white; padding: 4px 8px; border-radius: 8px; font-size: 11px; }
+        input { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 12px; border-radius: 12px; color: white; outline: none; margin-bottom: 20px; width: 100%; }
+        .btn { padding: 10px 20px; border-radius: 12px; border: none; cursor: pointer; font-weight: 700; color: white; }
     </style>
 </head>
 <body>
-
 <div class="sidebar">
-    <div class="logo-box">
-        <h2>NUGORTECH IT</h2>
-        <p>Different Creative Think</p>
-    </div>
-    <div style="padding:15px; border-radius:15px; background:var(--glass); border:1px solid var(--b); color:var(--b); font-weight:800; text-align:center;">
-        <i class="fas fa-chart-line"></i> SMART ANALYTICS
-    </div>
+    <h2 style="margin:0; font-weight:800; color: #00A3FF;">NUGORTECH IT</h2>
+    <p style="color:var(--p); font-size:9px; font-weight:800; letter-spacing:1px; text-transform: uppercase;">Smart Sales Console</p>
+    <div style="margin-top: 50px; font-weight: 800; color: #00A3FF;"><i class="fas fa-chart-line"></i> ANALYTICS</div>
 </div>
-
 <div class="main">
-    <!-- Filtered Real-time Cards -->
-    <div class="stats-grid">
-        <div class="stat-card c-1"><span class="val" id="cardSales">৳0</span><span class="lbl">Filtered Total Sales</span></div>
-        <div class="stat-card c-2"><span class="val" id="cardDue">৳0</span><span class="lbl">Filtered Total Due</span></div>
-        <div class="stat-card c-3"><span class="val" id="cardComm">৳0</span><span class="lbl">Filtered 5% Comm.</span></div>
-        <div class="stat-card c-4"><span class="val" id="cardLeads">0</span><span class="lbl">Filtered Leads</span></div>
+    <div class="stat-grid">
+        <div class="card c-1"><span class="val" id="v1">৳0</span><span class="lbl">Filtered Sales</span></div>
+        <div class="card c-2"><span class="val" id="v2">৳0</span><span class="lbl">Filtered Due</span></div>
+        <div class="card c-3"><span class="val" id="v3">৳0</span><span class="lbl">5% Comm.</span></div>
+        <div class="card c-4"><span class="val" id="v4">0</span><span class="lbl">Total Leads</span></div>
     </div>
-
     <div class="glass-panel">
-        <div class="controls">
-            <input type="text" id="searchName" placeholder="Search by Name or ID..." onkeyup="updateUI()">
-            <input type="text" id="searchDate" placeholder="Search by Date (e.g. 28-02-2026)" onkeyup="updateUI()">
-            <button class="btn btn-ex" onclick="exportExcel()">Export CSV</button>
-            <button class="btn btn-cl" onclick="wipeData()">Reset (8087)</button>
+        <div style="display: flex; gap:15px;">
+            <input type="text" id="sName" placeholder="Search by Name/ID..." onkeyup="updateUI()">
+            <input type="text" id="sDate" placeholder="Search by Date (e.g. 28-02-2026)" onkeyup="updateUI()">
+            <button class="btn" style="background:var(--d); height: 45px;" onclick="wipeData()"><i class="fas fa-trash"></i></button>
         </div>
-
-        <div class="grid-2">
-            <!-- Log Table -->
-            <div class="table-wrap">
-                <table id="mainTable">
-                    <thead><tr><th>Date</th><th>Name</th><th>ID</th><th>Sales</th><th>Due</th><th>5% Comm</th><th>Del</th></tr></thead>
+        <div style="display: grid; grid-template-columns: 2.2fr 1fr; gap: 25px;">
+            <div style="max-height: 450px; overflow-y: auto;">
+                <table id="mainT">
+                    <thead><tr><th>Date</th><th>Name</th><th>ID</th><th>Sales</th><th>Old Calls</th><th>Status</th><th>Del</th></tr></thead>
                     <tbody id="tbody"></tbody>
                 </table>
             </div>
-
-            <!-- Name-wise Summary -->
-            <div style="border-left: 1px solid var(--border); padding-left: 20px;">
-                <h4 style="font-size: 12px; color: var(--b); text-transform: uppercase;">Employee Summary</h4>
-                <div class="table-wrap">
-                    <table>
+            <div style="text-align:center;">
+                <h4 style="font-size: 11px; opacity: 0.6; text-transform: uppercase;">Employee Summary</h4>
+                <div style="max-height: 200px; overflow-y: auto;">
+                    <table style="font-size: 11px;">
                         <thead><tr><th>Name</th><th>Sales</th><th>Comm.</th></tr></thead>
                         <tbody id="nameBody"></tbody>
                     </table>
                 </div>
-                <div style="margin-top: 20px;">
-                    <canvas id="myChart"></canvas>
-                </div>
+                <canvas id="myChart" style="margin-top: 20px;"></canvas>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
 <script>
-    const firebaseConfig = { apiKey: "AIzaSyBrz1xvq4Fpt9-j75-gUS4d8ebqPRLmOK0", databaseURL: "https://sales-report-nugortech-it-default-rtdb.firebaseio.com", projectId: "sales-report-nugortech-it", appId: "1:848643315031:web:e6fbf92153490ea9d31a12" };
+    const firebaseConfig = { apiKey: "AIzaSyBrz1xvq4Fpt9-j75-gUS4d8ebqPRLmOK0", authDomain: "sales-report-nugortech-it.firebaseapp.com", databaseURL: "https://sales-report-nugortech-it-default-rtdb.firebaseio.com", projectId: "sales-report-nugortech-it", appId: "1:848643315031:web:e6fbf92153490ea9d31a12" };
     firebase.initializeApp(firebaseConfig); const database = firebase.database();
-    let masterData = []; // Store raw data
-    let pieChart;
+    let masterData = [], pieChart;
 
-    // Load Data once and listen for changes
     database.ref('sales_reports').on('value', snap => {
-        const data = snap.val();
-        masterData = [];
-        if (data) {
-            Object.keys(data).forEach(key => {
-                masterData.push({ key: key, ...data[key] });
-            });
-        }
-        updateUI(); // Run filter and render
+        const data = snap.val(); masterData = [];
+        if (data) Object.keys(data).forEach(k => masterData.push({ key: k, ...data[k] }));
+        updateUI();
     });
 
     function updateUI() {
-        const sName = document.getElementById('searchName').value.toUpperCase();
-        const sDate = document.getElementById('searchDate').value.toUpperCase();
-        const tbody = document.getElementById('tbody');
-        const nameBody = document.getElementById('nameBody');
-        tbody.innerHTML = ""; nameBody.innerHTML = "";
+        const sn = document.getElementById('sName').value.toUpperCase(), sd = document.getElementById('sDate').value.toUpperCase(), tb = document.getElementById('tbody'), nb = document.getElementById('nameBody');
+        tb.innerHTML = ""; nb.innerHTML = "";
+        let fS = 0, fD = 0, fC = 0, fL = 0, sm = {};
 
-        let fSales = 0, fDue = 0, fComm = 0, fLeads = 0;
-        let summary = {};
-
-        // Filter and Process Data
-        const filtered = masterData.filter(d => {
-            const matchName = d.name.toUpperCase().includes(sName) || d.id.includes(sName);
-            const matchDate = d.date.toUpperCase().includes(sDate);
-            return matchName && matchDate;
-        }).reverse();
+        const filtered = masterData.filter(d => (d.name.toUpperCase().includes(sn) || d.id.includes(sn)) && d.date.toUpperCase().includes(sd)).reverse();
 
         filtered.forEach(d => {
-            const s = Number(d.sales || 0);
-            const du = Number(d.due || 0);
-            const l = Number(d.lead || 0);
-            const c = s * 0.05;
+            const s = Number(d.sales||0), du = Number(d.due||0), l = Number(d.lead||0), c = s * 0.05, calls = d.oldCalls || 0;
+            fS += s; fD += du; fC += c; fL += l;
+            if(!sm[d.name]) sm[d.name] = {s:0, c:0}; sm[d.name].s += s; sm[d.name].c += c;
 
-            fSales += s; fDue += du; fComm += c; fLeads += l;
-
-            // Summary Calculation
-            if(!summary[d.name]) summary[d.name] = { s: 0, c: 0 };
-            summary[d.name].s += s;
-            summary[d.name].c += c;
-
-            // Render Log Row
-            tbody.innerHTML += `<tr>
-                <td>${d.date}</td>
-                <td>${d.name}</td>
-                <td style="color:var(--b)">#${d.id}</td>
+            tb.innerHTML += `<tr>
+                <td>${d.date}</td><td>${d.name}</td><td>#${d.id}</td>
                 <td>৳${s.toLocaleString()}</td>
-                <td style="color:var(--p)">৳${du.toLocaleString()}</td>
-                <td class="c-green">৳${c.toLocaleString()}</td>
-                <td><button onclick="del('${d.key}')" class="del-btn"><i class="fas fa-trash-alt"></i></button></td>
+                <td><span class="badge-call">${calls} Calls</span></td>
+                <td>${d.attendanceStatus === "Late" ? '<span class="badge-late">LATE</span>' : 'ON TIME'}</td>
+                <td><button onclick="delOne('${d.key}')" style="background:none; border:none; color:red; cursor:pointer;"><i class="fas fa-trash-alt"></i></button></td>
             </tr>`;
         });
 
-        // Render Summary Rows
-        Object.keys(summary).forEach(name => {
-            nameBody.innerHTML += `<tr>
-                <td>${name}</td>
-                <td>৳${summary[name].s.toLocaleString()}</td>
-                <td class="c-green">৳${summary[name].c.toLocaleString()}</td>
-            </tr>`;
-        });
-
-        // Update Stat Cards
-        document.getElementById('cardSales').innerText = "৳" + fSales.toLocaleString();
-        document.getElementById('cardDue').innerText = "৳" + fDue.toLocaleString();
-        document.getElementById('cardComm').innerText = "৳" + fComm.toLocaleString();
-        document.getElementById('cardLeads').innerText = fLeads;
-
-        updateChart(fSales, fDue);
+        Object.keys(sm).forEach(n => nb.innerHTML += `<tr><td>${n}</td><td>৳${sm[n].s.toLocaleString()}</td><td>৳${sm[n].c.toLocaleString()}</td></tr>`);
+        document.getElementById('v1').innerText = "৳" + fS.toLocaleString();
+        document.getElementById('v2').innerText = "৳" + fD.toLocaleString();
+        document.getElementById('v3').innerText = "৳" + fC.toLocaleString();
+        document.getElementById('v4').innerText = fL;
+        updateChart(fS, fD);
     }
 
     function updateChart(s, d) {
-        const ctx = document.getElementById('myChart').getContext('2d');
-        if (pieChart) pieChart.destroy();
-        pieChart = new Chart(ctx, { type: 'doughnut', data: { labels: ['Paid', 'Due'], datasets: [{ data: [s-d, d], backgroundColor: ['#10b981', 'rgba(255,255,255,0.05)'], borderWidth: 0 }] }, options: { cutout: '80%', plugins: { legend: { display: false } } } });
+        const ctx = document.getElementById('myChart').getContext('2d'); if (pieChart) pieChart.destroy();
+        pieChart = new Chart(ctx, { type: 'doughnut', data: { labels: ['Paid', 'Due'], datasets: [{ data: [s-d, d], backgroundColor: ['#28a745', '#fd7e14'], borderWidth: 0 }] }, options: { maintainAspectRatio: false, cutout: '80%', plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', font: {size: 10} } } } } });
     }
 
-    function exportExcel() {
-        let csv = "\uFEFFDate,Name,ID,Sales,Due,Commission\n";
-        const rows = document.querySelectorAll("#mainTable tr");
-        rows.forEach((row, i) => {
-            if(i === 0 || row.style.display === "none") return;
-            const cells = Array.from(row.querySelectorAll("td")).slice(0, 6).map(c => c.innerText.replace(/[৳#]/g, ""));
-            csv += cells.join(",") + "\n";
-        });
-        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = `Nugortech_Filtered_Report.csv`;
-        link.click();
-    }
-
-    function del(key) { if(confirm("Delete this entry?")) database.ref('sales_reports/'+key).remove(); }
-    function wipeData() { if(prompt("Pass: 8087") === "8087") database.ref('sales_reports').remove(); }
+    function delOne(k) { if(prompt("Pass?") === "8087") database.ref('sales_reports/'+k).remove(); }
+    function wipeData() { if(prompt("Master Pass?") === "8087") database.ref('sales_reports').remove(); }
 </script>
 </body>
 </html>
