@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Analytics | Nugortech IT Ltd</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root { --p: #FF6B00; --b: #00A3FF; --bg: #0b0f19; --card: rgba(255,255,255,0.03); }
+        * { box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+        body { margin: 0; background: var(--bg); display: flex; color: white; min-height: 100vh; }
+        .sidebar { width: 280px; background: rgba(0,0,0,0.3); border-right: 1px solid rgba(255,255,255,0.1); padding: 50px 30px; position: fixed; height: 100vh; }
+        .main { margin-left: 280px; width: calc(100% - 280px); padding: 50px; }
+        .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 40px; }
+        .stat-card { padding: 25px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.1); text-align: center; }
+        .c-1 { background: linear-gradient(135deg, #00A3FF 0%, #0066FF 100%); } .c-2 { background: linear-gradient(135deg, #10b981 0%, #059669 100%); } .c-3 { background: linear-gradient(135deg, #FF6B00 0%, #E65100 100%); } .c-4 { background: linear-gradient(135deg, #FF1744 0%, #D50000 100%); }
+        .panel { background: var(--card); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 35px; backdrop-filter: blur(10px); }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
+        th { padding: 12px; color: #64748b; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        td { padding: 15px 12px; border-bottom: 1px solid rgba(255,255,255,0.03); font-weight: 600; }
+        .btn { padding: 10px 20px; border-radius: 12px; border: none; cursor: pointer; font-weight: 700; color: white; background: var(--b); }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2 style="margin:0; font-weight:800; color:white;">NUGORTECH IT</h2>
+        <p style="color:var(--p); font-size:9px; font-weight:800; letter-spacing:1px; text-transform: uppercase;">Cloud Sales Hub</p>
+    </div>
+    <div class="main">
+        <div class="stat-grid">
+            <div class="stat-card c-1"><span id="v1" style="font-size:24px; font-weight:800;">0</span><div style="font-size:10px; opacity:0.8;">TOTAL SALES</div></div>
+            <div class="stat-card c-2"><span id="v2" style="font-size:24px; font-weight:800;">0</span><div style="font-size:10px; opacity:0.8;">TOTAL PAID</div></div>
+            <div class="stat-card c-3"><span id="v3" style="font-size:24px; font-weight:800;">0</span><div style="font-size:10px; opacity:0.8;">TOTAL DUE</div></div>
+            <div class="stat-card c-4"><span id="v4" style="font-size:24px; font-weight:800;">0</span><div style="font-size:10px; opacity:0.8;">TOTAL LEADS</div></div>
+        </div>
+        <div style="display:grid; grid-template-columns: 2.2fr 1fr; gap: 25px;">
+            <div class="panel">
+                <div style="display:flex; gap:10px; margin-bottom:20px;">
+                    <input type="text" id="src" onkeyup="filter()" placeholder="Search ID, Name or Date..." style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:12px; border-radius:12px; color:white; flex:1; outline:none;">
+                    <button class="btn" onclick="wipe()">Clear All (8087)</button>
+                </div>
+                <div style="max-height: 450px; overflow-y: auto;">
+                    <table id="tbl">
+                        <thead><tr><th>Date</th><th>ID</th><th>Name</th><th>Sales</th><th>Due</th><th>Service</th><th>Leads</th><th>Del</th></tr></thead>
+                        <tbody id="tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="panel" style="text-align:center;"><canvas id="chart"></canvas></div>
+        </div>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script>
+        const firebaseConfig = { apiKey: "AIzaSyBrz1xvq4Fpt9-j75-gUS4d8ebqPRLmOK0", databaseURL: "https://sales-report-nugortech-it-default-rtdb.firebaseio.com", projectId: "sales-report-nugortech-it", appId: "1:848643315031:web:e6fbf92153490ea9d31a12" };
+        firebase.initializeApp(firebaseConfig); const database = firebase.database();
+        let myChart;
+        database.ref('sales_reports').on('value', s => {
+            const tbody = document.getElementById('tbody'); tbody.innerHTML = "";
+            let ts=0, tp=0, td=0, tl=0; const all = s.val();
+            if (all) {
+                Object.keys(all).reverse().forEach(k => {
+                    const d = all[k]; ts += Number(d.sales); tp += Number(d.pay); td += Number(d.due); tl += Number(d.lead);
+                    tbody.innerHTML += `<tr><td>${d.date}</td><td>#${d.id}</td><td>${d.name}</td><td>${d.sales}</td><td style="color:var(--p)">${d.due}</td><td>${d.service}</td><td>${d.lead}</td><td><button onclick="del('${k}')" style="background:none; border:none; color:#f43f5e; cursor:pointer;"><i class="fas fa-trash"></i></button></td></tr>`;
+                });
+            }
+            document.getElementById('v1').innerText = ts; document.getElementById('v2').innerText = tp; document.getElementById('v3').innerText = td; document.getElementById('v4').innerText = tl;
+            updateChart(tp, td);
+        });
+        function updateChart(p, d) { const ctx = document.getElementById('chart').getContext('2d'); if (myChart) myChart.destroy(); myChart = new Chart(ctx, { type: 'pie', data: { labels: ['Paid', 'Due'], datasets: [{ data: [p, d], backgroundColor: ['#10b981', '#FF1744'], borderWidth: 0 }] } }); }
+        function filter() { const v = document.getElementById('src').value.toUpperCase(); const rows = document.getElementById('tbody').getElementsByTagName('tr'); for (let r of rows) { r.style.display = r.innerText.toUpperCase().includes(v) ? "" : "none"; } }
+        function del(k) { if(confirm("Delete?")) database.ref('sales_reports/'+k).remove(); }
+        function wipe() { if(prompt("Password?") === "8087") database.ref('sales_reports').remove(); }
+    </script>
+</body>
+</html>
