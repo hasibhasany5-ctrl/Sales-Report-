@@ -3,65 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sales Entry | Nugortech IT Ltd</title>
+    <title>Employee Portal | Nugortech IT Ltd</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --p: #FF6B00; --b: #00A3FF; --bg: #0f172a; }
+        :root { --p: #FF6B00; --b: #00A3FF; --s: #10b981; --bg: #0f172a; }
         * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { margin: 0; background: var(--bg); display: flex; justify-content: center; padding: 40px 20px; color: white; }
-        .card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); width: 100%; max-width: 650px; border-radius: 35px; padding: 40px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
+        .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.1); width: 100%; max-width: 650px; border-radius: 40px; padding: 40px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
         .header { text-align: center; margin-bottom: 30px; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         label { font-size: 11px; font-weight: 700; color: var(--b); display: block; margin-bottom: 5px; margin-left: 10px; }
-        input, select, textarea { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 12px; border-radius: 14px; color: white; outline: none; font-size: 14px; }
+        input, select { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 12px 15px; border-radius: 14px; color: white; outline: none; font-size: 14px; transition: 0.3s; }
         input:focus { border-color: var(--p); }
-        .btn { width: 100%; padding: 16px; background: linear-gradient(to right, var(--p), var(--b)); border: none; border-radius: 18px; color: white; font-weight: 800; cursor: pointer; margin-top: 25px; transition: 0.3s; }
-        .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(255, 107, 0, 0.3); }
-        #status { margin-top: 20px; text-align: center; font-weight: 800; display: none; }
+        .btn-submit { width: 100%; padding: 16px; background: linear-gradient(to right, var(--p), var(--b)); border: none; border-radius: 18px; color: white; font-weight: 800; cursor: pointer; margin-top: 25px; transition: 0.3s; }
+        .btn-submit:hover { transform: translateY(-3px); }
+        #status { margin-top: 20px; text-align: center; font-weight: 600; display: none; padding: 12px; border-radius: 12px; }
     </style>
 </head>
 <body>
-    <div class="card">
+    <div class="glass-card">
         <div class="header">
-            <h2 style="margin:0;">Nugortech IT Ltd</h2>
-            <p style="font-size: 10px; color: var(--p); font-weight: bold; letter-spacing: 2px;">DAILY SALES CLOUD REPORT</p>
+            <h2 style="margin:0; font-weight: 800;">Nugortech IT Ltd</h2>
+            <p style="font-size: 10px; color: var(--p); font-weight: bold; letter-spacing: 2px;">SALES & CALL REPORT</p>
         </div>
         <div class="grid">
-            <div style="margin-bottom:10px;"><label>NAME</label><input type="text" id="name" placeholder="Full Name"></div>
-            <div style="margin-bottom:10px;"><label>ID</label><input type="number" id="eid" placeholder="Employee ID"></div>
+            <div style="margin-bottom:10px;"><label>NAME</label><input type="text" id="uName" placeholder="Full Name"></div>
+            <div style="margin-bottom:10px;"><label>ID</label><input type="number" id="uId" placeholder="Employee ID"></div>
             <div style="margin-bottom:10px;"><label>SALES (BDT)</label><input type="number" id="sales" oninput="calc()"></div>
             <div style="margin-bottom:10px;"><label>PAYMENT (BDT)</label><input type="number" id="pay" oninput="calc()"></div>
             <div style="margin-bottom:10px;"><label>DUE (AUTO)</label><input type="number" id="due" readonly style="color:var(--p)"></div>
-            <div style="margin-bottom:10px;"><label>SERVICE</label><select id="service"><option value="Facebook Ads">Facebook Ads</option><option value="Google Ads">Google Ads</option><option value="Web Design">Web Design</option></select></div>
             <div style="margin-bottom:10px;"><label>LEADS</label><input type="number" id="lead"></div>
-            <div style="margin-bottom:10px;"><label>LEAD QUALITY</label><input type="text" id="qual"></div>
-            <div style="margin-bottom:10px;"><label>NEW CUSTOMER</label><input type="number" id="nc"></div>
-            <div style="margin-bottom:10px;"><label>OLD CUSTOMER</label><input type="number" id="oc"></div>
+            
+            <!-- নতুন অপশন: Regular Old 5 Customer Call -->
+            <div style="grid-column: span 2; margin-bottom:10px; background: rgba(0,163,255,0.05); padding: 15px; border-radius: 15px; border: 1px dashed var(--b);">
+                <label style="color: white;">REGULAR OLD CUSTOMER CALLS (TARGET 5)</label>
+                <input type="number" id="oldCalls" placeholder="How many old customers did you call today?">
+            </div>
         </div>
-        <button class="btn" onclick="submit()">SUBMIT TO CLOUD</button>
+        <button class="btn-submit" onclick="handleAuth()">SUBMIT SALES REPORT</button>
         <div id="status"></div>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyBrz1xvq4Fpt9-j75-gUS4d8ebqPRLmOK0",
-            authDomain: "sales-report-nugortech-it.firebaseapp.com",
-            databaseURL: "https://sales-report-nugortech-it-default-rtdb.firebaseio.com",
-            projectId: "sales-report-nugortech-it",
-            appId: "1:848643315031:web:e6fbf92153490ea9d31a12"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
+        const firebaseConfig = { apiKey: "AIzaSyBrz1xvq4Fpt9-j75-gUS4d8ebqPRLmOK0", authDomain: "sales-report-nugortech-it.firebaseapp.com", databaseURL: "https://sales-report-nugortech-it-default-rtdb.firebaseio.com", projectId: "sales-report-nugortech-it", appId: "1:848643315031:web:e6fbf92153490ea9d31a12" };
+        firebase.initializeApp(firebaseConfig); const database = firebase.database();
+        const oLat = 23.7604602; const oLon = 90.3566788; const range = 0.15;
 
         function calc() { document.getElementById('due').value = (document.getElementById('sales').value || 0) - (document.getElementById('pay').value || 0); }
-        function submit() {
-            const data = { name: document.getElementById('name').value, id: document.getElementById('eid').value, sales: document.getElementById('sales').value, pay: document.getElementById('pay').value, due: document.getElementById('due').value, service: document.getElementById('service').value, lead: document.getElementById('lead').value, nc: document.getElementById('nc').value, oc: document.getElementById('oc').value, date: new Date().toLocaleDateString('en-GB').replace(/\//g, "-"), time: new Date().toLocaleTimeString() };
-            if(!data.name || !data.id) return alert("Fill Name & ID");
-            document.getElementById('status').style.display="block"; document.getElementById('status').innerText="⏳ Syncing...";
-            db.ref('sales_reports').push(data).then(() => { document.getElementById('status').style.color="#10b981"; document.getElementById('status').innerText="✅ Saved Forever!"; setTimeout(()=> location.reload(), 2000); });
+        function getDist(l1, n1, l2, n2) { const R = 6371; const dL = (l2-l1)*Math.PI/180; const dN = (n2-n1)*Math.PI/180; const a = Math.sin(dL/2)**2 + Math.cos(l1*Math.PI/180)*Math.cos(l2*Math.PI/180)*Math.sin(dN/2)**2; return R*2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); }
+
+        function handleAuth() {
+            const n = document.getElementById('uName').value, i = document.getElementById('uId').value, s = document.getElementById('status'), oldC = document.getElementById('oldCalls').value;
+            if(!n || !i) return alert("Fill Name & ID");
+            s.style.display="block"; s.innerText="Verifying Location...";
+            navigator.geolocation.getCurrentPosition(p => {
+                const d = getDist(oLat, oLon, p.coords.latitude, p.coords.longitude);
+                if(d <= range) {
+                    const now = new Date(), today = now.toLocaleDateString('en-GB').replace(/\//g, "-"), time = now.toLocaleTimeString('en-US', { hour12: true });
+                    const cutoff = new Date(); cutoff.setHours(9, 30, 0, 0);
+                    
+                    const record = { 
+                        name: n, 
+                        id: i, 
+                        sales: document.getElementById('sales').value || 0, 
+                        due: document.getElementById('due').value || 0, 
+                        pay: document.getElementById('pay').value || 0,
+                        lead: document.getElementById('lead').value || 0,
+                        oldCalls: oldC || 0,
+                        date: today,
+                        inTime: time,
+                        attendanceStatus: now > cutoff ? "Late" : "On Time"
+                    };
+
+                    database.ref('sales_reports').push(record).then(() => {
+                        s.style.background = "rgba(16, 185, 129, 0.2)"; s.style.color="#10b981"; s.innerText="✅ Report Saved Successfully!";
+                        setTimeout(()=> location.reload(), 2000);
+                    });
+                } else { s.style.background = "rgba(239, 68, 68, 0.2)"; s.style.color="#ef4444"; s.innerText="❌ Denied! Out of Office Zone"; }
+            }, () => alert("Enable GPS!"), { enableHighAccuracy: true });
         }
     </script>
 </body>
