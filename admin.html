@@ -2,243 +2,77 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Sales Dashboard | Nugortech IT Ltd</title>
-    <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <title>Enterprise Analytics | Nugortech IT Ltd</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
     <style>
-        :root {
-            --nugor-orange: #FF6B00;
-            --nugor-blue: #00A3FF;
-            --bg-dark: #0b0f19;
-            --glass: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.1);
-        }
-
-        * { box-sizing: border-box; font-family: 'Outfit', sans-serif; }
-        body { margin: 0; background: var(--bg-dark); color: white; display: flex; min-height: 100vh; overflow-x: hidden; }
-
-        /* Sidebar */
-        .sidebar { width: 280px; background: rgba(0,0,0,0.3); backdrop-filter: blur(20px); border-right: 1px solid var(--border); padding: 50px 25px; position: fixed; height: 100vh; z-index: 100; }
-        .logo-box { text-align: center; margin-bottom: 50px; }
-        .logo-text { font-size: 22px; font-weight: 800; color: white; margin: 0; }
-        .logo-slogan { font-size: 9px; color: var(--nugor-orange); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
-
-        /* Main Content */
-        .main { margin-left: 280px; width: calc(100% - 280px); padding: 40px; }
-
-        /* Glowing Stat Cards */
-        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 40px; }
-        .stat-card { padding: 25px; border-radius: 25px; border: 1px solid var(--border); transition: 0.3s; text-align: center; }
-        .card-sales { background: linear-gradient(135deg, #00A3FF 0%, #0066FF 100%); }
-        .card-commission { background: linear-gradient(135deg, #FF6B00 0%, #E65100 100%); }
-        .card-paid { background: linear-gradient(135deg, #00E676 0%, #00C853 100%); color: #003300; }
-        .card-due { background: linear-gradient(135deg, #FF1744 0%, #D50000 100%); }
-        .val { font-size: 26px; font-weight: 800; display: block; }
-        .lbl { font-size: 10px; font-weight: 700; text-transform: uppercase; opacity: 0.8; letter-spacing: 1px; }
-
-        /* Layout Grid */
-        .panel-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; }
-        .panel { background: var(--glass); border: 1px solid var(--border); padding: 30px; border-radius: 35px; backdrop-filter: blur(10px); }
-
-        /* Controls */
-        .controls { display: grid; grid-template-columns: 1fr 1fr auto auto; gap: 12px; margin-bottom: 25px; }
-        input, select { background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 12px 18px; border-radius: 12px; color: white; outline: none; transition: 0.3s; font-size: 13px; }
-        .btn { padding: 12px 20px; border-radius: 12px; border: none; cursor: pointer; font-weight: 700; color: white; transition: 0.3s; }
-        .btn-csv { background: var(--nugor-blue); }
-        .btn-reset { background: #f43f5e; }
-
-        /* Tables */
-        .table-wrap { max-height: 400px; overflow-y: auto; margin-top: 10px; }
-        table { width: 100%; border-collapse: collapse; font-size: 13px; }
-        th { text-align: left; padding: 12px; color: #64748b; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--bg-dark); z-index: 1; }
-        td { padding: 15px 12px; border-bottom: 1px solid rgba(255,255,255,0.03); font-weight: 600; }
+        :root { --p: #FF6B00; --b: #00A3FF; --bg: #0b0f19; --card: rgba(255,255,255,0.03); }
+        * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { margin: 0; background: var(--bg); color: white; display: flex; min-height: 100vh; }
+        .sidebar { width: 260px; background: rgba(0,0,0,0.3); backdrop-filter: blur(20px); border-right: 1px solid rgba(255,255,255,0.1); padding: 40px 20px; position: fixed; height: 100vh; }
+        .main { margin-left: 260px; width: calc(100% - 260px); padding: 40px; }
         
-        .badge { padding: 4px 10px; border-radius: 8px; font-size: 10px; font-weight: 800; }
-        .b-late { background: #FF1744; color: white; }
-        .b-time { background: var(--nugor-blue); color: white; }
+        /* Stats Cards */
+        .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px; }
+        .stat-card { background: var(--card); padding: 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); text-align: center; }
+        .val { font-size: 22px; font-weight: 800; display: block; color: var(--b); }
+        .lbl { font-size: 10px; font-weight: 700; text-transform: uppercase; opacity: 0.7; }
 
-        .emp-card { background: rgba(255,255,255,0.02); padding: 15px; border-radius: 15px; margin-bottom: 10px; border-left: 4px solid var(--nugor-blue); }
-        .commission-amt { color: #00E676; font-size: 18px; font-weight: 800; }
-
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: var(--nugor-blue); border-radius: 10px; }
+        /* Table */
+        .panel { background: var(--card); border: 1px solid rgba(255,255,255,0.1); padding: 25px; border-radius: 25px; }
+        .table-wrap { width: 100%; overflow-x: auto; margin-top: 20px; }
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 12px; white-space: nowrap; }
+        th { padding: 12px; color: #94a3b8; border-bottom: 1px solid rgba(255,255,255,0.1); text-transform: uppercase; }
+        td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.03); }
+        input { padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: white; width: 250px; }
     </style>
 </head>
 <body>
-
-<div class="sidebar">
-    <div class="logo-box">
-        <h2 class="logo-text">NUGORTECH IT</h2>
-        <p class="logo-slogan">Different Creative Think</p>
+    <div class="sidebar">
+        <h2 style="margin:0; font-weight:800;">NUGORTECH IT</h2>
+        <p style="color:var(--p); font-size:9px; font-weight:800; text-transform:uppercase;">Sales Command Center</p>
     </div>
-    <div style="margin-top: 40px; color: var(--nugor-blue); font-weight: 800;"><i class="fas fa-chart-line"></i> SALES DASHBOARD</div>
-    <div style="margin-top: 20px; color: #64748b; font-size: 13px;"><i class="fas fa-wallet"></i> Commission Rate: 5%</div>
-</div>
-
-<div class="main">
-    <!-- Summary Cards -->
-    <div class="stats-grid">
-        <div class="stat-card card-sales"><span class="val" id="totalSales">0</span><span class="lbl">Total Sales (Filtered)</span></div>
-        <div class="stat-card card-commission"><span class="val" id="totalComm">0</span><span class="lbl">Total 5% Commission</span></div>
-        <div class="stat-card card-paid"><span class="val" id="totalPaid">0</span><span class="lbl">Total Received</span></div>
-        <div class="stat-card card-due"><span class="val" id="totalDue">0</span><span class="lbl">Total Due</span></div>
-    </div>
-
-    <div class="panel-grid">
-        <!-- Main Logs -->
+    <div class="main">
+        <div class="stat-grid">
+            <div class="stat-card"><span class="val" id="tSales">0</span><span class="lbl">Total Sales</span></div>
+            <div class="stat-card"><span class="val" id="tComm">0</span><span class="lbl">5% Commission</span></div>
+            <div class="stat-card"><span class="val" id="tDue">0</span><span class="lbl">Total Due</span></div>
+            <div class="stat-card"><span class="val" id="tLead">0</span><span class="lbl">Total Leads</span></div>
+        </div>
         <div class="panel">
-            <div class="controls">
-                <input type="text" id="idFilter" placeholder="Search ID or Name..." onkeyup="processData()">
-                <input type="text" id="monthFilter" placeholder="Month/Year (e.g. 02-2026)" onkeyup="processData()">
-                <button class="btn btn-csv" onclick="exportExcel()">CSV</button>
-                <button class="btn btn-reset" onclick="wipeDB()"><i class="fas fa-trash"></i></button>
-            </div>
+            <input type="text" id="src" onkeyup="filter()" placeholder="🔍 Search ID/Name...">
+            <button onclick="exp()" style="background:var(--b); border:none; color:white; padding:12px 20px; border-radius:10px; cursor:pointer;">Export CSV</button>
             <div class="table-wrap">
-                <table id="logsTable">
-                    <thead>
-                        <tr><th>Date</th><th>ID</th><th>Name</th><th>Sales</th><th>Due</th><th>Status</th><th>Del</th></tr>
-                    </thead>
+                <table id="tbl">
+                    <thead><tr><th>Date</th><th>ID</th><th>Name</th><th>Sales</th><th>Due</th><th>Service</th><th>Lead</th><th>Quality</th><th>Possibility</th><th>Calls</th><th>New</th><th>Old</th><th>Remarks</th><th>Del</th></tr></thead>
                     <tbody id="tbody"></tbody>
                 </table>
             </div>
         </div>
-
-        <!-- Employee Wise Dashboard -->
-        <div class="panel">
-            <h3 style="font-size: 16px; margin-bottom: 20px; color: var(--nugor-blue);">Employee Performance</h3>
-            <div id="empDashboard" style="max-height: 500px; overflow-y: auto;">
-                <!-- Employee Summary will load here -->
-            </div>
-        </div>
     </div>
-</div>
-
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
-<script>
-    const firebaseConfig = { 
-        apiKey: "AIzaSyBrz1xvq4Fpt9-j75-gUS4d8ebqPRLmOK0", 
-        authDomain: "sales-report-nugortech-it.firebaseapp.com",
-        databaseURL: "https://sales-report-nugortech-it-default-rtdb.firebaseio.com", 
-        projectId: "sales-report-nugortech-it", 
-        appId: "1:848643315031:web:e6fbf92153490ea9d31a12" 
-    };
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
-    let rawData = [];
-
-    // ডাটা শোনা শুরু
-    database.ref('sales_reports').on('value', snap => {
-        rawData = [];
-        const all = snap.val();
-        if(all) {
-            Object.keys(all).forEach(key => {
-                rawData.push({ key, ...all[key] });
-            });
-        }
-        processData();
-    });
-
-    function processData() {
-        const idSearch = document.getElementById('idFilter').value.toUpperCase();
-        const monthSearch = document.getElementById('monthFilter').value.toUpperCase();
-        const tbody = document.getElementById('tbody');
-        const empDash = document.getElementById('empDashboard');
-        
-        tbody.innerHTML = "";
-        empDash.innerHTML = "";
-
-        let grandSales = 0, grandPaid = 0, grandDue = 0;
-        let empMap = {}; // এমপ্লয়ি অনুযায়ী ডাটা গ্রুপ করার জন্য
-
-        // ফিল্টারিং এবং মেইন টেবিল তৈরি
-        rawData.slice().reverse().forEach(d => {
-            const rowContent = `${d.date} ${d.id} ${d.name}`.toUpperCase();
-            if(rowContent.includes(idSearch) && rowContent.includes(monthSearch)) {
-                
-                const s = Number(d.sales || 0);
-                const p = Number(d.pay || 0);
-                const due = Number(d.due || 0);
-
-                grandSales += s;
-                grandPaid += p;
-                grandDue += due;
-
-                // এমপ্লয়ি ওয়াইজ ড্যাশবোর্ড লজিক
-                if(!empMap[d.id]) {
-                    empMap[d.id] = { name: d.name, totalSales: 0 };
-                }
-                empMap[d.id].totalSales += s;
-
-                // মেইন টেবিল রো
-                let badge = d.status === "Late" ? `<span class="badge b-late">LATE</span>` : `<span class="badge b-time">ON TIME</span>`;
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${d.date}</td>
-                        <td style="color:var(--nugor-blue)">#${d.id}</td>
-                        <td>${d.name}</td>
-                        <td>${s}</td>
-                        <td style="color:var(--nugor-orange)">${due}</td>
-                        <td>${badge}</td>
-                        <td><button onclick="delLog('${d.key}')" style="background:none; border:none; color:#f43f5e; cursor:pointer;"><i class="fas fa-trash-alt"></i></button></td>
-                    </tr>
-                `;
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script>
+        const firebaseConfig = { apiKey: "AIzaSyBrz1xvq4Fpt9-j75-gUS4d8ebqPRLmOK0", databaseURL: "https://sales-report-nugortech-it-default-rtdb.firebaseio.com", projectId: "sales-report-nugortech-it", appId: "1:848643315031:web:e6fbf92153490ea9d31a12" };
+        firebase.initializeApp(firebaseConfig); const database = firebase.database();
+        database.ref('sales_reports').on('value', s => {
+            const tbody = document.getElementById('tbody'); tbody.innerHTML = "";
+            let ts=0, td=0, tl=0; const all = s.val();
+            if (all) {
+                Object.keys(all).reverse().forEach(k => {
+                    const d = all[k]; ts += Number(d.sales); td += Number(d.due); tl += Number(d.lead);
+                    tbody.innerHTML += `<tr><td>${d.date}</td><td>#${d.id}</td><td>${d.name}</td><td>${d.sales}</td><td>${d.due}</td><td>${d.service}</td><td>${d.lead}</td><td>${d.quality}</td><td>${d.poss}</td><td>${d.call}</td><td>${d.newC}</td><td>${d.oldC}</td><td>${d.rem}</td><td><button onclick="del('${k}')" style="background:none; border:none; color:red; cursor:pointer;"><i class="fas fa-trash"></i></button></td></tr>`;
+                });
             }
+            document.getElementById('tSales').innerText = ts.toLocaleString();
+            document.getElementById('tComm').innerText = (ts * 0.05).toLocaleString(); // 5% Commission
+            document.getElementById('tDue').innerText = td.toLocaleString();
+            document.getElementById('tLead').innerText = tl;
         });
-
-        // স্ট্যাটাস কার্ড আপডেট
-        document.getElementById('totalSales').innerText = grandSales.toLocaleString();
-        document.getElementById('totalPaid').innerText = grandPaid.toLocaleString();
-        document.getElementById('totalDue').innerText = grandDue.toLocaleString();
-        document.getElementById('totalComm').innerText = (grandSales * 0.05).toLocaleString();
-
-        // এমপ্লয়ি কার্ড তৈরি (কমিশনসহ)
-        Object.keys(empMap).forEach(id => {
-            const emp = empMap[id];
-            const comm = emp.totalSales * 0.05;
-            empDash.innerHTML += `
-                <div class="emp-card">
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <div>
-                            <span style="font-size:12px; color:#64748b;">#${id}</span>
-                            <div style="font-weight:800;">${emp.name}</div>
-                        </div>
-                        <div style="text-align:right;">
-                            <div style="font-size:10px; color:#64748b;">COMMISSION (5%)</div>
-                            <div class="commission-amt">৳${comm.toLocaleString()}</div>
-                        </div>
-                    </div>
-                    <div style="margin-top:10px; font-size:11px; color:#94a3b8;">Total Sales: ৳${emp.totalSales.toLocaleString()}</div>
-                </div>
-            `;
-        });
-    }
-
-    // ফিল্টার রিসেট না করে এক্সপোর্ট
-    function exportExcel() {
-        let csv = "\uFEFFDate,ID,Name,Sales,Due,Status\n";
-        const rows = document.querySelectorAll("#logsTable tbody tr");
-        rows.forEach(r => {
-            if(r.style.display !== "none") {
-                const cols = Array.from(r.querySelectorAll("td")).slice(0, 6).map(c => c.innerText.replace("#",""));
-                csv += cols.join(",") + "\n";
-            }
-        });
-        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = "Nugortech_Sales_Report.csv";
-        link.click();
-    }
-
-    function delLog(k) { if(confirm("Delete this record?")) database.ref('sales_reports/'+k).remove(); }
-    function wipeDB() { if(prompt("Pass: 8087") === "8087") database.ref('sales_reports').remove(); }
-</script>
+        function filter() { const v = document.getElementById('src').value.toUpperCase(); const rows = document.getElementById('tbody').getElementsByTagName('tr'); for (let r of rows) { r.style.display = r.innerText.toUpperCase().includes(v) ? "" : "none"; } }
+        function exp() { let csv = "Date,ID,Name,Sales,Due,Service,Lead,Quality,Possibility,Calls,NewC,OldC,Remarks\n"; document.querySelectorAll("#tbl tr").forEach((row, i) => { if(i===0) return; csv += Array.from(row.querySelectorAll("td")).slice(0,13).map(c => c.innerText.replace("#","")).join(",") + "\n"; }); const b = new Blob([csv], { type: 'text/csv;charset=utf-8;' }); const l = document.createElement("a"); l.href = URL.createObjectURL(b); l.download = "Report.csv"; l.click(); }
+        function del(k) { if(confirm("Delete?")) database.ref('sales_reports/'+k).remove(); }
+    </script>
 </body>
 </html>
