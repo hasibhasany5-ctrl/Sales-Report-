@@ -40,7 +40,7 @@
         .c-sales { background: linear-gradient(135deg, #00A3FF 0%, #0066FF 100%); }
         .c-comm { background: linear-gradient(135deg, #FF6B00 0%, #E65100 100%); }
         .c-due { background: linear-gradient(135deg, #FF1744 0%, #D50000 100%); }
-        .c-leads { background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%); }
+        .c-pay { background: linear-gradient(135deg, #00E676 0%, #00C853 100%); color: #003300; }
 
         .stat-val { font-size: 26px; font-weight: 800; display: block; margin-bottom: 5px; }
         .stat-lbl { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; }
@@ -54,7 +54,7 @@
         input { background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 12px 18px; border-radius: 12px; color: white; outline: none; transition: 0.3s; font-size: 13px; }
         input:focus { border-color: var(--nugor-blue); box-shadow: 0 0 10px rgba(0, 163, 255, 0.2); }
 
-        .btn { padding: 12px 20px; border-radius: 12px; border: none; cursor: pointer; font-weight: 700; color: white; transition: 0.3s; font-size: 12px; display: flex; align-items: center; gap: 8px; }
+        .btn { padding: 12px 20px; border-radius: 12px; border: none; font-weight: 700; color: white; transition: 0.3s; font-size: 12px; display: flex; align-items: center; gap: 8px; }
         .btn-csv { background: var(--nugor-blue); }
         .btn-reset { background: var(--nugor-red); }
 
@@ -94,7 +94,7 @@
         <div class="stat-card c-sales"><span class="stat-val" id="sumSales">0</span><span class="stat-lbl">Total Sales (Filtered)</span></div>
         <div class="stat-card c-comm"><span class="stat-val" id="sumComm">0</span><span class="stat-lbl">Total 5% Commission</span></div>
         <div class="stat-card c-due"><span class="stat-val" id="sumDue">0</span><span class="stat-lbl">Total Due Amount</span></div>
-        <div class="stat-card c-leads"><span class="stat-val" id="sumLeads">0</span><span class="stat-lbl">Total Leads Collected</span></div>
+        <div class="stat-card c-pay"><span class="stat-val" id="sumPay">0</span><span class="stat-lbl">Total Payment Received</span></div>
     </div>
 
     <div class="panel-grid">
@@ -113,6 +113,7 @@
                             <th>ID</th>
                             <th>Name</th>
                             <th>Sales</th>
+                            <th>Payment</th>
                             <th>Due</th>
                             <th>Service</th>
                             <th>Lead</th>
@@ -175,7 +176,7 @@
         tbody.innerHTML = "";
         empDash.innerHTML = "";
 
-        let tSales = 0, tPay = 0, tDue = 0, tLeads = 0;
+        let tSales = 0, tPay = 0, tDue = 0;
         let empMap = {};
 
         allReports.slice().reverse().forEach(r => {
@@ -185,24 +186,22 @@
                 const s = Number(r.sales || 0);
                 const p = Number(r.pay || 0);
                 const d = Number(r.due || 0);
-                const l = Number(r.lead || 0);
 
-                tSales += s; tPay += p; tDue += d; tLeads += l;
+                tSales += s; tPay += p; tDue += d;
 
-                // Employee group for summary
                 if(!empMap[r.id]) empMap[r.id] = { name: r.name, sales: 0 };
                 empMap[r.id].sales += s;
 
-                // Build Table Row
                 tbody.innerHTML += `
                     <tr>
                         <td style="color:#64748b; font-size:11px;">${r.date}</td>
                         <td style="color:#00A3FF">#${r.id}</td>
                         <td style="white-space:nowrap">${r.name}</td>
                         <td style="color:#00E676">৳${s}</td>
+                        <td style="color:#00E676">৳${p}</td>
                         <td style="color:#FF1744">৳${d}</td>
                         <td><span class="badge">${r.service}</span></td>
-                        <td>${l}</td>
+                        <td>${r.lead || 0}</td>
                         <td>${r.quality || '--'}</td>
                         <td>${r.poss || '--'}</td>
                         <td>${r.call || '--'}</td>
@@ -215,13 +214,11 @@
             }
         });
 
-        // Update Top Cards
         document.getElementById('sumSales').innerText = tSales.toLocaleString();
         document.getElementById('sumComm').innerText = (tSales * 0.05).toLocaleString();
         document.getElementById('sumDue').innerText = tDue.toLocaleString();
-        document.getElementById('sumLeads').innerText = tLeads.toLocaleString();
+        document.getElementById('sumPay').innerText = tPay.toLocaleString();
 
-        // Build Employee Performance Cards
         Object.keys(empMap).forEach(id => {
             const e = empMap[id];
             const c = e.sales * 0.05;
@@ -251,10 +248,10 @@
     }
 
     function exportData() {
-        let csv = "\uFEFFDate,ID,Name,Sales,Due,Service,Lead,Quality,Possibility,Calls,New,Old,Remarks\n";
+        let csv = "\uFEFFDate,ID,Name,Sales,Payment,Due,Service,Lead,Quality,Possibility,Calls,New,Old,Remarks\n";
         document.querySelectorAll("#mainTable tbody tr").forEach(r => {
             if(r.style.display !== "none") {
-                const cells = Array.from(r.querySelectorAll("td")).slice(0, 13).map(c => c.innerText.replace("#",""));
+                const cells = Array.from(r.querySelectorAll("td")).slice(0, 14).map(c => c.innerText.replace("#",""));
                 csv += cells.join(",") + "\n";
             }
         });
