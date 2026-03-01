@@ -2,273 +2,110 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Sales Analytics | Nugortech IT Ltd</title>
-    <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <title>Enterprise Analytics | Nugortech IT Ltd</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
     <style>
-        :root {
-            --nugor-orange: #FF6B00;
-            --nugor-blue: #00A3FF;
-            --nugor-green: #00E676;
-            --nugor-red: #FF1744;
-            --bg: #0b0f19;
-            --glass: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.1);
-        }
-
-        * { box-sizing: border-box; font-family: 'Outfit', sans-serif; }
-        body { margin: 0; background: var(--bg); color: white; display: flex; min-height: 100vh; overflow-x: hidden; }
-
-        /* Sidebar */
-        .sidebar { width: 260px; background: rgba(0,0,0,0.4); backdrop-filter: blur(20px); border-right: 1px solid var(--border); padding: 40px 25px; position: fixed; height: 100vh; z-index: 100; }
-        .logo-box { text-align: center; margin-bottom: 40px; }
-        .logo-text { font-size: 22px; font-weight: 800; color: white; margin: 0; }
-        .logo-slogan { font-size: 9px; color: var(--nugor-orange); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
-
-        /* Main Content */
-        .main { margin-left: 260px; width: calc(100% - 260px); padding: 40px; }
-
-        /* Glowing Stats Grid */
-        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 35px; }
-        .stat-card { padding: 25px; border-radius: 25px; border: 1px solid var(--border); transition: 0.3s; text-align: center; position: relative; overflow: hidden; }
-        .stat-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        
-        .c-sales { background: linear-gradient(135deg, #00A3FF 0%, #0066FF 100%); }
-        .c-comm { background: linear-gradient(135deg, #FF6B00 0%, #E65100 100%); }
-        .c-due { background: linear-gradient(135deg, #FF1744 0%, #D50000 100%); }
-        .c-pay { background: linear-gradient(135deg, #00E676 0%, #00C853 100%); color: #003300; }
-
-        .stat-val { font-size: 26px; font-weight: 800; display: block; margin-bottom: 5px; }
-        .stat-lbl { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; }
-
-        /* Dashboard Body */
-        .panel-grid { display: grid; grid-template-columns: 2.8fr 1.2fr; gap: 20px; }
-        .panel { background: var(--glass); border: 1px solid var(--border); padding: 30px; border-radius: 35px; backdrop-filter: blur(10px); }
-
-        /* Controls */
-        .controls { display: grid; grid-template-columns: 1fr 1fr auto auto; gap: 12px; margin-bottom: 25px; }
-        input { background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 12px 18px; border-radius: 12px; color: white; outline: none; transition: 0.3s; font-size: 13px; }
-        input:focus { border-color: var(--nugor-blue); box-shadow: 0 0 10px rgba(0, 163, 255, 0.2); }
-
-        .btn { padding: 12px 20px; border-radius: 12px; border: none; font-weight: 700; color: white; transition: 0.3s; font-size: 12px; display: flex; align-items: center; gap: 8px; }
-        .btn-csv { background: var(--nugor-blue); }
-        .btn-reset { background: var(--nugor-red); }
-
-        /* Full Column Table */
-        .table-wrap { max-height: 500px; overflow-x: auto; border-radius: 15px; }
-        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 1200px; }
-        th { padding: 15px; font-size: 10px; color: #64748b; text-transform: uppercase; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: #0b0f19; z-index: 10; }
-        td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.03); font-weight: 600; font-size: 12px; }
-        tr:hover { background: rgba(255,255,255,0.02); }
-
-        .badge { padding: 4px 8px; border-radius: 8px; font-size: 9px; font-weight: 800; background: var(--glass); color: var(--nugor-blue); border: 1px solid var(--border); }
-        .del-btn { background: none; border: none; color: #f43f5e; cursor: pointer; opacity: 0.6; transition: 0.3s; }
-        .del-btn:hover { opacity: 1; transform: scale(1.2); }
-
-        /* Employee Performance List */
-        .emp-list { margin-top: 20px; max-height: 400px; overflow-y: auto; }
-        .emp-item { background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 15px; border-radius: 20px; margin-bottom: 12px; border-left: 4px solid var(--nugor-blue); }
-        .comm-val { color: var(--nugor-green); font-size: 18px; font-weight: 800; }
-
-        ::-webkit-scrollbar { width: 4px; height: 4px; }
-        ::-webkit-scrollbar-thumb { background: var(--nugor-blue); border-radius: 10px; }
+        :root { --p: #FF6B00; --b: #00A3FF; --s: #10b981; --d: #f43f5e; --bg: #0b0f19; --card: rgba(255,255,255,0.03); }
+        * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { margin: 0; background: var(--bg); display: flex; color: white; min-height: 100vh; overflow-x: hidden; }
+        .sidebar { width: 280px; background: rgba(0, 0, 0, 0.3); backdrop-filter: blur(20px); border-right: 1px solid rgba(255,255,255,0.1); padding: 50px 25px; position: fixed; height: 100vh; }
+        .main { margin-left: 280px; width: calc(100% - 280px); padding: 40px; }
+        .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 40px; }
+        .card { padding: 25px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; position: relative; }
+        .c-1 { background: linear-gradient(135deg, #00A3FF 0%, #0066FF 100%); } .c-2 { background: linear-gradient(135deg, #00E676 0%, #00C853 100%); color: #003300; } .c-3 { background: linear-gradient(135deg, #FF6B00 0%, #E65100 100%); } .c-4 { background: linear-gradient(135deg, #FF1744 0%, #D50000 100%); }
+        .v { font-size: 32px; font-weight: 800; display: block; } .l { font-size: 11px; font-weight: 700; text-transform: uppercase; opacity: 0.9; }
+        .grid-2 { display: grid; grid-template-columns: 2.2fr 1fr; gap: 25px; }
+        .panel { background: var(--card); border: 1px solid rgba(255,255,255,0.1); padding: 35px; border-radius: 35px; backdrop-filter: blur(10px); }
+        .search { display: grid; grid-template-columns: 1fr 1.5fr auto auto; gap: 12px; margin-bottom: 25px; }
+        input { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 12px 18px; border-radius: 12px; color: white; outline: none; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th { padding: 15px; font-size: 10px; color: #64748b; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.03); font-weight: 600; font-size: 14px; }
+        .badge { padding: 5px 12px; border-radius: 10px; font-size: 11px; font-weight: 800; }
+        .b-in { background: rgba(0, 230, 118, 0.2); color: #00E676; } .b-late { background: #FF1744; color: white; } .b-time { background: var(--b); color: white; }
+        .del-btn { background: none; border: none; color: #f43f5e; cursor: pointer; transition: 0.3s; }
+        .btn { padding: 10px 20px; border-radius: 12px; border: none; cursor: pointer; font-weight: 700; color: white; }
     </style>
 </head>
 <body>
-
 <div class="sidebar">
-    <div class="logo-box">
-        <h2 class="logo-text">NUGORTECH IT</h2>
-        <p class="logo-slogan">Different Creative Think</p>
-    </div>
-    <div style="margin-top: 40px; color: var(--nugor-blue); font-weight: 800; font-size: 14px;"><i class="fas fa-chart-line"></i> SALES ANALYTICS</div>
-    <div style="margin-top: 20px; color: #64748b; font-size: 12px;"><i class="fas fa-percent"></i> Comm. Rate: 5%</div>
+    <h2 style="margin:0; font-weight:800;">NUGORTECH IT</h2>
+    <p style="color:var(--p); font-size:9px; font-weight:800; letter-spacing:1px; text-transform: uppercase;">Different Creative Think</p>
+    <div style="margin-top: 50px; color: #00A3FF; font-weight: 800;"><i class="fas fa-chart-pie"></i> LIVE ANALYTICS</div>
 </div>
-
 <div class="main">
-    <div class="stats-grid">
-        <div class="stat-card c-sales"><span class="stat-val" id="sumSales">0</span><span class="stat-lbl">Total Sales (Filtered)</span></div>
-        <div class="stat-card c-comm"><span class="stat-val" id="sumComm">0</span><span class="stat-lbl">Total 5% Commission</span></div>
-        <div class="stat-card c-due"><span class="stat-val" id="sumDue">0</span><span class="stat-lbl">Total Due Amount</span></div>
-        <div class="stat-card c-pay"><span class="stat-val" id="sumPay">0</span><span class="stat-lbl">Total Payment Received</span></div>
+    <div class="stat-grid">
+        <div class="card c-1"><span class="v" id="s1">0</span><span class="l">TOTAL STAFF</span></div>
+        <div class="card c-2"><span class="v" id="s2">0</span><span class="l">PRESENT TODAY</span></div>
+        <div class="card c-3"><span class="v" id="s3">0</span><span class="l">LATE TODAY</span></div>
+        <div class="card c-4"><span class="v" id="s4">0</span><span class="l">ABSENT TODAY</span></div>
     </div>
-
-    <div class="panel-grid">
-        <div class="glass-panel">
-            <div class="controls">
-                <input type="text" id="idF" placeholder="Search ID or Name..." onkeyup="processData()">
-                <input type="text" id="dtF" placeholder="Search Date (e.g. 28-02-2026)" onkeyup="processData()">
-                <button class="btn btn-csv" onclick="exportData()"><i class="fas fa-file-excel"></i> CSV</button>
-                <button class="btn btn-reset" onclick="wipeData()"><i class="fas fa-trash-can"></i> Reset</button>
+    <div class="grid-2">
+        <div class="panel">
+            <div class="search">
+                <input type="text" id="idSearch" placeholder="Search ID/Name..." onkeyup="filter()">
+                <input type="text" id="dateSearch" placeholder="Date (28-02-2026)" onkeyup="filter()">
+                <button class="btn" style="background:var(--b)" onclick="exp()">CSV</button>
+                <button class="btn" style="background:#f43f5e" onclick="wipeAll()"><i class="fas fa-trash-can"></i></button>
             </div>
-            <div class="table-wrap">
-                <table id="mainTable">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Sales</th>
-                            <th>Payment</th>
-                            <th>Due</th>
-                            <th>Service</th>
-                            <th>Lead</th>
-                            <th>Quality</th>
-                            <th>Possibility</th>
-                            <th>Calls</th>
-                            <th>New</th>
-                            <th>Old</th>
-                            <th>Remarks</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
+            <div style="max-height: 480px; overflow-y: auto;">
+                <table id="myT">
+                    <thead><tr><th>Date</th><th>ID</th><th>Name</th><th>IN</th><th>OUT</th><th>Status</th><th>Del</th></tr></thead>
                     <tbody id="tbody"></tbody>
                 </table>
             </div>
         </div>
-
-        <div class="glass-panel">
-            <h3 style="font-size: 14px; color: var(--nugor-blue); margin-bottom: 20px;">EMPLOYEE PERFORMANCE</h3>
-            <div id="empDash" class="emp-list"></div>
-            <div style="text-align:center; margin-top:30px;">
-                <canvas id="salesChart" style="max-height: 180px;"></canvas>
-            </div>
+        <div class="panel" style="text-align: center;">
+            <h3 style="font-size: 14px; color: #94a3b8; margin-bottom: 40px;">ATTENDANCE RATIO</h3>
+            <canvas id="chart"></canvas>
         </div>
     </div>
 </div>
 
-<!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
 <script>
-    const firebaseConfig = { 
-        apiKey: "AIzaSyBrz1xvq4Fpt9-j75-gUS4d8ebqPRLmOK0", 
-        authDomain: "sales-report-nugortech-it.firebaseapp.com",
-        databaseURL: "https://sales-report-nugortech-it-default-rtdb.firebaseio.com", 
-        projectId: "sales-report-nugortech-it", 
-        appId: "1:848643315031:web:e6fbf92153490ea9d31a12" 
-    };
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
-    let allReports = [];
+    const firebaseConfig = { apiKey: "AIzaSyB-AWYawVDTCAX0_ocZYQMqUI5ZteoDsIg", authDomain: "attendance-sheet-e3b6a.firebaseapp.com", databaseURL: "https://attendance-sheet-e3b6a-default-rtdb.firebaseio.com", projectId: "attendance-sheet-e3b6a", appId: "1:799184024638:web:82a23c732c074d98e80d6f" };
+    firebase.initializeApp(firebaseConfig); const database = firebase.database();
     let donut;
 
-    database.ref('sales_reports').on('value', snap => {
-        allReports = [];
-        const data = snap.val();
-        if(data) {
-            Object.keys(data).forEach(k => allReports.push({ key: k, ...data[k] }));
+    database.ref('attendance').on('value', snap => {
+        const tbody = document.getElementById('tbody'); tbody.innerHTML = "";
+        const all = snap.val(); let present = 0, lateCountToday = 0, staff = new Set();
+        const tKey = new Date().toLocaleDateString('en-GB').replace(/\//g, "-");
+
+        if (all) {
+            Object.keys(all).reverse().forEach(date => {
+                Object.keys(all[date]).forEach(id => {
+                    const d = all[date][id]; staff.add(id);
+                    let stBadge = `<span class="badge b-time">ON TIME</span>`;
+                    
+                    if (d.attendanceStatus === "Late") {
+                        stBadge = `<span class="badge b-late">LATE</span>`;
+                        if(date === tKey) lateCountToday++;
+                    }
+                    
+                    if(date === tKey) present++;
+
+                    tbody.innerHTML += `<tr><td>${date}</td><td style="color:#00A3FF">#${id}</td><td>${d.name}</td><td><span class="badge b-in">${d.inTime||'--'}</span></td><td><span class="badge b-in" style="color:#FF6B00; background:none;">${d.outTime||'--'}</span></td><td>${stBadge}</td><td><button onclick="delOne('${date}','${id}')" class="del-row" style="background:none; border:none; color:#f43f5e; cursor:pointer;"><i class="fas fa-trash-alt"></i></button></td></tr>`;
+                });
+            });
         }
-        processData();
+        document.getElementById('s1').innerText = staff.size;
+        document.getElementById('s2').innerText = present;
+        document.getElementById('s3').innerText = lateCountToday;
+        const absToday = Math.max(0, staff.size - present);
+        document.getElementById('s4').innerText = absToday;
+        updateChart(present - lateCountToday, lateCountToday, absToday);
     });
 
-    function processData() {
-        const idQuery = document.getElementById('idF').value.toUpperCase();
-        const dateQuery = document.getElementById('dtF').value.toUpperCase();
-        const tbody = document.getElementById('tbody');
-        const empDash = document.getElementById('empDash');
-        
-        tbody.innerHTML = "";
-        empDash.innerHTML = "";
-
-        let tSales = 0, tPay = 0, tDue = 0;
-        let empMap = {};
-
-        allReports.slice().reverse().forEach(r => {
-            const searchTxt = `${r.date} ${r.id} ${r.name}`.toUpperCase();
-            if(searchTxt.includes(idQuery) && searchTxt.includes(dateQuery)) {
-                
-                const s = Number(r.sales || 0);
-                const p = Number(r.pay || 0);
-                const d = Number(r.due || 0);
-
-                tSales += s; tPay += p; tDue += d;
-
-                if(!empMap[r.id]) empMap[r.id] = { name: r.name, sales: 0 };
-                empMap[r.id].sales += s;
-
-                tbody.innerHTML += `
-                    <tr>
-                        <td style="color:#64748b; font-size:11px;">${r.date}</td>
-                        <td style="color:#00A3FF">#${r.id}</td>
-                        <td style="white-space:nowrap">${r.name}</td>
-                        <td style="color:#00E676">৳${s}</td>
-                        <td style="color:#00E676">৳${p}</td>
-                        <td style="color:#FF1744">৳${d}</td>
-                        <td><span class="badge">${r.service}</span></td>
-                        <td>${r.lead || 0}</td>
-                        <td>${r.quality || '--'}</td>
-                        <td>${r.poss || '--'}</td>
-                        <td>${r.call || '--'}</td>
-                        <td>${r.newC || '0'}</td>
-                        <td>${r.oldC || '0'}</td>
-                        <td style="font-size:10px; opacity:0.6; max-width:100px; overflow:hidden;">${r.rem || '--'}</td>
-                        <td><button onclick="delOne('${r.key}')" class="del-btn"><i class="fas fa-trash-alt"></i></button></td>
-                    </tr>
-                `;
-            }
-        });
-
-        document.getElementById('sumSales').innerText = tSales.toLocaleString();
-        document.getElementById('sumComm').innerText = (tSales * 0.05).toLocaleString();
-        document.getElementById('sumDue').innerText = tDue.toLocaleString();
-        document.getElementById('sumPay').innerText = tPay.toLocaleString();
-
-        Object.keys(empMap).forEach(id => {
-            const e = empMap[id];
-            const c = e.sales * 0.05;
-            empDash.innerHTML += `
-                <div class="emp-item">
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <div>
-                            <span style="font-size:10px; color:#64748b;">ID #${id}</span>
-                            <div style="font-weight:800;">${e.name}</div>
-                        </div>
-                        <div style="text-align:right;">
-                            <div style="font-size:9px; color:#64748b;">COMMISSION</div>
-                            <div class="comm-val">৳${c.toLocaleString()}</div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        });
-
-        updateChart(tPay, tDue);
-    }
-
-    function updateChart(p, d) {
-        const ctx = document.getElementById('salesChart').getContext('2d');
-        if (donut) donut.destroy();
-        donut = new Chart(ctx, { type: 'doughnut', data: { labels: ['Paid', 'Due'], datasets: [{ data: [p, d], backgroundColor: ['#00E676', '#FF1744'], borderWidth: 0 }] }, options: { cutout: '80%', plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 10 } } } } } });
-    }
-
-    function exportData() {
-        let csv = "\uFEFFDate,ID,Name,Sales,Payment,Due,Service,Lead,Quality,Possibility,Calls,New,Old,Remarks\n";
-        document.querySelectorAll("#mainTable tbody tr").forEach(r => {
-            if(r.style.display !== "none") {
-                const cells = Array.from(r.querySelectorAll("td")).slice(0, 14).map(c => c.innerText.replace("#",""));
-                csv += cells.join(",") + "\n";
-            }
-        });
-        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = "Sales_Analytics_Report.csv";
-        link.click();
-    }
-
-    function delOne(k) { 
-        if(prompt("Admin Password?") === "8087") database.ref('sales_reports/'+k).remove(); 
-        else alert("Unauthorized!");
-    }
-    function wipeData() { 
-        if(prompt("DANGER: Enter Password to Clear All:") === "8087") database.ref('sales_reports').remove(); 
-    }
+    function updateChart(p, l, a) { const ctx = document.getElementById('chart').getContext('2d'); if (donut) donut.destroy(); donut = new Chart(ctx, { type: 'doughnut', data: { labels: ['On Time', 'Late', 'Absent'], datasets: [{ data: [p, l, a], backgroundColor: ['#00E676', '#FF1744', 'rgba(255,255,255,0.05)'], borderWidth: 0 }] }, options: { cutout: '85%', plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8' } } } } }); }
+    function filter() { const v1 = document.getElementById('idSearch').value.toUpperCase(), v2 = document.getElementById('dateSearch').value.toUpperCase(), rows = document.getElementById('tbody').getElementsByTagName('tr'); for (let r of rows) { r.style.display = (r.innerText.toUpperCase().includes(v1) && r.innerText.toUpperCase().includes(v2)) ? "" : "none"; } }
+    function exp() { let csv = "\uFEFFDate,ID,Name,In,Out,Status\n"; document.querySelectorAll("#myT tr").forEach((row, i) => { if(i === 0) return; csv += Array.from(row.querySelectorAll("td")).slice(0,6).map(c => c.innerText.replace("#","")).join(",") + "\n"; }); const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' }); const l = document.createElement("a"); l.href = URL.createObjectURL(blob); l.download = "Attendance_Report.csv"; l.click(); }
+    function delOne(d, i) { if(confirm("Delete this?")) database.ref('attendance/'+d+'/'+i).remove(); }
+    function wipeAll() { let p = prompt("Password?"); if(p === "8087") { database.ref('attendance').remove(); alert("Cleared!"); } else { alert("Wrong!"); } }
 </script>
 </body>
 </html>
