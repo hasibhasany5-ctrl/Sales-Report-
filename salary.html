@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Payroll Hub | Nugortech IT Ltd</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --p: #FF6B00; --b: #00A3FF; --s: #10b981; --bg: #0b0f19; --card: rgba(255,255,255,0.03); --border: rgba(255,255,255,0.1); }
+        * { box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+        body { margin: 0; background: var(--bg); color: white; min-height: 100vh; overflow-x: hidden; }
+        
+        .sidebar { width: 280px; background: rgba(0,0,0,0.3); backdrop-filter: blur(20px); border-right: 1px solid var(--border); padding: 40px 25px; position: fixed; height: 100vh; }
+        .main { margin-left: 280px; width: calc(100% - 280px); padding: 40px; }
+
+        .panel { background: var(--card); border: 1px solid var(--border); padding: 30px; border-radius: 30px; margin-bottom: 30px; }
+        
+        /* Input Table Styles */
+        .input-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        .input-table th { text-align: left; font-size: 11px; color: var(--b); padding: 10px; text-transform: uppercase; }
+        .input-table td { padding: 5px; }
+        input, select { background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 10px; border-radius: 10px; color: white; outline: none; width: 100%; font-size: 13px; }
+        
+        .btn { padding: 12px 20px; border-radius: 12px; border: none; font-weight: 700; cursor: pointer; transition: 0.3s; color: white; }
+        .btn-add { background: var(--glass); border: 1px dashed var(--b); color: var(--b); width: 100%; margin-bottom: 20px; }
+        .btn-gen { background: linear-gradient(135deg, var(--p), var(--b)); width: 100%; font-size: 16px; }
+
+        /* Final Sheet Design (Print Ready) */
+        .report-box { background: white; color: #1e293b; padding: 40px; border-radius: 20px; margin-top: 30px; display: none; }
+        .report-header { text-align: center; border-bottom: 3px solid #0b0f19; padding-bottom: 15px; margin-bottom: 20px; }
+        .report-header h1 { margin: 0; font-weight: 800; color: #0b0f19; text-transform: uppercase; }
+        
+        .final-table { width: 100%; border-collapse: collapse; }
+        .final-table th { background: #0b0f19; color: white; padding: 10px; font-size: 11px; border: 1px solid #333; }
+        .final-table td { padding: 10px; border: 1px solid #ccc; font-size: 12px; font-weight: 700; text-align: center; }
+        .final-table .name-col { text-align: left; }
+        .net-total { background: #f1f5f9; font-weight: 800; color: #10b981; }
+
+        @media print { 
+            body { background: white; }
+            .sidebar, .panel, .btn-add, .btn-gen, .sidebar-info { display: none !important; }
+            .main { margin-left: 0; width: 100%; padding: 0; }
+            .report-box { display: block !important; box-shadow: none; padding: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div style="text-align:center; margin-bottom:40px;">
+        <h2 style="margin:0; font-weight:800; color:white;">NUGORTECH IT</h2>
+        <p style="color:var(--p); font-size:9px; font-weight:800; letter-spacing:1px; text-transform: uppercase;">Payroll Management System</p>
+    </div>
+    <div class="sidebar-info" style="color:#64748b; font-size:12px; padding:20px; background:var(--card); border-radius:15px;">
+        <i class="fas fa-info-circle"></i> Add multiple employees to generate a single report for the Boss.
+    </div>
+</div>
+
+<div class="main">
+    <h1 style="font-weight: 800; margin-bottom:30px;">Salary Generator (Multi-Employee)</h1>
+
+    <div class="panel">
+        <div style="display: flex; gap: 20px; margin-bottom: 20px;">
+            <div style="flex:1"><label style="font-size:11px; color:var(--b); font-weight:800;">Target Month & Year</label>
+            <input type="text" id="targetMonth" placeholder="e.g. 03-2026"></div>
+        </div>
+
+        <table class="input-table" id="entryTable">
+            <thead>
+                <tr>
+                    <th width="15%">Employee ID</th>
+                    <th width="25%">Designation</th>
+                    <th width="20%">Joining Date</th>
+                    <th width="20%">Gross Salary</th>
+                    <th width="20%">Advance Paid</th>
+                </tr>
+            </thead>
+            <tbody id="inputBody">
+                <!-- Initial 3 rows for convenience -->
+                <tr class="emp-row">
+                    <td><input type="number" class="row-id" placeholder="ID"></td>
+                    <td>
+                        <select class="row-desig">
+                            <option value="SALES EXCUTATIVE">SALES EXCUTATIVE</option>
+                            <option value="VIDEO & GRAPHIC DESIGNER">VIDEO & GRAPHIC DESIGNER</option>
+                            <option value="WEB DEVELOPER">WEB DEVELOPER</option>
+                            <option value="ACCOUNTED & HR">ACCOUNTED & HR</option>
+                            <option value="META MARKETER Intern">META MARKETER Intern</option>
+                            <option value="SALES WITH MANAGEMENT">SALES WITH MANAGEMENT</option>
+                        </select>
+                    </td>
+                    <td><input type="text" class="row-join" placeholder="Date"></td>
+                    <td><input type="number" class="row-gross" placeholder="Gross"></td>
+                    <td><input type="number" class="row-adv" placeholder="Advance" value="0"></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <button class="btn btn-add" onclick="addNewRow()"><i class="fas fa-plus"></i> Add Another Employee Row</button>
+        <button class="btn btn-gen" onclick="generateBulkSalary()">GENERATE MASTER SALARY SHEET</button>
+    </div>
+
+    <!-- Final Printable Result -->
+    <div id="printArea" class="report-box">
+        <div class="report-header">
+            <h1>Nugortech IT Ltd.</h1>
+            <p style="font-weight: 800; font-size: 18px; margin: 5px 0;">Salary Sheet</p>
+            <p id="displayMonth" style="font-weight: 700; margin: 0; color: #555;"></p>
+        </div>
+
+        <table class="final-table">
+            <thead>
+                <tr>
+                    <th>SL</th>
+                    <th class="name-col">Name of Employee</th>
+                    <th>Designation</th>
+                    <th>Joining Date</th>
+                    <th>Gross Salary</th>
+                    <th>Total Sales</th>
+                    <th>Comm (5%)</th>
+                    <th>Advance</th>
+                    <th>Net Salary</th>
+                </tr>
+            </thead>
+            <tbody id="finalBody"></tbody>
+        </table>
+
+        <div style="margin-top: 50px; display: flex; justify-content: space-between;">
+            <p style="border-top: 1px solid #000; padding-top: 5px; width: 150px; text-align: center; font-size: 10px;">Accountant Signature</p>
+            <p style="border-top: 1px solid #000; padding-top: 5px; width: 150px; text-align: center; font-size: 10px;">Director Signature</p>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <button class="btn" style="background:#217346" onclick="downloadCSV()"><i class="fas fa-file-excel"></i> Save as Excel</button>
+            <button class="btn" style="background:#0b0f19; margin-left:10px;" onclick="window.print()"><i class="fas fa-print"></i> Print PDF Report</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+<script>
+    const firebaseConfig = { 
+        apiKey: "AIzaSyBrz1xvq4Fpt9-j75-gUS4d8ebqPRLmOK0", 
+        databaseURL: "https://sales-report-nugortech-it-default-rtdb.firebaseio.com", 
+        projectId: "sales-report-nugortech-it", 
+        appId: "1:848643315031:web:e6fbf92153490ea9d31a12" 
+    };
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    function addNewRow() {
+        const tbody = document.getElementById('inputBody');
+        const newRow = tbody.rows[0].cloneNode(true);
+        // Clear values in cloned row
+        newRow.querySelectorAll('input').forEach(i => i.value = (i.classList.contains('row-adv') ? "0" : ""));
+        tbody.appendChild(newRow);
+    }
+
+    async function generateBulkSalary() {
+        const month = document.getElementById('targetMonth').value;
+        if(!month) return alert("Enter Month (MM-YYYY) first!");
+
+        const rows = document.querySelectorAll('.emp-row');
+        const finalBody = document.getElementById('finalBody');
+        finalBody.innerHTML = "<tr><td colspan='9'>Calculating Data from Cloud...</td></tr>";
+        
+        // Fetch all sales once for speed
+        const salesSnap = await database.ref('sales_reports').once('value');
+        const salesData = salesSnap.val() || {};
+
+        let resultsHTML = "";
+        let sl = 1;
+
+        for (let row of rows) {
+            const id = row.querySelector('.row-id').value;
+            const desig = row.querySelector('.row-desig').value;
+            const join = row.querySelector('.row-join').value;
+            const gross = Number(row.querySelector('.row-gross').value);
+            const adv = Number(row.querySelector('.row-adv').value || 0);
+
+            if(!id || !gross) continue; // Skip empty rows
+
+            let totalSales = 0;
+            let empName = "Unknown ID #" + id;
+
+            // Calculate sales for this ID in target month
+            Object.values(salesData).forEach(entry => {
+                if(entry.id == id && entry.date.includes(month)) {
+                    totalSales += Number(entry.sales || 0);
+                    empName = entry.name;
+                }
+            });
+
+            const comm = Math.round(totalSales * 0.05);
+            const net = (gross + comm) - adv;
+
+            resultsHTML += `
+                <tr>
+                    <td>${sl++}</td>
+                    <td class="name-col">${empName.toUpperCase()}</td>
+                    <td>${desig}</td>
+                    <td>${join}</td>
+                    <td>${gross.toLocaleString()}</td>
+                    <td style="background:#fcfaff;">${totalSales.toLocaleString()}</td>
+                    <td style="color:#FF6B00;">${comm.toLocaleString()}</td>
+                    <td style="color:#ef4444;">${adv.toLocaleString()}</td>
+                    <td class="net-total">৳${net.toLocaleString()}</td>
+                </tr>
+            `;
+        }
+
+        document.getElementById('displayMonth').innerText = "Month : " + month;
+        finalBody.innerHTML = resultsHTML;
+        document.getElementById('printArea').style.display = "block";
+        document.getElementById('printArea').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function downloadCSV() {
+        let csv = "\uFEFFSL,Name,Designation,Joining Date,Gross,Total Sales,Commission,Advance,Net Salary\n";
+        document.querySelectorAll("#finalBody tr").forEach(row => {
+            const cells = Array.from(row.querySelectorAll("td")).map(c => c.innerText.replace("৳","").replace(/,/g,""));
+            csv += cells.join(",") + "\n";
+        });
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = `Nugortech_Salary_Report_${document.getElementById('targetMonth').value}.csv`;
+        link.click();
+    }
+</script>
+</body>
+</html>
