@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Payroll | Nugortech IT Ltd</title>
-    <!-- Google Fonts -->
+    <title>Professional Payroll | Nugortech IT Ltd</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --p: #FF6B00; --b: #00A3FF; --s: #10b981; --bg: #0f172a; --card: rgba(255,255,255,0.03); }
+        :root { --p: #FF6B00; --b: #00A3FF; --bg: #0f172a; --card: rgba(255,255,255,0.03); --border: rgba(255,255,255,0.1); }
         * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-        body { margin: 0; background: var(--bg); color: white; min-height: 100vh; overflow-x: hidden; }
+        body { margin: 0; background: var(--bg); color: white; min-height: 100vh; }
         
         .sidebar { width: 280px; background: rgba(0,0,0,0.3); backdrop-filter: blur(25px); border-right: 1px solid rgba(255,255,255,0.1); padding: 40px 25px; position: fixed; height: 100vh; }
         .main { margin-left: 280px; width: calc(100% - 280px); padding: 40px; }
@@ -21,29 +20,38 @@
         input, select { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 10px; border-radius: 12px; color: white; outline: none; width: 100%; font-size: 13px; }
 
         .btn { padding: 12px 25px; border: none; border-radius: 15px; font-weight: 700; cursor: pointer; transition: 0.3s; color: white; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-gen { background: linear-gradient(135deg, var(--p), var(--b)); width: 100%; font-size: 16px; margin-top: 10px; }
+        .btn-gen { background: linear-gradient(135deg, var(--p), var(--b)); width: 100%; font-size: 16px; }
 
-        /* Report Styles */
-        .report-box { background: white; color: #1e293b; padding: 50px; border-radius: 30px; margin-top: 40px; display: none; }
-        .report-header { text-align: center; border-bottom: 4px solid var(--b); padding-bottom: 20px; margin-bottom: 30px; }
-        .report-header h1 { margin: 0; font-weight: 800; color: #0b0f19; font-size: 28px; }
+        /* Report Styles (Print Area) */
+        .report-box { background: white; color: #1e293b; border-radius: 0; display: none; width: 100%; max-width: 900px; margin: 40px auto; overflow: hidden; position: relative; }
         
+        .header-img { width: 100%; display: block; }
+        .footer-img { width: 100%; display: block; margin-top: 30px; }
+
+        .report-content { padding: 0 40px; }
+        .report-title { text-align: center; margin: 20px 0; }
+        .report-title h2 { margin: 0; font-size: 24px; color: #0b0f19; text-transform: uppercase; border-bottom: 2px solid #eee; display: inline-block; padding-bottom: 5px; }
+        .period-box { text-align: center; font-weight: 800; font-size: 14px; margin-bottom: 20px; }
+
         .final-table { width: 100%; border-collapse: collapse; }
-        .final-table th { background: var(--b); color: white; padding: 15px 10px; font-size: 11px; border: 1px solid #0081cc; text-transform: uppercase; }
-        .final-table td { padding: 15px 10px; border: 1px solid #e2e8f0; font-size: 13px; font-weight: 700; text-align: center; }
+        .final-table th { background: #f8fafc; color: #333; padding: 10px; font-size: 10px; border: 1px solid #ddd; text-transform: uppercase; }
+        .final-table td { padding: 10px; border: 1px solid #eee; font-size: 11px; font-weight: 700; text-align: center; }
         
-        /* Signature Style */
-        .sign-area { margin-top: 80px; display: flex; justify-content: space-between; padding: 0 40px; }
-        .sign-box { text-align: center; width: 220px; }
-        .signature-font { font-family: 'Dancing Script', cursive; font-size: 32px; color: #1e3a8a; margin-bottom: -10px; }
-        .sign-line { border-top: 2px solid #333; margin-top: 5px; padding-top: 8px; font-size: 13px; font-weight: 800; color: #333; }
-        .designation { font-size: 11px; color: #64748b; font-weight: 600; text-transform: uppercase; }
+        /* Signatures */
+        .sign-area { margin-top: 50px; display: flex; justify-content: space-between; padding: 0 20px; }
+        .sign-box { text-align: center; width: 200px; }
+        .signature-font { font-family: 'Dancing Script', cursive; font-size: 28px; color: #1e3a8a; margin-bottom: -5px; }
+        .sign-line { border-top: 1.5px solid #333; padding-top: 5px; font-size: 11px; font-weight: 800; }
 
         @media print { 
+            @page { size: portrait; margin: 0; }
             body { background: white; }
             .sidebar, .panel, .btn-gen, .main-title, .action-btns { display: none !important; }
             .main { margin-left: 0; width: 100%; padding: 0; }
-            .report-box { display: block !important; box-shadow: none; padding: 0; }
+            .report-box { display: block !important; margin: 0; padding: 0; box-shadow: none; }
+            /* Force content into one page */
+            .final-table td, .final-table th { padding: 8px 5px; }
+            .sign-area { margin-top: 30px; }
         }
     </style>
 </head>
@@ -52,12 +60,12 @@
 <div class="sidebar">
     <div style="text-align:center; margin-bottom:50px;">
         <h2 style="margin:0; font-weight:800;">NUGORTECH IT</h2>
-        <p style="color:var(--p); font-size:9px; font-weight:800; letter-spacing:1px; text-transform: uppercase;">Official Payroll</p>
+        <p style="color:var(--p); font-size:9px; font-weight:800; letter-spacing:1px; text-transform: uppercase;">Payroll Management</p>
     </div>
 </div>
 
 <div class="main">
-    <h1 class="main-title" style="font-weight: 800; margin-bottom:30px;">Salary Management</h1>
+    <h1 class="main-title" style="font-weight: 800; margin-bottom:30px;">Salary System</h1>
 
     <div class="panel">
         <label style="color:var(--b); font-size:11px; font-weight:800;">TARGET MONTH (MM-YYYY)</label>
@@ -65,7 +73,7 @@
 
         <table class="input-table">
             <thead>
-                <tr><th width="30%">Name</th><th width="15%">ID</th><th width="25%">Designation</th><th width="15%">Gross</th><th width="15%">Advance</th></tr>
+                <tr><th width="35%">Employee Name</th><th width="15%">ID</th><th width="25%">Designation</th><th width="12%">Gross</th><th width="12%">Advance</th></tr>
             </thead>
             <tbody id="inputBody">
                 <tr class="emp-row">
@@ -73,53 +81,57 @@
                     <td><input type="number" class="row-id" placeholder="ID"></td>
                     <td>
                         <select class="row-desig">
+                            <option value="SALES WITH MANAGEMENT">SALES WITH MANAGEMENT</option>
                             <option value="SALES EXCUTATIVE">SALES EXCUTATIVE</option>
                             <option value="VIDEO & GRAPHIC DESIGNER">VIDEO & GRAPHIC DESIGNER</option>
                             <option value="WEB DEVELOPER">WEB DEVELOPER</option>
                             <option value="ACCOUNTED & HR">ACCOUNTED & HR</option>
                             <option value="META MARKETER Intern">META MARKETER Intern</option>
-                            <option value="SALES WITH MANAGEMENT">SALES WITH MANAGEMENT</option>
                         </select>
                     </td>
-                    <td><input type="number" class="row-gross" placeholder="BDT"></td>
+                    <td><input type="number" class="row-gross" placeholder="Gross"></td>
                     <td><input type="number" class="row-adv" value="0"></td>
                 </tr>
             </tbody>
         </table>
         
-        <button class="btn btn-gen" onclick="generatePayroll()"><i class="fas fa-sync-alt"></i> GENERATE OFFICIAL REPORT</button>
+        <button class="btn btn-gen" onclick="generatePayroll()"><i class="fas fa-file-invoice"></i> GENERATE FINAL SALARY SHEET</button>
     </div>
 
     <div id="printArea" class="report-box">
-        <div class="report-header">
-            <h1>Nugortech IT Ltd.</h1>
-            <p>OFFICIAL SALARY SHEET</p>
-            <div id="displayMonth" style="font-weight: 800; margin-top: 10px; font-size: 14px; color: #555;"></div>
+        <!-- আপনার দেওয়া Header Image এখানে বসবে -->
+        <img src="https://i.ibb.co/6RRL9HVM/Logo-Final.png" class="header-img" alt="Header">
+
+        <div class="report-content">
+            <div class="report-title"><h2>Salary Sheet</h2></div>
+            <div class="period-box" id="displayMonth">Month : ---</div>
+
+            <table class="final-table">
+                <thead>
+                    <tr><th>SL</th><th style="text-align:left;">Employee Name</th><th>ID</th><th>Designation</th><th>Gross</th><th>Sales</th><th>Comm (5%)</th><th>Adv.</th><th>Net Salary</th></tr>
+                </thead>
+                <tbody id="finalBody"></tbody>
+            </table>
+
+            <div class="sign-area">
+                <div class="sign-box">
+                    <div class="signature-font">Hasib</div>
+                    <div class="sign-line">Accountant Signature</div>
+                    <div style="font-size:9px; font-weight:700;">Hasib - Accountant</div>
+                </div>
+                <div class="sign-box">
+                    <div class="signature-font">Nur Islam</div>
+                    <div class="sign-line">Director Signature</div>
+                    <div style="font-size:9px; font-weight:700;">Nur Islam - Director</div>
+                </div>
+            </div>
         </div>
 
-        <table class="final-table">
-            <thead>
-                <tr><th>SL</th><th style="text-align:left;">Name of Employee</th><th>ID</th><th>Designation</th><th>Gross</th><th>Sales</th><th>Comm (5%)</th><th>Adv.</th><th>Net Salary</th></tr>
-            </thead>
-            <tbody id="finalBody"></tbody>
-        </table>
+        <!-- আপনার দেওয়া Footer Image এখানে বসবে -->
+        <img src="https://i.ibb.co/KcL8yN7W/footer-image.png" class="footer-img" alt="Footer">
 
-        <!-- Beautiful Signature Section -->
-        <div class="sign-area">
-            <div class="sign-box">
-                <div class="signature-font">Hasib</div>
-                <div class="sign-line">Accountant Signature</div>
-                <div class="designation">Hasib - Accountant</div>
-            </div>
-            <div class="sign-box">
-                <div class="signature-font">Nur Islam</div>
-                <div class="sign-line">Director Signature</div>
-                <div class="designation">Nur Islam - Director</div>
-            </div>
-        </div>
-
-        <div class="action-btns" style="text-align: center; margin-top: 50px;">
-            <button class="btn" style="background:#0b0f19" onclick="window.print()"><i class="fas fa-print"></i> Print PDF Report</button>
+        <div class="action-btns" style="text-align: center; margin-top: 30px; padding-bottom: 40px;">
+            <button class="btn" style="background:#0b0f19" onclick="window.print()"><i class="fas fa-print"></i> PRINT SALARY REPORT</button>
         </div>
     </div>
 </div>
@@ -137,7 +149,7 @@
         if(!month) return alert("Enter Month!");
         const rows = document.querySelectorAll('.emp-row');
         const finalBody = document.getElementById('finalBody');
-        finalBody.innerHTML = "<tr><td colspan='9'>Calculating...</td></tr>";
+        finalBody.innerHTML = "<tr><td colspan='9'>Syncing Cloud Data...</td></tr>";
         
         const salesSnap = await database.ref('sales_reports').once('value');
         const salesData = salesSnap.val() || {};
@@ -154,10 +166,10 @@
             const comm = Math.round(totalSales * 0.05);
             const net = (gross + comm) - adv;
 
-            html += `<tr><td>${sl++}</td><td style="text-align:left;">${name.toUpperCase()}</td><td>#${id}</td><td>${desig}</td><td>${gross.toLocaleString()}</td><td style="color:#00A3FF">৳${totalSales.toLocaleString()}</td><td style="color:#FF6B00">৳${comm.toLocaleString()}</td><td style="color:#ef4444">৳${adv.toLocaleString()}</td><td style="background:#0f172a; color:#10b981;">৳${net.toLocaleString()}</td></tr>`;
+            html += `<tr><td>${sl++}</td><td style="text-align:left;">${name.toUpperCase()}</td><td>#${id}</td><td>${desig}</td><td>${gross.toLocaleString()}</td><td style="color:#00A3FF">৳${totalSales.toLocaleString()}</td><td style="color:#FF6B00">৳${comm.toLocaleString()}</td><td style="color:#ef4444">৳${adv.toLocaleString()}</td><td style="background:#f1f5f9; color:#10b981;">৳${net.toLocaleString()}</td></tr>`;
         });
 
-        document.getElementById('displayMonth').innerText = "Payroll Period: " + month;
+        document.getElementById('displayMonth').innerText = "Month : " + month;
         finalBody.innerHTML = html;
         document.getElementById('printArea').style.display = "block";
         document.getElementById('printArea').scrollIntoView({ behavior: 'smooth' });
