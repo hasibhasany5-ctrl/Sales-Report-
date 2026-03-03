@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Professional Payroll | Nugortech IT Ltd</title>
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -11,104 +12,119 @@
         * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { margin: 0; background: var(--bg); color: white; min-height: 100vh; }
         
-        .sidebar { width: 280px; background: rgba(0,0,0,0.3); backdrop-filter: blur(25px); border-right: 1px solid rgba(255,255,255,0.1); padding: 40px 25px; position: fixed; height: 100vh; }
+        /* Sidebar UI */
+        .sidebar { width: 280px; background: rgba(0,0,0,0.3); backdrop-filter: blur(25px); border-right: 1px solid var(--border); padding: 40px 25px; position: fixed; height: 100vh; }
         .main { margin-left: 280px; width: calc(100% - 280px); padding: 40px; }
 
-        .panel { background: var(--card); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 30px; margin-bottom: 30px; }
+        /* Input Form Panel */
+        .panel { background: var(--card); border: 1px solid var(--border); padding: 30px; border-radius: 30px; margin-bottom: 30px; }
         .input-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
         .input-table th { text-align: left; font-size: 11px; color: var(--b); padding: 10px; text-transform: uppercase; }
-        input, select { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 10px; border-radius: 12px; color: white; outline: none; width: 100%; font-size: 13px; }
+        input, select { background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 10px; border-radius: 12px; color: white; outline: none; width: 100%; font-size: 13px; }
 
-        .btn { padding: 12px 25px; border: none; border-radius: 15px; font-weight: 700; cursor: pointer; transition: 0.3s; color: white; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-gen { background: linear-gradient(135deg, var(--p), var(--b)); width: 100%; font-size: 16px; }
+        .btn { padding: 12px 25px; border: none; border-radius: 15px; font-weight: 700; cursor: pointer; transition: 0.3s; color: white; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-gen { background: linear-gradient(135deg, var(--p), var(--b)); width: 100%; font-size: 16px; margin-top: 10px; }
 
-        /* Report Styles (Print Area) */
-        .report-box { background: white; color: #1e293b; border-radius: 0; display: none; width: 100%; max-width: 900px; margin: 40px auto; overflow: hidden; position: relative; }
+        /* Report Box (The Printed Part) */
+        .report-box { background: white; color: #1e293b; border-radius: 0; display: none; width: 100%; max-width: 900px; margin: 40px auto; overflow: hidden; position: relative; box-shadow: 0 30px 60px rgba(0,0,0,0.5); }
         
-        .header-img { width: 100%; display: block; }
-        .footer-img { width: 100%; display: block; margin-top: 30px; }
+        /* Header Styling */
+        .report-header { padding: 40px 50px 20px; text-align: left; display: flex; justify-content: space-between; align-items: center; border-bottom: 4px solid var(--b); }
+        .header-logo img { height: 75px; }
+        .header-address { text-align: right; }
+        .header-address h2 { margin: 0; color: #0b0f19; font-weight: 800; }
+        .header-address p { margin: 5px 0 0; font-size: 11px; font-weight: 700; color: #555; line-height: 1.4; max-width: 250px; }
 
-        .report-content { padding: 0 40px; }
-        .report-title { text-align: center; margin: 20px 0; }
-        .report-title h2 { margin: 0; font-size: 24px; color: #0b0f19; text-transform: uppercase; border-bottom: 2px solid #eee; display: inline-block; padding-bottom: 5px; }
-        .period-box { text-align: center; font-weight: 800; font-size: 14px; margin-bottom: 20px; }
+        .report-content { padding: 30px 50px; }
+        .report-title { text-align: center; margin-bottom: 20px; }
+        .report-title h3 { margin: 0; font-size: 22px; color: #0b0f19; text-transform: uppercase; border-bottom: 2px solid #eee; display: inline-block; padding-bottom: 5px; }
+        .period-text { text-align: center; font-weight: 800; font-size: 13px; color: var(--p); margin-bottom: 20px; }
 
         .final-table { width: 100%; border-collapse: collapse; }
-        .final-table th { background: #f8fafc; color: #333; padding: 10px; font-size: 10px; border: 1px solid #ddd; text-transform: uppercase; }
-        .final-table td { padding: 10px; border: 1px solid #eee; font-size: 11px; font-weight: 700; text-align: center; }
+        .final-table th { background: #f1f5f9; color: #333; padding: 12px 8px; font-size: 10px; border: 1px solid #cbd5e1; text-transform: uppercase; }
+        .final-table td { padding: 12px 8px; border: 1px solid #e2e8f0; font-size: 11px; font-weight: 700; text-align: center; }
         
-        /* Signatures */
-        .sign-area { margin-top: 50px; display: flex; justify-content: space-between; padding: 0 20px; }
-        .sign-box { text-align: center; width: 200px; }
-        .signature-font { font-family: 'Dancing Script', cursive; font-size: 28px; color: #1e3a8a; margin-bottom: -5px; }
-        .sign-line { border-top: 1.5px solid #333; padding-top: 5px; font-size: 11px; font-weight: 800; }
+        .name-cell { text-align: left !important; color: #0b0f19; }
+        .net-total { background: #0f172a; color: #10b981; font-size: 14px !important; }
+
+        /* Signature Section */
+        .sign-area { margin-top: 60px; display: flex; justify-content: space-between; padding: 0 20px; }
+        .sign-box { text-align: center; width: 220px; }
+        .signature-font { font-family: 'Dancing Script', cursive; font-size: 30px; color: #1e3a8a; margin-bottom: -5px; }
+        .sign-line { border-top: 1.5px solid #333; padding-top: 5px; font-size: 11px; font-weight: 800; color: #333; }
 
         @media print { 
-            @page { size: portrait; margin: 0; }
+            @page { size: A4; margin: 0; }
             body { background: white; }
-            .sidebar, .panel, .btn-gen, .main-title, .action-btns { display: none !important; }
+            .sidebar, .panel, .btn-gen, .action-btns { display: none !important; }
             .main { margin-left: 0; width: 100%; padding: 0; }
-            .report-box { display: block !important; margin: 0; padding: 0; box-shadow: none; }
-            /* Force content into one page */
-            .final-table td, .final-table th { padding: 8px 5px; }
-            .sign-area { margin-top: 30px; }
+            .report-box { display: block !important; margin: 0; padding: 0; box-shadow: none; border: none; }
         }
     </style>
 </head>
 <body>
 
 <div class="sidebar">
-    <div style="text-align:center; margin-bottom:50px;">
+    <div style="text-align:center; margin-bottom:40px;">
         <h2 style="margin:0; font-weight:800;">NUGORTECH IT</h2>
-        <p style="color:var(--p); font-size:9px; font-weight:800; letter-spacing:1px; text-transform: uppercase;">Payroll Management</p>
+        <p style="color:var(--p); font-size:9px; font-weight:800; letter-spacing:1px; text-transform: uppercase;">Cloud Payroll Pro</p>
     </div>
 </div>
 
 <div class="main">
-    <h1 class="main-title" style="font-weight: 800; margin-bottom:30px;">Salary System</h1>
+    <h1 style="font-weight: 800; margin-bottom:30px;">Salary Management System</h1>
 
     <div class="panel">
-        <label style="color:var(--b); font-size:11px; font-weight:800;">TARGET MONTH (MM-YYYY)</label>
+        <label style="color:var(--b); font-size:11px; font-weight:800;">MONTH & YEAR (MM-YYYY)</label>
         <input type="text" id="targetMonth" placeholder="e.g. 03-2026" style="max-width: 300px; margin-bottom: 25px;">
 
         <table class="input-table">
             <thead>
-                <tr><th width="35%">Employee Name</th><th width="15%">ID</th><th width="25%">Designation</th><th width="12%">Gross</th><th width="12%">Advance</th></tr>
+                <tr><th width="30%">Name</th><th width="15%">ID</th><th width="25%">Designation</th><th width="15%">Gross</th><th width="15%">Advance</th></tr>
             </thead>
             <tbody id="inputBody">
                 <tr class="emp-row">
-                    <td><input type="text" class="row-name" placeholder="Full Name"></td>
+                    <td><input type="text" class="row-name" placeholder="Employee Name"></td>
                     <td><input type="number" class="row-id" placeholder="ID"></td>
                     <td>
                         <select class="row-desig">
-                            <option value="SALES WITH MANAGEMENT">SALES WITH MANAGEMENT</option>
                             <option value="SALES EXCUTATIVE">SALES EXCUTATIVE</option>
                             <option value="VIDEO & GRAPHIC DESIGNER">VIDEO & GRAPHIC DESIGNER</option>
                             <option value="WEB DEVELOPER">WEB DEVELOPER</option>
                             <option value="ACCOUNTED & HR">ACCOUNTED & HR</option>
                             <option value="META MARKETER Intern">META MARKETER Intern</option>
+                            <option value="SALES WITH MANAGEMENT">SALES WITH MANAGEMENT</option>
                         </select>
                     </td>
-                    <td><input type="number" class="row-gross" placeholder="Gross"></td>
+                    <td><input type="number" class="row-gross" placeholder="BDT"></td>
                     <td><input type="number" class="row-adv" value="0"></td>
                 </tr>
             </tbody>
         </table>
         
-        <button class="btn btn-gen" onclick="generatePayroll()"><i class="fas fa-file-invoice"></i> GENERATE FINAL SALARY SHEET</button>
+        <button class="btn btn-gen" onclick="generatePayroll()"><i class="fas fa-file-invoice-dollar"></i> GENERATE FINAL ONE-PAGE REPORT</button>
     </div>
 
+    <!-- Final Report Content -->
     <div id="printArea" class="report-box">
-        <!-- আপনার দেওয়া Header Image এখানে বসবে -->
-        <img src="https://i.ibb.co/6RRL9HVM/Logo-Final.png" class="header-img" alt="Header">
+        <div class="report-header">
+            <div class="header-logo">
+                <!-- আপনার লোগোর লিঙ্ক এখানে বসানো হয়েছে -->
+                <img src="https://i.ibb.co/6RRL9HVM/Logo-Final.png" alt="Nugortech Logo">
+            </div>
+            <div class="header-address">
+                <h2>Nugortech IT Ltd.</h2>
+                <p>HOUSE #85/2, ROAD #4, MOHAMMADIA HOUSING LTD, MOHAMMADPUR, DHAKA-1207</p>
+            </div>
+        </div>
 
         <div class="report-content">
-            <div class="report-title"><h2>Salary Sheet</h2></div>
-            <div class="period-box" id="displayMonth">Month : ---</div>
+            <div class="report-title"><h3>Salary Sheet</h3></div>
+            <div class="period-text" id="displayMonth">Month : ---</div>
 
             <table class="final-table">
                 <thead>
-                    <tr><th>SL</th><th style="text-align:left;">Employee Name</th><th>ID</th><th>Designation</th><th>Gross</th><th>Sales</th><th>Comm (5%)</th><th>Adv.</th><th>Net Salary</th></tr>
+                    <tr><th>SL</th><th style="text-align:left;">Name of Employee</th><th>ID</th><th>Designation</th><th>Gross</th><th>Total Sales</th><th>Comm (5%)</th><th>Adv.</th><th>Net Salary</th></tr>
                 </thead>
                 <tbody id="finalBody"></tbody>
             </table>
@@ -117,21 +133,19 @@
                 <div class="sign-box">
                     <div class="signature-font">Hasib</div>
                     <div class="sign-line">Accountant Signature</div>
-                    <div style="font-size:9px; font-weight:700;">Hasib - Accountant</div>
+                    <div style="font-size:9px; font-weight:700; color:#666;">Hasib - Accountant & HR</div>
                 </div>
                 <div class="sign-box">
                     <div class="signature-font">Nur Islam</div>
                     <div class="sign-line">Director Signature</div>
-                    <div style="font-size:9px; font-weight:700;">Nur Islam - Director</div>
+                    <div style="font-size:9px; font-weight:700; color:#666;">Nur Islam - Managing Director</div>
                 </div>
             </div>
         </div>
 
-        <!-- আপনার দেওয়া Footer Image এখানে বসবে -->
-        <img src="https://i.ibb.co/KcL8yN7W/footer-image.png" class="footer-img" alt="Footer">
-
         <div class="action-btns" style="text-align: center; margin-top: 30px; padding-bottom: 40px;">
-            <button class="btn" style="background:#0b0f19" onclick="window.print()"><i class="fas fa-print"></i> PRINT SALARY REPORT</button>
+            <button class="btn" style="background:#217346" onclick="downloadCSV()"><i class="fas fa-file-excel"></i> Export Excel</button>
+            <button class="btn" style="background:#0b0f19; margin-left:10px;" onclick="window.print()"><i class="fas fa-print"></i> Print PDF</button>
         </div>
     </div>
 </div>
@@ -146,10 +160,10 @@
 
     async function generatePayroll() {
         const month = document.getElementById('targetMonth').value;
-        if(!month) return alert("Enter Month!");
+        if(!month) return alert("Please enter target Month!");
         const rows = document.querySelectorAll('.emp-row');
         const finalBody = document.getElementById('finalBody');
-        finalBody.innerHTML = "<tr><td colspan='9'>Syncing Cloud Data...</td></tr>";
+        finalBody.innerHTML = "<tr><td colspan='9'>Fetching Cloud Data...</td></tr>";
         
         const salesSnap = await database.ref('sales_reports').once('value');
         const salesData = salesSnap.val() || {};
@@ -166,13 +180,24 @@
             const comm = Math.round(totalSales * 0.05);
             const net = (gross + comm) - adv;
 
-            html += `<tr><td>${sl++}</td><td style="text-align:left;">${name.toUpperCase()}</td><td>#${id}</td><td>${desig}</td><td>${gross.toLocaleString()}</td><td style="color:#00A3FF">৳${totalSales.toLocaleString()}</td><td style="color:#FF6B00">৳${comm.toLocaleString()}</td><td style="color:#ef4444">৳${adv.toLocaleString()}</td><td style="background:#f1f5f9; color:#10b981;">৳${net.toLocaleString()}</td></tr>`;
+            html += `<tr><td>${sl++}</td><td class="name-cell">${name.toUpperCase()}</td><td style="color:#64748b">#${id}</td><td style="font-size:9px">${desig}</td><td>${gross.toLocaleString()}</td><td style="color:var(--b)">৳${totalSales.toLocaleString()}</td><td style="color:var(--p)">৳${comm.toLocaleString()}</td><td style="color:#ef4444">৳${adv.toLocaleString()}</td><td class="net-total">৳${net.toLocaleString()}</td></tr>`;
         });
 
         document.getElementById('displayMonth').innerText = "Month : " + month;
         finalBody.innerHTML = html;
         document.getElementById('printArea').style.display = "block";
         document.getElementById('printArea').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function downloadCSV() {
+        let csv = "\uFEFFSL,Name,ID,Designation,Gross,Total Sales,Commission,Advance,Net Salary\n";
+        document.querySelectorAll("#finalBody tr").forEach(row => {
+            const cells = Array.from(row.querySelectorAll("td")).map(c => c.innerText.replace("৳","").replace(/,/g,""));
+            csv += cells.join(",") + "\n";
+        });
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a"); link.href = URL.createObjectURL(blob);
+        link.download = `Nugortech_Salary_${document.getElementById('targetMonth').value}.csv`; link.click();
     }
 </script>
 </body>
