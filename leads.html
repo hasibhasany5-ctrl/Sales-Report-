@@ -4,47 +4,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WhatsApp Lead Hub | Nugortech IT Ltd</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- Modern UI Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --p: #FF6B00; --b: #00A3FF; --s: #10b981; --bg: #0b0f19; --card: rgba(255,255,255,0.03); --border: rgba(255,255,255,0.1); }
-        * { box-sizing: border-box; font-family: 'Outfit', sans-serif; }
-        body { margin: 0; background: var(--bg); color: white; display: flex; min-height: 100vh; }
+        * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { margin: 0; background: var(--bg); color: white; display: flex; min-height: 100vh; overflow-x: hidden; }
 
-        /* Sidebar */
-        .sidebar { width: 280px; background: rgba(0,0,0,0.3); backdrop-filter: blur(20px); border-right: 1px solid var(--border); padding: 50px 30px; position: fixed; height: 100vh; }
+        /* Navigation Sidebar */
+        .sidebar { width: 280px; background: rgba(0,0,0,0.4); backdrop-filter: blur(25px); border-right: 1px solid var(--border); padding: 40px 25px; position: fixed; height: 100vh; z-index: 100; }
         .main { margin-left: 280px; width: calc(100% - 280px); padding: 40px; }
 
-        /* Summary Cards */
+        /* Dynamic Stats Grid */
         .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 35px; }
-        .stat-card { padding: 25px; border-radius: 25px; border: 1px solid var(--border); text-align: center; background: var(--card); transition: 0.3s; }
-        .stat-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .stat-val { font-size: 28px; font-weight: 800; display: block; margin-bottom: 5px; color: var(--b); }
-        .stat-lbl { font-size: 10px; font-weight: 700; opacity: 0.6; text-transform: uppercase; }
+        .stat-card { padding: 25px; border-radius: 25px; border: 1px solid var(--border); text-align: center; background: var(--card); transition: 0.3s; position: relative; overflow: hidden; }
+        .stat-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); border-color: var(--b); }
+        .stat-val { font-size: 30px; font-weight: 800; display: block; margin-bottom: 5px; color: var(--b); }
+        .stat-lbl { font-size: 10px; font-weight: 700; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* Form & List Layout */
-        .grid-layout { display: grid; grid-template-columns: 1fr 2.5fr; gap: 25px; }
+        /* Panel Layout */
+        .grid-layout { display: grid; grid-template-columns: 1fr 2.4fr; gap: 25px; }
         .panel { background: var(--card); border: 1px solid var(--border); padding: 30px; border-radius: 35px; backdrop-filter: blur(10px); }
 
-        input, select, textarea { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 14px; border-radius: 15px; color: white; outline: none; margin-bottom: 15px; font-size: 14px; }
-        input:focus { border-color: var(--b); }
+        /* Inputs & Buttons */
+        label { font-size: 10px; font-weight: 800; color: var(--b); margin-bottom: 8px; display: block; margin-left: 5px; }
+        input, select, textarea { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 14px; border-radius: 15px; color: white; outline: none; margin-bottom: 15px; font-size: 14px; transition: 0.3s; }
+        input:focus { border-color: var(--b); background: rgba(255,255,255,0.08); }
 
-        .btn-sync { width: 100%; padding: 15px; background: linear-gradient(to right, var(--p), var(--b)); border: none; border-radius: 18px; color: white; font-weight: 800; cursor: pointer; transition: 0.3s; font-size: 15px; }
-        .btn-sync:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(255, 107, 0, 0.4); }
+        .btn-sync { width: 100%; padding: 16px; background: linear-gradient(135deg, var(--p), var(--b)); border: none; border-radius: 18px; color: white; font-weight: 800; cursor: pointer; transition: 0.3s; font-size: 14px; letter-spacing: 1px; }
+        .btn-sync:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(255, 107, 0, 0.3); }
 
-        /* Master Lead Table */
-        .table-wrap { max-height: 500px; overflow-y: auto; border-radius: 15px; }
+        /* Monitoring Table */
+        .table-wrap { max-height: 480px; overflow-y: auto; border-radius: 15px; }
         table { width: 100%; border-collapse: collapse; text-align: left; }
-        th { padding: 15px; font-size: 10px; color: #64748b; text-transform: uppercase; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: #0b0f19; }
-        td { padding: 15px 10px; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 13px; font-weight: 600; }
+        th { padding: 15px; font-size: 10px; color: #64748b; text-transform: uppercase; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: #0b0f19; z-index: 10; }
+        td { padding: 18px 12px; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 13px; font-weight: 600; }
         
         .badge { padding: 5px 10px; border-radius: 8px; font-size: 10px; font-weight: 800; text-transform: uppercase; }
         .b-chat { background: rgba(0, 163, 255, 0.1); color: var(--b); }
-        .b-hot { background: rgba(255, 107, 0, 0.1); color: var(--p); }
+        .b-hot { background: rgba(255, 23, 68, 0.15); color: #FF1744; border: 1px solid rgba(255, 23, 68, 0.2); }
         .b-done { background: rgba(16, 185, 129, 0.1); color: #10b981; }
 
-        .wa-btn { color: #25D366; text-decoration: none; font-size: 18px; transition: 0.3s; }
-        .wa-btn:hover { transform: scale(1.3); }
+        .wa-link { color: #25D366; text-decoration: none; font-size: 18px; transition: 0.3s; }
+        .wa-link:hover { transform: scale(1.3); }
+        .exec-tag { font-size: 11px; color: var(--p); font-weight: 800; }
 
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-thumb { background: var(--b); border-radius: 10px; }
@@ -54,54 +58,57 @@
 
 <div class="sidebar">
     <div style="text-align:center; margin-bottom:50px;">
-        <h2 style="margin:0; font-weight:800; color:white;">NUGORTECH IT</h2>
-        <p style="color:var(--p); font-size:10px; font-weight:800; letter-spacing:1px;">DIFFERENT CREATIVE THINK</p>
+        <h2 style="margin:0; font-weight:800; color:white; font-size: 20px;">NUGORTECH IT</h2>
+        <p style="color:var(--p); font-size:9px; font-weight:800; letter-spacing:1px; text-transform: uppercase;">Cloud Lead Management</p>
     </div>
-    <div style="padding:15px; border-radius:15px; background:var(--card); border:1.5px solid var(--b); color:var(--b); font-weight:800; text-align:center;">
-        <i class="fab fa-whatsapp"></i> MASTER INBOX
+    <div style="padding:15px; border-radius:15px; background:var(--card); border:1px solid var(--b); color:var(--b); font-weight:800; text-align:center; font-size: 13px;">
+        <i class="fab fa-whatsapp"></i> LIVE MONITORING
     </div>
 </div>
 
 <div class="main">
     <div class="stat-grid">
-        <div class="stat-card"><span class="stat-val" id="tLeads">0</span><span class="stat-lbl">Today's Leads</span></div>
-        <div class="stat-card"><span class="stat-val" id="hLeads">0</span><span class="stat-lbl">Hot Possibilities</span></div>
-        <div class="stat-card"><span class="stat-val" id="cLeads">0</span><span class="stat-lbl">Confirmed Sales</span></div>
-        <div class="stat-card"><span class="stat-val" id="tStaff">0</span><span class="stat-lbl">Active Staff</span></div>
+        <div class="stat-card"><span class="stat-val" id="countTotal">0</span><span class="stat-lbl">Today's Leads</span></div>
+        <div class="stat-card"><span class="stat-val" id="countHot" style="color:#FF1744">0</span><span class="stat-lbl">Hot Leads</span></div>
+        <div class="stat-card"><span class="stat-val" id="countStaff">0</span><span class="stat-lbl">Active Staff</span></div>
+        <div class="stat-card"><span class="stat-val" id="countDone" style="color:#10b981">0</span><span class="stat-lbl">Converted Sales</span></div>
     </div>
 
     <div class="grid-layout">
-        <!-- Lead Submission Panel -->
+        <!-- Input Form -->
         <div class="panel">
-            <h3 style="margin-top:0; color: var(--b);">Sync WhatsApp Lead</h3>
-            <label style="font-size:10px; color:var(--b); font-weight:800;">EXECUTIVE NAME</label>
-            <input type="text" id="staffName" placeholder="Your Name">
+            <h3 style="margin-top:0; color: var(--b); font-size: 16px;">Sync Lead to Hub</h3>
             
-            <label style="font-size:10px; color:var(--b); font-weight:800;">CLIENT WHATSAPP NO.</label>
-            <input type="number" id="clientPhone" placeholder="017XXXXXXXX">
+            <label>YOUR NAME</label>
+            <input type="text" id="staffName" placeholder="Executive Name">
             
-            <label style="font-size:10px; color:var(--b); font-weight:800;">LEAD STATUS</label>
-            <select id="statusSelect">
+            <label>WHATSAPP NO.</label>
+            <input type="number" id="clientNo" placeholder="017XXXXXXXX">
+            
+            <label>LEAD PRIORITY</label>
+            <select id="leadStatus">
                 <option value="Chatting">Ongoing Chat</option>
                 <option value="Hot Lead">Hot Lead (Urgent)</option>
-                <option value="Paid/Done">Payment Done</option>
+                <option value="Paid/Done">Payment Confirmed</option>
                 <option value="Closed">Not Interested</option>
             </select>
             
-            <textarea id="notes" placeholder="Short Message Summary..." rows="4"></textarea>
-            <button class="btn-sync" onclick="syncLead()"><i class="fas fa-cloud-upload-alt"></i> SYNC TO MASTER INBOX</button>
+            <label>LEAD NOTES</label>
+            <textarea id="leadNotes" placeholder="Summary of the conversation..." rows="3"></textarea>
+            
+            <button class="btn-sync" onclick="syncData()"><i class="fas fa-satellite-dish"></i> SYNC TO MASTER HUB</button>
         </div>
 
-        <!-- Master Admin Monitor -->
+        <!-- Monitoring Board -->
         <div class="panel">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
-                <h3 style="margin:0;">Live Monitoring Board</h3>
-                <input type="text" id="find" onkeyup="filter()" placeholder="Search Staff or Customer..." style="width:250px; margin-bottom:0;">
+                <h3 style="margin:0; font-size: 16px;">Central Monitoring Board</h3>
+                <input type="text" id="searchBar" onkeyup="runFilter()" placeholder="Search Name or Status..." style="width:250px; margin-bottom:0;">
             </div>
             <div class="table-wrap">
-                <table id="waTable">
+                <table id="leadTable">
                     <thead>
-                        <tr><th>Time</th><th>Executive</th><th>Customer</th><th>Phone</th><th>Status</th><th>Action</th></tr>
+                        <tr><th>Time</th><th>Executive</th><th>Customer</th><th>WA</th><th>Status</th><th>Del</th></tr>
                     </thead>
                     <tbody id="tbody"></tbody>
                 </table>
@@ -115,75 +122,96 @@
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 <script>
+    // Firebase Configuration
     const firebaseConfig = { 
         apiKey: "AIzaSyBrz1xvq4Fpt9-j75-gUS4d8ebqPRLmOK0", 
         databaseURL: "https://sales-report-nugortech-it-default-rtdb.firebaseio.com", 
         projectId: "sales-report-nugortech-it", 
         appId: "1:848643315031:web:e6fbf92153490ea9d31a12" 
     };
-    firebase.initializeApp(firebaseConfig);
+
+    // Initialize Firebase
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
     const db = firebase.database();
 
-    function syncLead() {
-        const phone = document.getElementById('clientPhone').value;
+    // Function to Sync Data
+    function syncData() {
         const name = document.getElementById('staffName').value;
-        if(!phone || !name) return alert("Fill Name & Number!");
+        const phone = document.getElementById('clientNo').value;
+        const status = document.getElementById('leadStatus').value;
+        const notes = document.getElementById('leadNotes').value;
 
-        const data = {
+        if(!name || !phone) return alert("Executive Name and Phone Number are required!");
+
+        const leadData = {
             staff: name,
             phone: phone,
-            status: document.getElementById('statusSelect').value,
-            msg: document.getElementById('notes').value,
-            time: new Date().toLocaleTimeString(),
+            status: status,
+            notes: notes,
+            time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
             date: new Date().toLocaleDateString('en-GB').replace(/\//g, "-")
         };
 
-        db.ref('whatsapp_leads').push(data).then(() => {
-            alert("Lead Synced!");
-            document.getElementById('clientPhone').value = "";
-            document.getElementById('notes').value = "";
-        });
+        db.ref('whatsapp_leads').push(leadData).then(() => {
+            alert("Lead synced successfully!");
+            document.getElementById('clientNo').value = "";
+            document.getElementById('leadNotes').value = "";
+        }).catch(err => alert("Error: " + err.message));
     }
 
-    db.ref('whatsapp_leads').on('value', snap => {
-        const tbody = document.getElementById('tbody'); tbody.innerHTML = "";
-        const all = snap.val();
-        let total = 0, hot = 0, confirmed = 0, staffSet = new Set();
-        const today = new Date().toLocaleDateString('en-GB').replace(/\//g, "-");
+    // Load Leads Real-time
+    db.ref('whatsapp_leads').on('value', (snap) => {
+        const tbody = document.getElementById('tbody');
+        tbody.innerHTML = "";
+        const allLeads = snap.val();
+        
+        let total = 0, hot = 0, done = 0, staffSet = new Set();
+        const todayStr = new Date().toLocaleDateString('en-GB').replace(/\//g, "-");
 
-        if(all) {
-            Object.keys(all).reverse().forEach(k => {
-                const d = all[k];
-                if(d.date === today) total++;
-                staffSet.add(d.staff);
-                if(d.status === "Hot Lead") hot++;
-                if(d.status === "Paid/Done") confirmed++;
+        if (allLeads) {
+            Object.keys(allLeads).reverse().forEach(key => {
+                const lead = allLeads[key];
+                if(lead.date === todayStr) total++;
+                staffSet.add(lead.staff);
+                if(lead.status === "Hot Lead") hot++;
+                if(lead.status === "Paid/Done") done++;
 
-                let badge = d.status === "Hot Lead" ? "b-hot" : (d.status === "Paid/Done" ? "b-done" : "b-chat");
+                let statusBadge = lead.status === "Hot Lead" ? "b-hot" : (lead.status === "Paid/Done" ? "b-done" : "b-chat");
 
                 tbody.innerHTML += `<tr>
-                    <td style="font-size:10px; opacity:0.6;">${d.time}<br>${d.date}</td>
-                    <td style="color:var(--p)">${d.staff}</td>
-                    <td>Client: ${d.phone.slice(-4)}</td>
-                    <td><a href="https://wa.me/88${d.phone}" target="_blank" class="wa-btn"><i class="fab fa-whatsapp"></i> ${d.phone}</a></td>
-                    <td><span class="badge ${badge}">${d.status}</span></td>
-                    <td><button onclick="del('${k}')" style="background:none; border:none; color:red; cursor:pointer;"><i class="fas fa-trash"></i></button></td>
+                    <td style="font-size:10px; opacity:0.6;">${lead.time}<br>${lead.date}</td>
+                    <td><span class="exec-tag">${lead.staff}</span></td>
+                    <td>Client: ${lead.phone.slice(-4)}</td>
+                    <td><a href="https://wa.me/88${lead.phone}" target="_blank" class="wa-link"><i class="fab fa-whatsapp"></i></a></td>
+                    <td><span class="badge ${statusBadge}">${lead.status}</span></td>
+                    <td><button onclick="deleteLead('${key}')" style="background:none; border:none; color:#ef4444; cursor:pointer;"><i class="fas fa-trash-alt"></i></button></td>
                 </tr>`;
             });
         }
-        document.getElementById('tLeads').innerText = total;
-        document.getElementById('hLeads').innerText = hot;
-        document.getElementById('cLeads').innerText = confirmed;
-        document.getElementById('tStaff').innerText = staffSet.size;
+        
+        document.getElementById('countTotal').innerText = total;
+        document.getElementById('countHot').innerText = hot;
+        document.getElementById('countStaff').innerText = staffSet.size;
+        document.getElementById('countDone').innerText = done;
     });
 
-    function filter() {
-        const val = document.getElementById('find').value.toUpperCase();
+    // Filtering
+    function runFilter() {
+        const val = document.getElementById('searchBar').value.toUpperCase();
         const rows = document.getElementById('tbody').getElementsByTagName('tr');
         for (let r of rows) { r.style.display = r.innerText.toUpperCase().includes(val) ? "" : "none"; }
     }
 
-    function del(k) { if(prompt("Pass: 8087") === "8087") db.ref('whatsapp_leads/'+k).remove(); }
+    // Delete with Security
+    function deleteLead(key) {
+        if(prompt("Enter Admin Password to delete:") === "8087") {
+            db.ref('whatsapp_leads/' + key).remove();
+        } else {
+            alert("Wrong Password!");
+        }
+    }
 </script>
 </body>
 </html>
