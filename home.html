@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Master Control Center | Nugortech IT Ltd</title>
-    <!-- Fonts & Icons -->
+    <!-- Modern Font & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -15,43 +15,46 @@
         * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; transition: 0.3s ease; }
         body { margin: 0; background: var(--bg); color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow-x: hidden; }
 
-        .bg-glow { position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(0,163,255,0.12) 0%, transparent 70%); z-index: -1; animation: orbit 15s infinite alternate; }
-        @keyframes orbit { from { transform: translate(-30%, -30%); } to { transform: translate(30%, 30%); } }
+        /* Futuristic Background Glow */
+        .bg-glow { position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(0,163,255,0.15) 0%, transparent 70%); z-index: -1; animation: move 15s infinite alternate; }
+        @keyframes move { from { transform: translate(-40%, -40%); } to { transform: translate(40%, 40%); } }
 
         .container { width: 100%; max-width: 1000px; padding: 40px; text-align: center; }
         
         .header { margin-bottom: 50px; }
-        .header h1 { font-size: 36px; font-weight: 800; margin: 0; letter-spacing: -1px; }
-        .header p { color: var(--orange); font-weight: 700; text-transform: uppercase; letter-spacing: 3px; font-size: 11px; margin-top: 10px; }
+        .header h1 { font-size: 42px; font-weight: 800; margin: 0; letter-spacing: -2px; }
+        .header p { color: var(--orange); font-weight: 700; text-transform: uppercase; letter-spacing: 4px; font-size: 11px; margin-top: 10px; }
 
         .welcome-box { margin-bottom: 50px; }
-        #greeting { font-size: 18px; opacity: 0.6; margin-bottom: 10px; }
-        #time { font-size: 42px; font-weight: 800; color: white; }
+        #greet { font-size: 18px; opacity: 0.6; margin-bottom: 10px; font-weight: 400; }
+        #time { font-size: 48px; font-weight: 800; color: white; letter-spacing: -1px; }
 
-        /* Master Grid */
-        .master-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        /* Master Dashboard Grid */
+        .master-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
 
         .tile { 
-            background: var(--glass); border: 1px solid var(--border); padding: 35px 20px; 
-            border-radius: 30px; backdrop-filter: blur(20px); text-decoration: none; 
+            background: var(--glass); border: 1px solid var(--border); padding: 40px 30px; 
+            border-radius: 35px; backdrop-filter: blur(20px); text-decoration: none; 
             color: white; display: flex; flex-direction: column; align-items: center; gap: 15px;
             position: relative; overflow: hidden;
         }
-        .tile:hover { transform: translateY(-10px); background: rgba(255,255,255,0.06); border-color: var(--blue); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
-        .tile i { font-size: 32px; }
-        .tile h3 { margin: 0; font-size: 15px; font-weight: 800; text-transform: uppercase; }
-        .tile span { font-size: 10px; opacity: 0.5; }
+        .tile:hover { transform: translateY(-12px); background: rgba(255,255,255,0.06); border-color: var(--blue); box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
+        .tile i { font-size: 38px; }
+        .tile h3 { margin: 0; font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .tile span { font-size: 11px; opacity: 0.5; font-weight: 500; }
 
-        /* Color Themes */
-        .t-blue i { color: var(--blue); }
-        .t-green i { color: var(--green); }
-        .t-orange i { color: var(--orange); }
-        .t-purple i { color: var(--purple); }
+        /* Colorful Themes for Each Tool */
+        .t-blue i { color: var(--blue); text-shadow: 0 0 20px rgba(0, 163, 255, 0.4); }
+        .t-green i { color: var(--green); text-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
+        .t-orange i { color: var(--orange); text-shadow: 0 0 20px rgba(255, 107, 0, 0.4); }
+        .t-purple i { color: var(--purple); text-shadow: 0 0 20px rgba(168, 85, 247, 0.4); }
 
-        .footer { position: fixed; bottom: 30px; font-size: 10px; opacity: 0.3; letter-spacing: 2px; font-weight: 600; }
+        .footer { position: fixed; bottom: 30px; font-size: 10px; opacity: 0.3; letter-spacing: 2px; font-weight: 700; text-transform: uppercase; }
 
-        @media (max-width: 600px) {
+        @media (max-width: 700px) {
             .master-grid { grid-template-columns: 1fr; }
+            .header h1 { font-size: 32px; }
+            .container { padding: 20px; }
         }
     </style>
 </head>
@@ -66,65 +69,66 @@
         </div>
 
         <div class="welcome-box">
-            <div id="greeting">Loading System...</div>
+            <div id="greet">Syncing System Data...</div>
             <div id="time">00:00:00</div>
         </div>
 
         <div class="master-grid">
-            <!-- Attendance Check-In -->
+            <!-- 1. Staff Check-In (Attendance App) -->
             <a href="https://nugortech-it-attendance.vercel.app" class="tile t-blue" target="_blank">
                 <i class="fas fa-fingerprint"></i>
                 <h3>Staff Attendance</h3>
-                <span>Check-In & GPS Lock</span>
+                <span>Office GPS Check-In</span>
             </a>
 
-            <!-- Sales Entry Form -->
+            <!-- 2. Daily Sales Entry -->
             <a href="index.html" class="tile t-green">
-                <i class="fas fa-edit"></i>
+                <i class="fas fa-file-invoice"></i>
                 <h3>Sales Entry</h3>
-                <span>Daily Sales Submission</span>
+                <span>Submit Daily Reports</span>
             </a>
 
-            <!-- Sales Dashboard -->
+            <!-- 3. Sales Analytics Dashboard -->
             <a href="admin.html" class="tile t-purple">
                 <i class="fas fa-chart-pie"></i>
-                <h3>Sales Analytics</h3>
-                <span>Performance & Reports</span>
+                <h3>Sales Dashboard</h3>
+                <span>Performance & Analytics</span>
             </a>
 
-            <!-- Salary Hub -->
+            <!-- 4. Payroll Management Hub -->
             <a href="salary.html" class="tile t-orange">
                 <i class="fas fa-wallet"></i>
                 <h3>Payroll Hub</h3>
                 <span>Commissions & Salaries</span>
             </a>
 
-            <!-- Admin Attendance Logs -->
+            <!-- 5. Attendance Logs (Admin View) -->
             <a href="https://nugortech-it-attendance.vercel.app/admin.html" class="tile t-blue" target="_blank">
                 <i class="fas fa-users-viewfinder"></i>
                 <h3>Attendance Logs</h3>
-                <span>Full System Logs</span>
+                <span>Staff Log Monitor</span>
             </a>
         </div>
 
-        <div class="footer">ENTERPRISE CLOUD ERP v3.1 | POWERED BY NUGORTECH IT</div>
+        <div class="footer">Nugortech ERP v4.0 | Fully Integrated Cloud System</div>
     </div>
 
     <script>
-        function updateUI() {
+        // Update Time and Personalized Greeting
+        function runDashboard() {
             const now = new Date();
-            const hours = now.getHours();
-            let greet = "Welcome, Boss Hasib";
+            const h = now.getHours();
+            let g = "Welcome Back, Boss Hasib";
             
-            if (hours < 12) greet = "Good Morning, Boss Hasib";
-            else if (hours < 17) greet = "Good Afternoon, Boss Hasib";
-            else greet = "Good Evening, Boss Hasib";
+            if (h < 12) g = "Good Morning, Boss Hasib";
+            else if (h < 17) g = "Good Afternoon, Boss Hasib";
+            else g = "Good Evening, Boss Hasib";
 
-            document.getElementById('greeting').innerText = greet;
+            document.getElementById('greet').innerText = g;
             document.getElementById('time').innerText = now.toLocaleTimeString('en-US', { hour12: false });
         }
-        setInterval(updateUI, 1000);
-        updateUI();
+        setInterval(runDashboard, 1000);
+        runDashboard();
     </script>
 </body>
 </html>
