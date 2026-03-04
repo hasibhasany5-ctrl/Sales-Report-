@@ -3,77 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Finance | Nugortech IT Ltd</title>
+    <title>Enterprise Finance Hub | Nugortech IT Ltd</title>
     <!-- Modern Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root { 
-            --orange: #FF6B00; --blue: #00A3FF; --green: #10b981; --red: #f43f5e;
-            --bg: #0b1120; --glass: rgba(255, 255, 255, 0.03); --border: rgba(255, 255, 255, 0.1); 
-        }
+        :root { --p: #FF6B00; --b: #00A3FF; --bg: #0b0f19; --card: rgba(255,255,255,0.03); --border: rgba(255,255,255,0.1); }
         * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { margin: 0; background: var(--bg); color: white; min-height: 100vh; overflow-x: hidden; }
 
-        /* Sidebar */
+        /* Sidebar UI */
         .sidebar { width: 280px; background: rgba(0,0,0,0.3); backdrop-filter: blur(20px); border-right: 1px solid var(--border); padding: 40px 25px; position: fixed; height: 100vh; z-index: 100; }
-        .logo-box { text-align: center; margin-bottom: 40px; }
-        .logo-text { font-size: 24px; font-weight: 800; color: white; margin: 0; }
-        .logo-slogan { font-size: 9px; color: var(--orange); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-top: 5px; }
-
-        .main { margin-left: 280px; width: calc(100% - 280px); padding: 40px; }
+        .main { margin-left: 280px; width: calc(100% - 280px); padding: 50px; }
 
         /* Summary Cards */
-        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 40px; }
-        .stat-card { padding: 30px; border-radius: 30px; border: 1px solid var(--border); text-align: center; background: var(--glass); transition: 0.3s; }
-        .stat-val { font-size: 28px; font-weight: 800; display: block; color: var(--blue); margin-bottom: 5px; }
+        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 35px; }
+        .stat-card { padding: 25px; border-radius: 25px; border: 1px solid var(--border); text-align: center; background: var(--card); transition: 0.3s; }
+        .stat-val { font-size: 26px; font-weight: 800; display: block; color: var(--b); margin-bottom: 5px; }
         .stat-lbl { font-size: 10px; font-weight: 700; opacity: 0.6; text-transform: uppercase; }
 
-        /* Form Layout */
+        /* Grid Layout */
         .grid-layout { display: grid; grid-template-columns: 1fr 2.5fr; gap: 30px; }
-        .panel { background: var(--glass); border: 1px solid var(--border); padding: 35px; border-radius: 40px; backdrop-filter: blur(15px); }
+        .panel { background: var(--card); border: 1px solid var(--border); padding: 30px; border-radius: 40px; backdrop-filter: blur(15px); }
         
-        label { font-size: 10px; font-weight: 800; color: var(--blue); margin-bottom: 8px; display: block; text-transform: uppercase; }
-        input, select, textarea { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 14px; border-radius: 15px; color: white; outline: none; margin-bottom: 20px; font-size: 14px; }
-        input:focus { border-color: var(--blue); }
-
-        .btn-save { width: 100%; padding: 18px; background: linear-gradient(to right, var(--orange), var(--blue)); border: none; border-radius: 20px; color: white; font-weight: 800; cursor: pointer; transition: 0.3s; font-size: 14px; }
+        label { font-size: 10px; font-weight: 800; color: var(--b); margin-bottom: 8px; display: block; text-transform: uppercase; }
+        input, select, textarea { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 12px; border-radius: 12px; color: white; outline: none; margin-bottom: 15px; font-size: 13px; }
+        .btn-save { width: 100%; padding: 18px; background: linear-gradient(to right, #a11414, #d4a017); border: none; border-radius: 20px; color: white; font-weight: 800; cursor: pointer; transition: 0.3s; }
 
         /* Table */
-        .table-wrap { max-height: 500px; overflow-y: auto; border-radius: 20px; }
+        .table-wrap { max-height: 480px; overflow-y: auto; border-radius: 20px; }
         table { width: 100%; border-collapse: collapse; text-align: left; }
-        th { padding: 15px; font-size: 10px; color: #64748b; text-transform: uppercase; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: #0b1120; z-index: 10; }
-        td { padding: 18px 15px; border-bottom: 1px solid rgba(255,255,255,0.03); font-weight: 600; font-size: 13px; }
-        .p-btn { padding: 6px 15px; border-radius: 10px; background: rgba(0,163,255,0.1); color: var(--blue); border: 1px solid var(--blue); cursor: pointer; font-weight: 800; font-size: 11px; }
+        th { padding: 15px; font-size: 10px; color: #64748b; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: #0b1120; z-index: 10; }
+        td { padding: 18px 12px; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 13px; font-weight: 600; }
+        .p-btn { padding: 5px 12px; border-radius: 8px; background: rgba(0,163,255,0.1); color: var(--b); border: 1px solid var(--b); cursor: pointer; font-weight: 800; font-size: 11px; }
 
-        /* --- PRENIUM VOUCHER PRINT DESIGN --- */
-        #voucherPrint { background: white; color: #1e293b; width: 850px; display: none; margin: 0 auto; overflow: hidden; border: none; }
+        /* --- PRENIUM VOUCHER DESIGN (IMAGE MATCH) --- */
+        #voucherArea { 
+            background: #F9F5EB; color: #1e293b; width: 800px; display: none; margin: 0 auto; overflow: hidden; position: relative; 
+            box-shadow: 0 40px 80px rgba(0,0,0,0.5); border-radius: 5px;
+        }
+        /* Top Red/Gold Curve */
+        .v-top-curve { background: linear-gradient(90deg, #8B0000 0%, #D4AF37 100%); height: 130px; border-radius: 0 0 100% 0; padding: 40px 50px; position: relative; color: white; display: flex; align-items: center; }
+        .v-logo-box { background: white; width: 65px; height: 65px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 32px; color: #D4AF37; font-weight: 800; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         
-        /* Dynamic Themes */
-        .v-header-box { padding: 50px; display: flex; justify-content: space-between; align-items: center; color: white; }
-        .payment-head { background: linear-gradient(135deg, #8B0000 0%, #D4AF37 100%); }
-        .receipt-head { background: linear-gradient(135deg, #0f172a 0%, #00A3FF 100%); }
+        .v-title-sec { padding: 40px 50px 0; }
+        .v-main-title { font-size: 42px; font-weight: 800; color: #1a1a1a; margin: 0; letter-spacing: -2px; }
+        .v-meta { display: flex; gap: 40px; margin-top: 15px; font-weight: 700; border-bottom: 2px solid #D4AF37; padding-bottom: 15px; width: 500px; }
 
-        .v-type-badge { padding: 8px 30px; border-radius: 50px; font-weight: 800; font-size: 14px; color: white; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .p-badge { background: #FF6B00; }
-        .r-badge { background: #1e3a8a; }
+        .v-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 50px; padding: 30px 50px; }
+        .v-sec-title { font-size: 16px; font-weight: 800; border-bottom: 2px solid #ddd; padding-bottom: 5px; margin-bottom: 12px; }
+        .v-row { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 13px; font-weight: 600; }
+        .v-val { font-weight: 800; color: #000; }
 
-        .v-body { padding: 50px; }
-        .v-info-row { display: flex; justify-content: space-between; margin-bottom: 40px; border-bottom: 2px solid #f1f5f9; padding-bottom: 20px; }
-        .v-row { display: flex; border-bottom: 1px solid #f1f5f9; padding: 18px 0; font-size: 16px; }
-        .v-lbl { width: 220px; color: #64748b; font-weight: 700; text-transform: uppercase; font-size: 12px; }
-        .v-val { font-weight: 800; color: #0b0f19; flex: 1; }
+        .v-table { width: calc(100% - 100px); margin: 20px 50px; border-collapse: collapse; border: 2px solid #D4AF37; }
+        .v-table th { background: #F1E9D2; padding: 12px; text-align: left; font-size: 13px; border-right: 2px solid #D4AF37; border-bottom: 2px solid #D4AF37; }
+        .v-table td { padding: 15px 12px; font-weight: 800; border-right: 2px solid #D4AF37; }
 
-        .v-amt-card { background: #f8fafc; border-radius: 25px; padding: 35px; margin-top: 40px; border: 2.5px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
-        .v-total-lbl { font-size: 12px; font-weight: 800; color: #64748b; text-transform: uppercase; }
-        .v-amt { font-size: 32px; font-weight: 800; }
+        .v-footer { margin-top: 80px; display: flex; justify-content: space-between; padding: 0 60px 100px; }
+        .sign-box { text-align: center; width: 180px; border-top: 2px solid #000; padding-top: 5px; font-size: 11px; font-weight: 800; position: relative; }
+        .sig-font { font-family: 'Dancing Script', cursive; font-size: 30px; color: #1e3a8a; position: absolute; top: -45px; left: 0; width: 100%; text-align: center; }
 
-        .v-footer { margin-top: 100px; display: flex; justify-content: space-between; padding: 0 10px; }
-        .sign-box { text-align: center; width: 230px; border-top: 2.5px solid #0f172a; padding-top: 10px; font-size: 11px; font-weight: 800; color: #0f172a; position: relative; }
-        .sig-font { font-family: 'Dancing Script', cursive; font-size: 32px; color: #1e3a8a; position: absolute; top: -45px; left: 0; width: 100%; text-align: center; }
-
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-thumb { background: var(--blue); border-radius: 10px; }
+        /* Bottom Red Curve */
+        .v-bottom-curve { position: absolute; bottom: 0; width: 100%; height: 60px; background: #8B0000; border-radius: 100% 0 0 0; }
+        .v-address-bar { position: absolute; bottom: 10px; width: 100%; text-align: center; font-size: 9px; font-weight: 700; color: #fff; z-index: 10; opacity: 0.8; }
 
         @media print { 
             @page { size: portrait; margin: 0; }
@@ -86,28 +79,28 @@
 <body>
 
 <div class="sidebar">
-    <div class="logo-box">
-        <h2>Nugortech IT</h2>
-        <p class="logo-slogan">Different Creative Think</p>
+    <div style="text-align:center; margin-bottom:40px;">
+        <h2 style="margin:0; font-weight:800; color:white;">Nugortech IT</h2>
+        <p style="color:var(--p); font-size:9px; font-weight:800; letter-spacing:1px; text-transform: uppercase;">Finance Control Center</p>
     </div>
-    <div style="padding:15px; border-radius:20px; background:var(--glass); border:1px solid var(--blue); color:var(--blue); font-weight:800; text-align:center; font-size:13px; margin-top:40px;">
-        <i class="fas fa-file-invoice-dollar"></i> VOUCHER CONTROL
+    <div style="padding:15px; border-radius:20px; background:var(--card); border:1px solid var(--b); color:var(--b); font-weight:800; text-align:center; font-size:12px;">
+        <i class="fas fa-file-invoice-dollar"></i> VOUCHER SYSTEM ACTIVE
     </div>
 </div>
 
 <div class="main">
     <div class="stat-grid">
-        <div class="stat-card"><span class="stat-val" id="sumSal">৳0</span><span class="stat-lbl">Salaries Paid</span></div>
-        <div class="stat-card"><span class="stat-val" id="sumAdv">৳0</span><span class="stat-lbl">Advances Given</span></div>
-        <div class="stat-card"><span class="stat-val" id="sumMisc">৳0</span><span class="stat-lbl">Other Expenses</span></div>
+        <div class="stat-card c-1"><span class="v" id="sSal">৳0</span><span class="l">Salaries Paid</span></div>
+        <div class="stat-card c-2"><span class="v" id="sAdv">৳0</span><span class="l">Advances Given</span></div>
+        <div class="stat-card c-3"><span class="v" id="sExp">৳0</span><span class="l">Other Expenses</span></div>
     </div>
 
     <div class="grid-layout">
         <div class="panel">
-            <h3 style="margin-top:0; color: var(--blue); font-size: 18px;">Voucher Entry</h3>
+            <h3 style="margin-top:0; color: var(--b); font-size: 18px;">Voucher Entry</h3>
             
-            <label>Transaction Type</label>
-            <select id="jType">
+            <label>Entry Type</label>
+            <select id="vType">
                 <option value="PAYMENT">Payment Voucher (খরচ)</option>
                 <option value="RECEIPT">Receipt Voucher (জমা)</option>
             </select>
@@ -115,37 +108,39 @@
             <label>Recipient / Client Name</label>
             <input type="text" id="jName" placeholder="Full Name">
             
-            <label>Category</label>
+            <label>Purpose</label>
             <select id="jDebit">
                 <option value="Staff Monthly Salary">Staff Monthly Salary</option>
                 <option value="Salary Advance Disbursement">Salary Advance Disbursement</option>
-                <option value="Performance Commission">Performance Commission</option>
+                <option value="Performance Bonus/Commission">Performance Bonus/Commission</option>
                 <option value="Office Rent / Utility Bill">Office Rent / Utility Bill</option>
-                <option value="Miscellaneous Office Expense">Miscellaneous Office Expense</option>
+                <option value="Miscellaneous Expense">Miscellaneous Expense</option>
                 <option value="Client Payment Received">Client Payment Received</option>
             </select>
 
             <label>Payment Mode</label>
             <select id="jCredit">
-                <option value="Cash at Hand">Cash at Hand</option>
+                <option value="Cash at Office">Cash at Office</option>
                 <option value="Nugortech Bank A/C">Nugortech Bank A/C</option>
-                <option value="bKash / Mobile Wallet">bKash / Mobile Wallet</option>
+                <option value="bKash / Nagad / Rocket">bKash / Nagad / Rocket</option>
             </select>
             
             <label>Amount (BDT)</label>
             <input type="number" id="jAmt" placeholder="Enter Amount">
             
-            <label>Description</label>
-            <textarea id="jNote" placeholder="Short details..." rows="2"></textarea>
+            <textarea id="jNote" placeholder="Short description..." rows="2"></textarea>
             
-            <button class="btn-save" onclick="postToCloud()"><i class="fas fa-receipt"></i> SAVE & GENERATE VOUCHER</button>
+            <button class="btn-save" onclick="saveToCloud()"><i class="fas fa-receipt"></i> POST & GENERATE VOUCHER</button>
         </div>
 
         <div class="panel">
-            <h3 style="margin:0 0 20px 0; font-size: 18px;">Journal Logs</h3>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <h3 style="margin:0; font-size: 18px;">History</h3>
+                <button onclick="wipe()" style="background:none; border:none; color:var(--d); cursor:pointer;"><i class="fas fa-trash-alt"></i> Wipe All</button>
+            </div>
             <div class="table-wrap">
                 <table id="logsTable">
-                    <thead><tr><th>Date</th><th>Recipient</th><th>Method</th><th>Amount</th><th>Print</th><th>Del</th></tr></thead>
+                    <thead><tr><th>Date</th><th>Type</th><th>Name</th><th>Amount</th><th>Voucher</th><th>Del</th></tr></thead>
                     <tbody id="tbody"></tbody>
                 </table>
             </div>
@@ -153,41 +148,56 @@
     </div>
 </div>
 
-<!-- --- MASTER VOUCHER DESIGN (FOR PRINTING) --- -->
+<!-- --- PRENIUM PRINT AREA --- -->
 <div id="voucherPrint">
-    <div id="vHeader" class="v-header-box">
-        <div>
-            <h1>Nugortech IT Ltd.</h1>
-            <p style="font-size:12px; opacity:0.9; letter-spacing:1px; font-weight:700;">HOUSE #85/2, ROAD #4, MOHAMMADIA HOUSING LTD, MOHAMMADPUR, DHAKA-1207</p>
+    <div id="vHeader" class="v-top-curve">
+        <div class="v-logo-box">N</div>
+        <div style="margin-left:20px;">
+            <h1 style="margin:0; font-size: 22px;">Nugortech IT Ltd.</h1>
+            <p style="font-size: 9px; opacity: 0.9; margin:0; font-weight:700;">DIFFERENT CREATIVE THINK</p>
         </div>
-        <div id="vTypeBadge" class="v-type-badge">---</div>
+        <div id="vBadge" class="v-badge" style="margin-left:auto;">VOUCHER</div>
     </div>
     
-    <div class="v-body">
-        <div class="v-info-row">
-            <div style="font-size:14px; font-weight:700; color:#64748b;">Voucher ID: <span id="vNo" style="color:#000">---</span></div>
-            <div style="font-size:14px; font-weight:700; color:#64748b;">Date: <span id="vDate" style="color:#000">---</span></div>
-        </div>
-
-        <div class="v-row"><div class="v-lbl" id="vSideTitle">Paid To:</div><div class="v-val" id="vDispName">---</div></div>
-        <div class="v-row"><div class="v-lbl">Head of Account:</div><div class="v-val" id="vDispHead">---</div></div>
-        <div class="v-row"><div class="v-lbl">Payment Mode:</div><div class="v-val" id="vDispMode">---</div></div>
-        <div class="v-row" style="border:none;"><div class="v-lbl">Narration:</div><div class="v-val" id="vDispNote" style="font-style:italic; font-weight:400;">---</div></div>
-
-        <div class="v-amt-card">
-            <div>
-                <div class="v-total-lbl">Total Payable Amount</div>
-                <div class="v-amt" id="vDispAmt">৳0.00</div>
-            </div>
-            <div style="text-align:right; font-size:10px; font-weight:800; color:#cbd5e1;">OFFICIAL CORPORATE SEAL</div>
-        </div>
-
-        <div class="v-footer">
-            <div class="sign-box"><div class="sig-font">Hasib</div>Accountant Signature</div>
-            <div class="sign-box"><div class="sig-font">Nur Islam</div>Managing Director</div>
-            <div class="sign-box"><div class="sig-font" id="vRecSign">---</div>Receiver Signature</div>
+    <div class="v-title-sec">
+        <h1 class="v-main-title" id="vMainTitle">PAYMENT RECEIPT</h1>
+        <div class="v-no-date">
+            <div>Receipt No: <strong id="vNo">---</strong></div>
+            <div>Date: <strong id="vDate">---</strong></div>
         </div>
     </div>
+
+    <div class="v-grid">
+        <div>
+            <div class="v-sec-title" id="vSideTitle">Billed To:</div>
+            <div class="v-row"><span>Name:</span> <span class="v-val" id="vDispName">---</span></div>
+            <div class="v-row"><span>Address:</span> <span class="v-val">House #85/2, Road #4, Dhaka</span></div>
+        </div>
+        <div>
+            <div class="v-section-title" style="font-size:16px; font-weight:800; border-bottom:2px solid #eee; padding-bottom:5px; margin-bottom:12px; color:#000;">Summary:</div>
+            <div class="v-row"><span>Method:</span> <span class="v-val" id="vDispMode">---</span></div>
+            <div class="v-row"><span>Status:</span> <span class="v-val" style="color:green">SUCCESSFUL</span></div>
+        </div>
+    </div>
+
+    <table class="v-table">
+        <thead><tr><th width="75%">Description</th><th width="25%">Amount</th></tr></thead>
+        <tbody><tr><td id="vDispNote" style="height:70px; vertical-align:top;">---</td><td id="vDispAmtTable" style="text-align:right;">৳0.00</td></tr></tbody>
+    </table>
+
+    <div class="v-total-card">
+        <div style="font-size:11px; font-weight:800; color:#64748b; text-transform:uppercase;">Total Payable Amount</div>
+        <div class="v-amt-val" id="vDispAmt">৳0.00</div>
+    </div>
+
+    <div class="v-footer">
+        <div class="sign-box"><div class="sig-font">Hasib</div>Accountant Signature</div>
+        <div class="sign-box"><div class="sig-font">Nur Islam</div>Managing Director</div>
+        <div class="sign-box"><div class="sig-font" id="vRecSign">---</div>Receiver Signature</div>
+    </div>
+
+    <div class="v-bottom-curve"></div>
+    <div class="v-address-bar">HOUSE #85/2, ROAD #4, MOHAMMADIA HOUSING LTD, MOHAMMADPUR, DHAKA-1207</div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -195,23 +205,16 @@
 
 <script>
     const firebaseConfig = { apiKey: "AIzaSyBrz1xvq4Fpt9-j75-gUS4d8ebqPRLmOK0", databaseURL: "https://sales-report-nugortech-it-default-rtdb.firebaseio.com", projectId: "sales-report-nugortech-it", appId: "1:848643315031:web:e6fbf92153490ea9d31a12" };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+    firebase.initializeApp(firebaseConfig); const db = firebase.database();
 
-    function postToCloud() {
+    function saveToCloud() {
         const n = document.getElementById('jName').value, a = document.getElementById('jAmt').value;
-        if(!n || !a) return alert("Enter Name & Amount!");
-        const data = { 
-            type: document.getElementById('jType').value,
-            name: n, debit: document.getElementById('jDebit').value, 
-            credit: document.getElementById('jCredit').value, 
-            amount: Number(a), note: document.getElementById('jNote').value, 
-            date: new Date().toLocaleDateString('en-GB') 
-        };
-        db.ref('ledger_final_master').push(data).then(() => { location.reload(); });
+        if(!n || !a) return alert("Fill all fields!");
+        const data = { type: document.getElementById('vType').value, name: n, debit: document.getElementById('jDebit').value, credit: document.getElementById('jCredit').value, amount: Number(a), note: document.getElementById('jNote').value, date: new Date().toLocaleDateString('en-GB') };
+        db.ref('ledger_final_allinone').push(data).then(() => { location.reload(); });
     }
 
-    db.ref('ledger_final_master').on('value', snap => {
+    db.ref('ledger_final_allinone').on('value', snap => {
         const tbody = document.getElementById('tbody'); tbody.innerHTML = "";
         let s1=0, s2=0, s3=0; const all = snap.val();
         if(all) {
@@ -220,33 +223,31 @@
                 if(d.type === "PAYMENT") {
                     if(d.debit.includes("Salary Payment")) s1 += d.amount; else if(d.debit.includes("Advance")) s2 += d.amount; else s3 += d.amount;
                 }
-                tbody.innerHTML += `<tr><td>${d.date}</td><td>${d.name}</td><td style="font-size:11px;">${d.credit}</td><td style="color:var(--green)">৳${d.amount.toLocaleString()}</td><td><button class="p-btn" onclick="printV('${k}')">Print</button></td><td><i class="fas fa-trash" onclick="del('${k}')" style="color:red; cursor:pointer;"></i></td></tr>`;
+                tbody.innerHTML += `<tr><td>${d.date}</td><td style="font-size:10px; font-weight:800;">${d.type}</td><td>${d.name}</td><td style="color:var(--s)">৳${d.amount.toLocaleString()}</td><td><button onclick="printV('${k}')" class="p-btn">Voucher</button></td><td><i class="fas fa-trash" onclick="del('${k}')" style="color:red; cursor:pointer;"></i></td></tr>`;
             });
         }
-        document.getElementById('sumSal').innerText = "৳" + s1.toLocaleString();
-        document.getElementById('sumAdv').innerText = "৳" + s2.toLocaleString();
-        document.getElementById('sumMisc').innerText = "৳" + s3.toLocaleString();
+        document.getElementById('sSal').innerText = "৳" + s1.toLocaleString();
+        document.getElementById('sAdv').innerText = "৳" + s2.toLocaleString();
+        document.getElementById('sExp').innerText = "৳" + s3.toLocaleString();
     });
 
     function printV(key) {
-        db.ref('ledger_final_master/'+key).once('value', s => {
+        db.ref('ledger_final_allinone/'+key).once('value', s => {
             const d = s.val();
-            const header = document.getElementById('vHeader');
-            const badge = document.getElementById('vTypeBadge');
+            const badge = document.getElementById('vBadge');
             const sideTitle = document.getElementById('vSideTitle');
+            const mainTitle = document.getElementById('vMainTitle');
 
             if(d.type === "PAYMENT") {
-                header.className = "v-header-box payment-head";
-                badge.className = "v-type-badge p-badge";
                 badge.innerText = "PAYMENT VOUCHER";
-                sideTitle.innerText = "Paid To:";
-                document.getElementById('vDispAmt').style.color = "#8B0000";
+                sideTitle.innerText = "Billed To:";
+                mainTitle.innerText = "PAYMENT RECEIPT";
+                mainTitle.style.color = "#8B0000";
             } else {
-                header.className = "v-header-box receipt-head";
-                badge.className = "v-type-badge r-badge";
                 badge.innerText = "RECEIPT VOUCHER";
                 sideTitle.innerText = "Received From:";
-                document.getElementById('vDispAmt').style.color = "#00A3FF";
+                mainTitle.innerText = "OFFICIAL RECEIPT";
+                mainTitle.style.color = "#1e3a8a";
             }
 
             document.getElementById('vNo').innerText = "NUG-" + key.slice(-6).toUpperCase();
@@ -256,15 +257,14 @@
             document.getElementById('vDispMode').innerText = d.credit;
             document.getElementById('vDispNote').innerText = d.note || "N/A";
             document.getElementById('vDispAmt').innerText = "৳" + d.amount.toLocaleString() + "/=";
-            
-            // AUTOMATIC RECEIVER SIGNATURE
+            document.getElementById('vDispAmtTable').innerText = "৳" + d.amount.toLocaleString();
             document.getElementById('vRecSign').innerText = d.name.split(' ')[0];
-            
             window.print();
         });
     }
 
-    function del(k) { if(prompt("Pass: 8087") === "8087") db.ref('ledger_final_master/'+k).remove(); }
+    function del(k) { if(prompt("Pass: 8087") === "8087") db.ref('ledger_final_allinone/'+k).remove(); }
+    function wipe() { if(prompt("Reset? 8087") === "8087") db.ref('ledger_final_allinone').remove(); }
 </script>
 </body>
 </html>
