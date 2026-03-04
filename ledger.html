@@ -3,69 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Finance Hub | Nugortech IT Ltd</title>
-    <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <title>Royal Dashboard | Nugortech IT Ltd</title>
+    <!-- Premium Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&family=Montserrat:wght@800;900&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --p: #FF6B00; --b: #00A3FF; --s: #10b981; --red: #f43f5e; --bg: #0b1120; --card: rgba(255,255,255,0.03); --border: rgba(255,255,255,0.1); }
+        :root { --gold: #D4AF37; --deep-blue: #0f172a; --nugor-orange: #FF6B00; --bg: #0b1120; }
         * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-        body { margin: 0; background: var(--bg); color: white; min-height: 100vh; overflow-x: hidden; }
+        body { margin: 0; background: var(--bg); color: white; display: flex; min-height: 100vh; overflow-x: hidden; }
 
-        /* Dashboard Styles */
-        .sidebar { width: 280px; background: rgba(0,0,0,0.3); backdrop-filter: blur(20px); border-right: 1px solid var(--border); padding: 40px 25px; position: fixed; height: 100vh; z-index: 100; }
+        /* Sidebar UI */
+        .sidebar { width: 280px; background: rgba(0,0,0,0.3); backdrop-filter: blur(20px); border-right: 1px solid rgba(255,255,255,0.1); padding: 40px 25px; position: fixed; height: 100vh; z-index: 100; }
         .main { margin-left: 280px; width: calc(100% - 280px); padding: 50px; }
-        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 40px; }
-        .stat-card { padding: 30px; border-radius: 30px; border: 1px solid var(--border); text-align: center; background: var(--card); }
-        .v { font-size: 28px; font-weight: 800; display: block; color: var(--b); margin-bottom: 5px; }
 
-        .grid-layout { display: grid; grid-template-columns: 1fr 2.5fr; gap: 30px; }
-        .panel { background: var(--card); border: 1px solid var(--border); padding: 35px; border-radius: 40px; backdrop-filter: blur(15px); }
-        label { font-size: 10px; font-weight: 800; color: var(--b); margin-bottom: 8px; display: block; text-transform: uppercase; }
-        input, select, textarea { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 12px; border-radius: 12px; color: white; outline: none; margin-bottom: 15px; font-size: 14px; }
-        .btn-save { width: 100%; padding: 18px; background: linear-gradient(to right, var(--p), var(--b)); border: none; border-radius: 20px; color: white; font-weight: 800; cursor: pointer; transition: 0.3s; }
+        /* Input Form Panel */
+        .panel { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 40px; backdrop-filter: blur(15px); margin-bottom: 30px; }
+        label { font-size: 10px; font-weight: 800; color: var(--gold); margin-bottom: 8px; display: block; text-transform: uppercase; }
+        input, select, textarea { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 14px; border-radius: 15px; color: white; outline: none; margin-bottom: 15px; font-size: 14px; }
 
-        .table-wrap { max-height: 450px; overflow-y: auto; border-radius: 20px; }
-        table { width: 100%; border-collapse: collapse; text-align: left; }
-        th { padding: 15px; font-size: 10px; color: #64748b; text-transform: uppercase; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: #0b1120; z-index: 10; }
-        td { padding: 18px 15px; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 13px; font-weight: 600; }
-        .p-btn { padding: 6px 15px; border-radius: 10px; background: rgba(0,163,255,0.1); color: var(--b); border: 1px solid var(--b); cursor: pointer; font-weight: 800; font-size: 11px; }
+        .btn-save { width: 100%; padding: 18px; background: linear-gradient(135deg, var(--nugor-orange), var(--gold)); border: none; border-radius: 20px; color: white; font-weight: 800; cursor: pointer; transition: 0.3s; }
+        .p-btn { padding: 6px 15px; border-radius: 10px; background: rgba(212, 175, 55, 0.1); color: var(--gold); border: 1px solid var(--gold); cursor: pointer; font-weight: 800; font-size: 11px; }
 
-        /* --- THE ULTIMATE VOUCHER DESIGN (MATCHING IMAGE) --- */
-        #voucherPrint { background: #F9F5EB; color: #1e293b; width: 800px; display: none; margin: 0 auto; overflow: hidden; position: relative; border-radius: 10px; }
+        /* --- THE ROYAL VOUCHER DESIGN (MATCHING YOUR PIC) --- */
+        #voucherPrint { 
+            background: #FDF8EE; /* Soft Colorful Background */
+            color: #0b0f19; width: 850px; display: none; margin: 0 auto; overflow: hidden; position: relative; border: 10px solid #fff;
+        }
         
-        /* Dynamic Header Curves */
-        .v-header-curve { height: 140px; padding: 40px 50px; position: relative; color: white; display: flex; align-items: center; }
-        .head-pay { background: linear-gradient(90deg, #8B0000 0%, #D4AF37 100%); border-radius: 0 0 100% 0; }
-        .head-rec { background: linear-gradient(90deg, #0f172a 0%, #00A3FF 100%); border-radius: 0 0 0 100%; }
+        .v-header-curve { height: 160px; padding: 40px 50px; position: relative; color: white; display: flex; align-items: center; justify-content: space-between; }
+        .head-pay { background: linear-gradient(90deg, #8B0000 0%, var(--gold) 100%); border-radius: 0 0 120px 0; }
+        .head-rec { background: linear-gradient(90deg, #1e3a8a 0%, #00A3FF 100%); border-radius: 0 0 0 120px; }
         
-        .v-logo { background: white; width: 60px; height: 60px; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 32px; color: #D4AF37; font-weight: 800; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .v-company-info { margin-left: 20px; }
-        .v-company-info h2 { margin: 0; font-size: 24px; font-weight: 800; text-transform: uppercase; }
-        .v-company-info p { margin: 0; font-size: 9px; font-weight: 700; letter-spacing: 1px; }
+        .v-company h1 { margin: 0; font-family: 'Montserrat', sans-serif; font-size: 32px; font-weight: 900; letter-spacing: -1px; }
+        .v-company p { margin: 0; font-size: 11px; font-weight: 800; letter-spacing: 2px; color: #fff; opacity: 0.9; }
 
-        .v-main-title { font-size: 42px; font-weight: 800; color: #1a1a1a; margin: 40px 50px 0; letter-spacing: -2px; }
-        .v-meta { display: flex; gap: 40px; margin: 15px 50px; font-weight: 700; border-bottom: 2px solid #ccc; padding-bottom: 15px; color: #444; }
+        .v-title-row { padding: 40px 50px 0; display: flex; justify-content: space-between; align-items: flex-end; }
+        .v-main-title { font-family: 'Montserrat', sans-serif; font-size: 44px; font-weight: 900; color: #1a1a1a; margin: 0; letter-spacing: -2px; }
+        .v-badge { background: #000; color: #fff; padding: 5px 20px; border-radius: 5px; font-size: 12px; font-weight: 800; }
 
-        .v-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 50px; padding: 30px 50px; }
-        .v-sec-title { font-size: 16px; font-weight: 800; border-bottom: 2px solid #ddd; padding-bottom: 5px; margin-bottom: 15px; color: #000; }
-        .v-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; font-weight: 600; }
-        .v-lbl { color: #666; } .v-val { font-weight: 800; color: #000; }
+        .v-meta { display: flex; gap: 50px; padding: 10px 50px; margin-top: 5px; font-weight: 800; color: #444; border-bottom: 3px solid var(--gold); width: 600px; font-size: 14px; }
 
-        .v-table { width: calc(100% - 100px); margin: 10px 50px; border-collapse: collapse; border: 2px solid #333; }
-        .v-table th { background: #eee; padding: 12px; text-align: left; font-size: 13px; border: 1px solid #333; }
-        .v-table td { padding: 18px 12px; font-weight: 800; border: 1px solid #333; }
+        .v-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; padding: 30px 50px; }
+        .v-sec-title { font-size: 18px; font-weight: 900; border-bottom: 2px solid #ddd; padding-bottom: 5px; margin-bottom: 12px; color: #000; }
+        .v-row { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 14px; font-weight: 800; }
+        .v-lbl { color: #666; } .v-val { color: #000; text-transform: uppercase; }
 
-        .v-total-card { background: #f1f1f1; margin: 30px 50px; padding: 25px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; border: 2px dashed #999; }
-        .v-amt-val { font-size: 32px; font-weight: 800; }
+        .v-table { width: calc(100% - 100px); margin: 10px 50px; border-collapse: collapse; border: 3px solid var(--gold); }
+        .v-table th { background: #F1E9D2; padding: 15px; text-align: left; font-size: 14px; font-weight: 900; border: 2px solid var(--gold); color: #000; }
+        .v-table td { padding: 20px 15px; font-weight: 900; border: 2px solid var(--gold); font-size: 16px; color: #000; }
 
-        /* Signature Section (Small Cursive) */
-        .v-footer { margin-top: 80px; display: flex; justify-content: space-between; padding: 0 50px 140px; }
-        .sign-box { text-align: center; width: 180px; border-top: 2px solid #000; padding-top: 8px; font-size: 11px; font-weight: 800; color: #000; position: relative; }
-        .sig-font { font-family: 'Dancing Script', cursive; font-size: 24px; color: #1e3a8a; position: absolute; top: -38px; left: 0; width: 100%; text-align: center; }
+        .v-total-card { background: #fff; margin: 30px 50px; padding: 30px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; border: 3px solid var(--gold); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .v-amt { font-size: 40px; font-weight: 900; color: #00A3FF; }
 
-        .v-bottom-bar { position: absolute; bottom: 0; width: 100%; height: 60px; }
-        .v-address-text { position: absolute; bottom: 12px; width: 100%; text-align: center; font-size: 8px; font-weight: 800; color: #fff; z-index: 10; opacity: 0.8; padding: 0 50px; }
+        /* Signatures (Thin Pechano Italyc) */
+        .v-footer { margin-top: 70px; display: flex; justify-content: space-between; padding: 0 50px 150px; }
+        .sign-box { text-align: center; width: 220px; border-top: 2px solid #000; padding-top: 10px; font-size: 12px; font-weight: 900; color: #000; position: relative; }
+        .sig-font { font-family: 'Mrs Saint Delafield', cursive; font-size: 45px; color: #1e3a8a; position: absolute; top: -55px; left: 0; width: 100%; text-align: center; font-weight: 400; font-style: italic; }
+
+        .v-addr { position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; font-weight: 900; color: #666; letter-spacing: 1px; }
 
         @media print { 
             @page { size: portrait; margin: 0; }
@@ -78,96 +73,88 @@
 <body>
 
 <div class="sidebar">
-    <div class="logo-box">
-        <h2 class="logo-text">NUGORTECH IT</h2>
-        <p class="logo-slogan">Different Creative Think</p>
+    <div style="text-align:center; margin-bottom:50px;">
+        <h2 style="margin:0; font-weight:800; color:white;">NUGORTECH IT</h2>
+        <p style="color:var(--gold); font-size:9px; font-weight:800; letter-spacing:1px; text-transform: uppercase;">Royal Ledger Hub</p>
     </div>
-    <div style="padding:15px; border-radius:15px; background:var(--card); border:1px solid var(--b); color:var(--b); font-weight:800; text-align:center; font-size:12px;">
-        <i class="fas fa-file-invoice-dollar"></i> FINANCE CONTROL HUB
+    <div style="padding:15px; border-radius:15px; background:rgba(255,255,255,0.02); border:1px solid var(--gold); color:var(--gold); font-weight:800; text-align:center; font-size:12px;">
+        <i class="fas fa-crown"></i> PREMIUM VOUCHERS
     </div>
 </div>
 
 <div class="main">
-    <div class="stat-grid">
-        <div class="stat-card"><span class="v" id="statSal">৳0</span><span class="l">Salaries Paid</span></div>
-        <div class="stat-card"><span class="v" id="statAdv">৳0</span><span class="l">Advances Given</span></div>
-        <div class="stat-card"><span class="v" id="statOther">৳0</span><span class="l">Other Expenses</span></div>
-    </div>
-
     <div class="grid-layout">
         <div class="panel">
-            <h3 style="margin-top:0; color: var(--b); font-size: 18px;">Journal Entry</h3>
-            <label>Transaction Type</label>
-            <select id="jType"><option value="PAYMENT">Payment Voucher (খরচ)</option><option value="RECEIPT">Receipt Voucher (জমা)</option></select>
-            <label>Recipient / Client Name</label>
-            <input type="text" id="jName" placeholder="Full Name">
-            <label>Head of Account</label>
-            <select id="jHead">
-                <option value="Staff Monthly Salary">Staff Monthly Salary</option>
-                <option value="Salary Advance Payment">Salary Advance Payment</option>
-                <option value="Performance Bonus">Performance Bonus</option>
-                <option value="Client Project Payment">Client Project Payment</option>
-                <option value="Office Rent / Utility Bill">Office Rent / Utility Bill</option>
-            </select>
-            <label>Payment Mode</label>
-            <select id="jMode"><option value="Cash at Hand">Cash at Hand</option><option value="Bank Transfer">Bank Transfer</option><option value="bKash / Nagad">bKash / Nagad</option></select>
-            <label>Amount (BDT)</label>
-            <input type="number" id="jAmt" placeholder="Enter BDT Amount">
-            <textarea id="jNote" placeholder="Short description..." rows="2"></textarea>
-            <button class="btn-save" onclick="saveToCloud()"><i class="fas fa-receipt"></i> SAVE & GENERATE VOUCHER</button>
+            <h3 style="margin-top:0; color: var(--gold); font-size: 18px;">Voucher Entry</h3>
+            <label>Type</label>
+            <select id="jType"><option value="PAYMENT">Payment Voucher</option><option value="RECEIPT">Receipt Voucher</option></select>
+            <label>Name</label>
+            <input type="text" id="jName" placeholder="Employee / Client">
+            <label>Purpose</label>
+            <input type="text" id="jHead" placeholder="Purpose of Payment">
+            <label>Mode</label>
+            <select id="jMode"><option value="Cash at Office">Cash at Office</option><option value="Bank Transfer">Bank Transfer</option><option value="bKash / Nagad">bKash / Nagad</option></select>
+            <label>Amount</label>
+            <input type="number" id="jAmt" placeholder="BDT Amount">
+            <textarea id="jNote" placeholder="Extra remarks..." rows="2"></textarea>
+            <button class="btn-save" onclick="saveToCloud()"><i class="fas fa-print"></i> SAVE & GENERATE</button>
         </div>
 
         <div class="panel">
-            <h3 style="margin:0 0 20px 0; font-size: 18px;">Transaction Logs</h3>
+            <h3 style="margin-bottom: 20px;">Recent Transactions</h3>
             <div class="table-wrap">
                 <table id="logsTable">
-                    <thead><tr><th>Date</th><th>Type</th><th>Name</th><th>Amount</th><th>Print</th><th>Del</th></tr></thead>
+                    <thead><tr><th>Date</th><th>Name</th><th>Amount</th><th>Print</th><th>Del</th></tr></thead>
                     <tbody id="tbody"></tbody>
                 </table>
             </div>
-            <button onclick="wipe()" style="margin-top:20px; background:none; border:none; color:var(--red); cursor:pointer; font-size:11px; font-weight:800;">Reset Database (8087)</button>
+            <button onclick="wipe()" style="margin-top:20px; background:none; border:none; color:var(--red); cursor:pointer; font-size:11px; font-weight:800;">WIPE ALL (8087)</button>
         </div>
     </div>
 </div>
 
-<!-- --- FINAL VOUCHER (PRINT READY) --- -->
+<!-- --- ROYAL VOUCHER (PRINT READY) --- -->
 <div id="voucherPrint">
-    <div id="vHead" class="v-top-curve">
-        <div class="v-logo">N</div>
-        <div class="v-company-info">
-            <h2>Nugortech IT Ltd.</h2>
-            <p>DIFFERENT CREATIVE THINK</p>
+    <div id="vHead" class="v-header-curve head-pay">
+        <div style="display:flex; align-items:center;">
+            <div class="v-logo">N</div>
+            <div class="v-company" style="margin-left:20px;">
+                <h1 id="vCompName" style="color:white">Nugortech IT Ltd.</h1>
+                <p>DIFFERENT CREATIVE THINK</p>
+            </div>
         </div>
-        <div id="vTypeBadge" class="v-badge" style="background:#FF6B00; margin-left:auto;">VOUCHER</div>
+        <div class="v-badge">OFFICIAL</div>
     </div>
     
-    <h1 class="v-main-title" id="vTitle">PAYMENT RECEIPT</h1>
+    <div class="v-title-row">
+        <h1 class="v-main-title" id="vTitle">PAYMENT RECEIPT</h1>
+    </div>
     <div class="v-meta">
-        <div>Voucher ID: <strong id="vNo">---</strong></div>
+        <div>No: <strong id="vNo">---</strong></div>
         <div>Date: <strong id="vDate">---</strong></div>
     </div>
 
     <div class="v-grid">
         <div>
             <div class="v-sec-title" id="vSideTitle">Billed To:</div>
-            <div class="v-row"><span>Name:</span> <span class="v-val" id="vDispName">---</span></div>
-            <div class="v-row"><span>Location:</span> <span class="v-val">House #85/2, Road #4, Dhaka</span></div>
+            <div class="v-row"><span class="v-lbl">Name:</span> <span class="v-val" id="vDispName">---</span></div>
+            <div class="v-row"><span class="v-lbl">Address:</span> <span class="v-val">House #85/2, Road #4, Dhaka</span></div>
         </div>
         <div>
-            <div class="v-sec-title">Payment Summary:</div>
-            <div class="v-row"><span>Method:</span> <span class="v-val" id="vDispMode">---</span></div>
-            <div class="v-row"><span>Transaction:</span> <span class="v-val" style="color:green">SUCCESSFUL</span></div>
+            <div class="v-sec-title">Summary:</div>
+            <div class="v-row"><span class="v-lbl">Method:</span> <span class="v-val" id="vDispMode">---</span></div>
+            <div class="v-row"><span class="v-lbl">Status:</span> <span class="v-val" style="color:#2ecc71">SUCCESSFUL</span></div>
         </div>
     </div>
 
     <table class="v-table">
-        <thead><tr><th width="75%">Description</th><th width="25%">Amount</th></tr></thead>
-        <tbody><tr><td id="vDispNote" style="height:70px; vertical-align:top;">---</td><td id="vDispAmtTable" style="text-align:right; font-size:18px;">৳0.00</td></tr></tbody>
+        <thead><tr><th width="70%">Description / Particulars</th><th width="30%">Amount (BDT)</th></tr></thead>
+        <tbody><tr><td id="vDispNote" style="height:80px; vertical-align:top;">---</td><td id="vDispAmtTable" style="text-align:right;">৳0.00</td></tr></tbody>
     </table>
 
     <div class="v-total-card">
-        <div style="font-size:11px; font-weight:800; color:#64748b; text-transform:uppercase;">Total Payable Amount</div>
-        <div id="vDispAmt" style="font-size:32px; font-weight:800; color:#00A3FF;">৳0.00</div>
+        <div style="font-size:12px; font-weight:900; color:#666; text-transform:uppercase;">Grand Total Payable</div>
+        <div class="v-amt" id="vDispAmt">৳0.00</div>
     </div>
 
     <div class="v-footer">
@@ -176,13 +163,11 @@
         <div class="sign-box"><div class="sig-font" id="vRecSign">---</div>Receiver Signature</div>
     </div>
 
-    <div id="vBot" class="v-bottom-bar"></div>
-    <div class="v-address-text">HOUSE #85/2, ROAD #4, MOHAMMADIA HOUSING LTD, MOHAMMADPUR, DHAKA-1207</div>
+    <div class="v-addr">HOUSE #85/2, ROAD #4, MOHAMMADIA HOUSING LTD, MOHAMMADPUR, DHAKA-1207</div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
 <script>
     const firebaseConfig = { apiKey: "AIzaSyBrz1xvq4Fpt9-j75-gUS4d8ebqPRLmOK0", databaseURL: "https://sales-report-nugortech-it-default-rtdb.firebaseio.com", projectId: "sales-report-nugortech-it", appId: "1:848643315031:web:e6fbf92153490ea9d31a12" };
     firebase.initializeApp(firebaseConfig); const db = firebase.database();
@@ -190,46 +175,35 @@
     function saveToCloud() {
         const n = document.getElementById('jName').value, a = document.getElementById('jAmt').value;
         if(!n || !a) return alert("Fill all fields!");
-        const data = { type: document.getElementById('jType').value, name: n, debit: document.getElementById('jHead').value, credit: document.getElementById('jMode').value, amount: Number(a), note: document.getElementById('jNote').value, date: new Date().toLocaleDateString('en-GB') };
-        db.ref('ledger_final_official').push(data).then(() => { location.reload(); });
+        db.ref('ledger_royal_v5').push({ type: document.getElementById('jType').value, name: n, head: document.getElementById('jHead').value, mode: document.getElementById('jMode').value, amount: Number(a), note: document.getElementById('jNote').value, date: new Date().toLocaleDateString('en-GB') }).then(() => { location.reload(); });
     }
 
-    db.ref('ledger_final_official').on('value', snap => {
+    db.ref('ledger_royal_v5').on('value', snap => {
         const tbody = document.getElementById('tbody'); tbody.innerHTML = "";
-        let s1=0, s2=0, s3=0; const all = snap.val();
-        if(all) {
-            Object.keys(all).reverse().forEach(k => {
-                const d = all[k];
-                if(d.type === "PAYMENT") {
-                    if(d.debit.includes("Salary Payment")) s1 += d.amount; else if(d.debit.includes("Advance")) s2 += d.amount; else s3 += d.amount;
-                }
-                tbody.innerHTML += `<tr><td>${d.date}</td><td style="font-size:10px; font-weight:800;">${d.type}</td><td>${d.name}</td><td style="color:var(--s)">৳${d.amount.toLocaleString()}</td><td><button onclick="printV('${k}')" class="p-btn">Print</button></td><td><i class="fas fa-trash" onclick="del('${k}')" style="color:red; cursor:pointer;"></i></td></tr>`;
+        if(snap.val()) {
+            Object.keys(snap.val()).reverse().forEach(k => {
+                const d = snap.val()[k];
+                tbody.innerHTML += `<tr><td>${d.date}</td><td>${d.name}</td><td style="color:var(--gold)">৳${d.amount.toLocaleString()}</td><td><button onclick="printV('${k}')" class="p-btn">Print</button></td><td><i class="fas fa-trash" onclick="del('${k}')" style="color:red; cursor:pointer;"></i></td></tr>`;
             });
         }
-        document.getElementById('statSal').innerText = "৳" + s1.toLocaleString();
-        document.getElementById('statAdv').innerText = "৳" + s2.toLocaleString();
-        document.getElementById('statOther').innerText = "৳" + s3.toLocaleString();
     });
 
     function printV(key) {
-        db.ref('ledger_final_official/'+key).once('value', s => {
+        db.ref('ledger_royal_v5/'+key).once('value', s => {
             const d = s.val();
-            const h = document.getElementById('vHead'); const b = document.getElementById('vBot');
-            const side = document.getElementById('vSideTitle'); const title = document.getElementById('vTitle');
+            const h = document.getElementById('vHead'); const side = document.getElementById('vSideTitle'); const title = document.getElementById('vTitle'); const cName = document.getElementById('vCompName');
 
             if(d.type === "PAYMENT") {
-                h.className = "v-header-curve head-pay"; b.style.background = "#8B0000";
-                side.innerText = "Billed To:"; title.innerText = "PAYMENT RECEIPT"; title.style.color = "#8B0000";
+                h.className = "v-header-curve head-pay"; side.innerText = "Billed To:"; title.innerText = "PAYMENT RECEIPT"; title.style.color = "#8B0000"; cName.style.color = "#fff";
             } else {
-                h.className = "v-header-curve head-rec"; b.style.background = "#1e3a8a";
-                side.innerText = "Received From:"; title.innerText = "OFFICIAL RECEIPT"; title.style.color = "#1e3a8a";
+                h.className = "v-header-curve head-rec"; side.innerText = "Received From:"; title.innerText = "OFFICIAL RECEIPT"; title.style.color = "#1e3a8a"; cName.style.color = "#fff";
             }
 
             document.getElementById('vNo').innerText = "NUG-" + key.slice(-6).toUpperCase();
             document.getElementById('vDate').innerText = d.date;
             document.getElementById('vDispName').innerText = d.name.toUpperCase();
-            document.getElementById('vDispMode').innerText = d.credit;
-            document.getElementById('vDispNote').innerText = d.note || "Nugortech IT Service Payment";
+            document.getElementById('vDispMode').innerText = d.mode;
+            document.getElementById('vDispNote').innerText = d.note || d.head;
             document.getElementById('vDispAmt').innerText = "৳" + d.amount.toLocaleString();
             document.getElementById('vDispAmtTable').innerText = "৳" + d.amount.toLocaleString();
             document.getElementById('vRecSign').innerText = d.name.split(' ')[0];
@@ -237,8 +211,8 @@
         });
     }
 
-    function del(k) { if(prompt("Pass: 8087") === "8087") db.ref('ledger_final_official/'+k).remove(); }
-    function wipe() { if(prompt("Pass: 8087") === "8087") db.ref('ledger_final_official').remove(); }
+    function del(k) { if(prompt("Pass?") === "8087") db.ref('ledger_royal_v5/'+k).remove(); }
+    function wipe() { if(prompt("Reset 8087?") === "8087") db.ref('ledger_royal_v5').remove(); }
 </script>
 </body>
 </html>
