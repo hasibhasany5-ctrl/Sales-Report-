@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Nugortech IT Ltd</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --p: #FF6B00; --b: #00A3FF; --bg: #0b1120; }
+        body { margin: 0; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: 'Plus Jakarta Sans', sans-serif; color: white; }
+        .login-card { background: rgba(255,255,255,0.03); padding: 40px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1); width: 100%; max-width: 350px; text-align: center; backdrop-filter: blur(10px); }
+        h2 { margin-bottom: 30px; font-weight: 800; }
+        input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 15px; border-radius: 15px; color: white; margin-bottom: 15px; outline: none; }
+        input:focus { border-color: var(--b); }
+        .btn-login { width: 100%; padding: 15px; background: linear-gradient(to right, var(--p), var(--b)); border: none; border-radius: 15px; color: white; font-weight: 800; cursor: pointer; transition: 0.3s; }
+        .btn-login:hover { transform: scale(1.02); box-shadow: 0 10px 20px rgba(0, 163, 255, 0.2); }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <h2>Nugortech IT</h2>
+        <p style="font-size: 12px; color: var(--p); margin-bottom: 20px;">ADMIN ACCESS ONLY</p>
+        <input type="email" id="email" placeholder="Admin Email">
+        <input type="password" id="pass" placeholder="Password">
+        <button class="btn-login" onclick="login()">LOGIN TO DASHBOARD</button>
+        <p id="msg" style="margin-top: 15px; font-size: 12px; color: #f43f5e;"></p>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script>
+        // আপনার সেই একই Firebase Config এখানে বসান
+        const firebaseConfig = { 
+            apiKey: "AIzaSyBrz1xvq4Fpt9-j75-gUS4d8ebqPRLmOK0", 
+            authDomain: "sales-report-nugortech-it.firebaseapp.com",
+            projectId: "sales-report-nugortech-it",
+            appId: "1:848643315031:web:e6fbf92153490ea9d31a12" 
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        function login() {
+            const e = document.getElementById('email').value;
+            const p = document.getElementById('pass').value;
+            firebase.auth().signInWithEmailAndPassword(e, p)
+            .then(() => { location.href = "home.html"; }) // সফল হলে হোম পেজে যাবে
+            .catch(err => { document.getElementById('msg').innerText = "Error: " + err.message; });
+        }
+    </script>
+</body>
+</html>
