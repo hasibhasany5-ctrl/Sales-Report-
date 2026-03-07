@@ -7,6 +7,7 @@
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         :root { 
             --orange: #FF6B00; --blue: #00A3FF; --green: #10b981; --purple: #a855f7; --red: #f43f5e; --cyan: #06b6d4;
@@ -15,23 +16,25 @@
         * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; transition: 0.3s ease; }
         body { margin: 0; background: var(--bg); color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow-x: hidden; }
 
-        /* Hidden initially to prevent flickering before auth check */
-        #main-wrapper { display: none; width: 100%; text-align: center; }
+        /* Security Layer: Hidden by default */
+        #secure-wrapper { display: none; width: 100%; text-align: center; }
 
-        .bg-glow { position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(0,163,255,0.12) 0%, transparent 70%); z-index: -1; animation: orbit 15s infinite alternate; }
-        @keyframes orbit { from { transform: translate(-30%, -30%); } to { transform: translate(30%, 30%); } }
+        .bg-glow { position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(0,163,255,0.12) 0%, transparent 70%); z-index: -1; animation: move 15s infinite alternate; }
+        @keyframes move { from { transform: translate(-40%, -40%); } to { transform: translate(40%, 40%); } }
 
         .container { width: 100%; max-width: 1200px; padding: 40px; margin: auto; }
         .header { margin-bottom: 50px; position: relative; }
         .header h1 { font-size: 42px; font-weight: 800; margin: 0; letter-spacing: -2px; }
         .header p { color: var(--orange); font-weight: 700; text-transform: uppercase; letter-spacing: 4px; font-size: 11px; margin-top: 10px; }
 
-        .btn-logout { position: absolute; top: 0; right: 0; padding: 10px 20px; background: rgba(244, 63, 94, 0.1); border: 1px solid var(--red); color: var(--red); border-radius: 12px; cursor: pointer; font-size: 12px; font-weight: 700; }
-        .btn-logout:hover { background: var(--red); color: white; }
+        /* Logout Button */
+        .logout-btn { position: absolute; top: 0; right: 0; padding: 10px 20px; background: rgba(244, 63, 94, 0.1); border: 1px solid var(--red); color: var(--red); border-radius: 12px; cursor: pointer; font-size: 12px; font-weight: 700; }
+        .logout-btn:hover { background: var(--red); color: white; }
 
         .welcome-box { margin-bottom: 50px; }
         #time { font-size: 48px; font-weight: 800; color: white; letter-spacing: -1px; }
 
+        /* Master Grid Layout */
         .master-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
         .tile { background: var(--glass); border: 1px solid var(--border); padding: 35px 20px; border-radius: 40px; backdrop-filter: blur(20px); text-decoration: none; color: white; display: flex; flex-direction: column; align-items: center; gap: 15px; position: relative; overflow: hidden; }
         .tile:hover { transform: translateY(-12px); background: rgba(255,255,255,0.06); border-color: var(--blue); box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
@@ -40,7 +43,11 @@
         .tile span { font-size: 10px; opacity: 0.5; }
 
         .t-blue i { color: var(--blue); } .t-green i { color: var(--green); } .t-orange i { color: var(--orange); } .t-purple i { color: var(--purple); } .t-red i { color: var(--red); } .t-cyan i { color: var(--cyan); }
+        
         .footer { position: fixed; bottom: 30px; width: 100%; font-size: 10px; opacity: 0.3; letter-spacing: 2px; font-weight: 700; text-transform: uppercase; pointer-events: none; }
+
+        /* Loading Spinner UI */
+        #auth-loader { font-weight: 800; font-size: 18px; color: var(--blue); }
 
         @media (max-width: 900px) { .master-grid { grid-template-columns: 1fr 1fr; } }
         @media (max-width: 600px) { .master-grid { grid-template-columns: 1fr; } }
@@ -50,16 +57,16 @@
 
     <div class="bg-glow"></div>
 
-    <!-- Security Loading Screen -->
-    <div id="loading-screen" style="font-weight: 800; font-size: 20px; color: var(--blue);">Verifying Admin Access...</div>
+    <!-- Security Check Screen -->
+    <div id="auth-loader">🔒 Verifying Security Access...</div>
 
-    <div id="main-wrapper">
+    <div id="secure-wrapper">
         <div class="container">
             <div class="header">
                 <h1>Nugortech IT Ltd</h1>
                 <p>Different Creative Think</p>
-                <!-- লগআউট বাটন -->
-                <button class="btn-logout" onclick="logout()">LOGOUT</button>
+                <!-- Logout Button -->
+                <button class="logout-btn" onclick="handleLogout()">LOGOUT</button>
             </div>
 
             <div class="welcome-box">
@@ -68,16 +75,57 @@
             </div>
 
             <div class="master-grid">
-                <a href="https://nugortech-it-attendance.vercel.app" class="tile t-blue" target="_blank"><i class="fas fa-fingerprint"></i><h3>Attendance</h3><span>Staff Check-In</span></a>
-                <a href="index.html" class="tile t-green"><i class="fas fa-file-invoice"></i><h3>Sales Entry</h3><span>Daily Reporting</span></a>
-                <a href="admin.html" class="tile t-purple"><i class="fas fa-chart-pie"></i><h3>Sales Dashboard</h3><span>Performance Log</span></a>
-                <a href="salary.html" class="tile t-orange"><i class="fas fa-wallet"></i><h3>Payroll Hub</h3><span>Salaries & Comm.</span></a>
-                <a href="tasks.html" class="tile t-cyan"><i class="fas fa-list-check"></i><h3>Task Tracker</h3><span>Project Progress</span></a>
-                <a href="ledger.html" class="tile t-red"><i class="fas fa-file-invoice-dollar"></i><h3>Office Ledger</h3><span>Voucher Hub</span></a>
-                <a href="https://nugortech-it-attendance.vercel.app/admin.html" class="tile t-blue" target="_blank"><i class="fas fa-users-viewfinder"></i><h3>Attendance Logs</h3><span>Admin View</span></a>
+                <!-- 1. Attendance Check-In -->
+                <a href="https://nugortech-it-attendance.vercel.app" class="tile t-blue" target="_blank">
+                    <i class="fas fa-fingerprint"></i>
+                    <h3>Attendance</h3>
+                    <span>Staff Check-In</span>
+                </a>
+
+                <!-- 2. Daily Sales Entry -->
+                <a href="index.html" class="tile t-green">
+                    <i class="fas fa-file-invoice"></i>
+                    <h3>Sales Entry</h3>
+                    <span>Daily Reporting</span>
+                </a>
+
+                <!-- 3. Sales Analytics Dashboard -->
+                <a href="admin.html" class="tile t-purple">
+                    <i class="fas fa-chart-pie"></i>
+                    <h3>Sales Dashboard</h3>
+                    <span>Performance Log</span>
+                </a>
+
+                <!-- 4. Payroll Management Hub -->
+                <a href="salary.html" class="tile t-orange">
+                    <i class="fas fa-wallet"></i>
+                    <h3>Payroll Hub</h3>
+                    <span>Salaries & Comm.</span>
+                </a>
+
+                <!-- 5. Smart Task Tracker -->
+                <a href="tasks.html" class="tile t-cyan">
+                    <i class="fas fa-list-check"></i>
+                    <h3>Task Tracker</h3>
+                    <span>Project Progress</span>
+                </a>
+
+                <!-- 6. Office Ledger & Vouchers -->
+                <a href="ledger.html" class="tile t-red">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    <h3>Office Ledger</h3>
+                    <span>Voucher Hub</span>
+                </a>
+
+                <!-- 7. Attendance Admin Logs -->
+                <a href="https://nugortech-it-attendance.vercel.app/admin.html" class="tile t-blue" target="_blank">
+                    <i class="fas fa-users-viewfinder"></i>
+                    <h3>Attendance Logs</h3>
+                    <span>Admin View</span>
+                </a>
             </div>
 
-            <div class="footer">Nugortech SECURE ERP v6.0 | Boss Hasib Edition</div>
+            <div class="footer">Nugortech SECURE ERP v7.0 | Boss Hasib Edition</div>
         </div>
     </div>
 
@@ -86,6 +134,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 
     <script>
+        // আপনার সেলস প্রজেক্টের কনফিগারেশন
         const firebaseConfig = { 
             apiKey: "AIzaSyBrz1xvq4Fpt9-j75-gUS4d8ebqPRLmOK0", 
             authDomain: "sales-report-nugortech-it.firebaseapp.com",
@@ -97,23 +146,23 @@
         // --- SECURITY GUARD LOGIC ---
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
-                // লগইন থাকলে ড্যাশবোর্ড দেখাবে
-                document.getElementById('loading-screen').style.display = "none";
-                document.getElementById('main-wrapper').style.display = "block";
-                startClock();
+                // ইউজার লগইন থাকলে ড্যাশবোর্ড দেখাবে
+                document.getElementById('auth-loader').style.display = "none";
+                document.getElementById('secure-wrapper').style.display = "block";
+                startDashboard();
             } else {
-                // লগইন না থাকলে সরাসরি লগইন পেজে নিয়ে যাবে
+                // লগইন না থাকলে লগইন পেজে পাঠিয়ে দেবে
                 location.href = "login.html";
             }
         });
 
-        function logout() {
+        function handleLogout() {
             firebase.auth().signOut().then(() => {
                 location.href = "login.html";
             });
         }
 
-        function startClock() {
+        function startDashboard() {
             setInterval(() => {
                 const now = new Date();
                 const h = now.getHours();
