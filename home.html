@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Dashboard | Nugortech IT Ltd</title>
+    <title>Master Control Center | Nugortech IT Ltd</title>
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -13,178 +13,128 @@
             --orange: #FF6B00; --blue: #00A3FF; --green: #10b981; --purple: #a855f7; --red: #f43f5e; --cyan: #06b6d4;
             --bg: #0b1120; --glass: rgba(255, 255, 255, 0.03); --border: rgba(255, 255, 255, 0.1); 
         }
+        * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; transition: 0.3s ease; }
+        body { margin: 0; background: var(--bg); color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow-x: hidden; }
+
+        /* Security Layer: Hidden by default */
+        #secure-wrapper { display: none; width: 100%; text-align: center; }
+
+        .bg-glow { position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(0,163,255,0.12) 0%, transparent 70%); z-index: -1; animation: move 15s infinite alternate; }
+        @keyframes move { from { transform: translate(-40%, -40%); } to { transform: translate(40%, 40%); } }
+
+        .container { width: 100%; max-width: 1200px; padding: 40px; margin: auto; }
+        .header { margin-bottom: 50px; position: relative; }
+        .header h1 { font-size: 42px; font-weight: 800; margin: 0; letter-spacing: -2px; }
+        .header p { color: var(--orange); font-weight: 700; text-transform: uppercase; letter-spacing: 4px; font-size: 11px; margin-top: 10px; }
+
+        /* Logout Button */
+        .logout-btn { position: absolute; top: 0; right: 0; padding: 10px 20px; background: rgba(244, 63, 94, 0.1); border: 1px solid var(--red); color: var(--red); border-radius: 12px; cursor: pointer; font-size: 12px; font-weight: 700; }
+        .logout-btn:hover { background: var(--red); color: white; }
+
+        .welcome-box { margin-bottom: 50px; }
+        #time { font-size: 48px; font-weight: 800; color: white; letter-spacing: -1px; }
+
+        /* Master Grid Layout */
+        .master-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .tile { background: var(--glass); border: 1px solid var(--border); padding: 35px 20px; border-radius: 40px; backdrop-filter: blur(20px); text-decoration: none; color: white; display: flex; flex-direction: column; align-items: center; gap: 15px; position: relative; overflow: hidden; }
+        .tile:hover { transform: translateY(-12px); background: rgba(255,255,255,0.06); border-color: var(--blue); box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
+        .tile i { font-size: 38px; }
+        .tile h3 { margin: 0; font-size: 15px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .tile span { font-size: 10px; opacity: 0.5; }
+
+        .t-blue i { color: var(--blue); } .t-green i { color: var(--green); } .t-orange i { color: var(--orange); } .t-purple i { color: var(--purple); } .t-red i { color: var(--red); } .t-cyan i { color: var(--cyan); }
         
-        * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        
-        body { margin: 0; background: var(--bg); color: white; min-height: 100vh; overflow-x: hidden; display: flex; flex-direction: column; align-items: center; }
+        .footer { position: fixed; bottom: 30px; width: 100%; font-size: 10px; opacity: 0.3; letter-spacing: 2px; font-weight: 700; text-transform: uppercase; pointer-events: none; }
 
-        /* Security Check */
-        #secure-wrapper { display: none; width: 100%; max-width: 1200px; padding: 40px 20px; }
+        /* Loading Spinner UI */
+        #auth-loader { font-weight: 800; font-size: 18px; color: var(--blue); }
 
-        /* Animated Background Glow */
-        .bg-glow { position: fixed; width: 600px; height: 600px; background: radial-gradient(circle, rgba(0,163,255,0.1) 0%, transparent 70%); z-index: -1; animation: drift 20s infinite alternate; }
-        @keyframes drift { from { top: -10%; left: -10%; } to { bottom: -10%; right: -10%; } }
-
-        /* Header */
-        .top-nav { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 50px; }
-        .logo-area h1 { font-size: 28px; font-weight: 800; margin: 0; letter-spacing: -1.5px; color: white; }
-        .logo-area span { color: var(--orange); font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; }
-
-        .logout-btn { padding: 10px 20px; background: rgba(244, 63, 94, 0.1); border: 1px solid var(--red); color: var(--red); border-radius: 12px; cursor: pointer; font-size: 11px; font-weight: 800; }
-        .logout-btn:hover { background: var(--red); color: white; box-shadow: 0 0 20px rgba(244, 63, 94, 0.4); }
-
-        /* Clock & Greetings */
-        .hero-section { text-align: center; margin-bottom: 60px; }
-        #greet { font-size: 16px; opacity: 0.5; font-weight: 400; margin-bottom: 10px; }
-        #time { font-size: 56px; font-weight: 800; letter-spacing: -2px; background: linear-gradient(to bottom, #fff, #64748b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-        /* Master Grid (Medium Sized Responsive) */
-        .master-grid { 
-            display: grid; 
-            grid-template-columns: repeat(4, 1fr); 
-            gap: 20px; 
-            width: 100%;
-        }
-
-        .tile { 
-            background: var(--glass); 
-            border: 1px solid var(--border); 
-            padding: 30px 20px; 
-            border-radius: 30px; 
-            backdrop-filter: blur(20px); 
-            text-decoration: none; 
-            color: white; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center;
-            gap: 12px;
-            text-align: center;
-        }
-
-        /* Hover Effect: Colour Change & Glow */
-        .tile:hover { transform: translateY(-10px) scale(1.02); background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.3); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
-        
-        .tile i { font-size: 32px; margin-bottom: 5px; }
-        .tile h3 { margin: 0; font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
-        .tile span { font-size: 10px; opacity: 0.4; font-weight: 500; display: block; }
-
-        /* Individual Tile Colors */
-        .t-attendance:hover { border-color: var(--blue); box-shadow: 0 0 30px rgba(0, 163, 255, 0.2); }
-        .t-attendance i { color: var(--blue); }
-
-        .t-sales-in:hover { border-color: var(--green); box-shadow: 0 0 30px rgba(16, 185, 129, 0.2); }
-        .t-sales-in i { color: var(--green); }
-
-        .t-sales-dash:hover { border-color: var(--purple); box-shadow: 0 0 30px rgba(168, 85, 247, 0.2); }
-        .t-sales-dash i { color: var(--purple); }
-
-        .t-payroll:hover { border-color: var(--orange); box-shadow: 0 0 30px rgba(255, 107, 0, 0.2); }
-        .t-payroll i { color: var(--orange); }
-
-        .t-task:hover { border-color: var(--cyan); box-shadow: 0 0 30px rgba(6, 182, 212, 0.2); }
-        .t-task i { color: var(--cyan); }
-
-        .t-ledger:hover { border-color: var(--red); box-shadow: 0 0 30px rgba(244, 63, 94, 0.2); }
-        .t-ledger i { color: var(--red); }
-
-        .t-admin:hover { border-color: #94a3b8; box-shadow: 0 0 30px rgba(148, 163, 184, 0.2); }
-        .t-admin i { color: #94a3b8; }
-
-        /* Loading Screen */
-        #loader { position: fixed; inset: 0; background: var(--bg); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 2000; }
-
-        .footer-text { margin-top: 60px; font-size: 10px; opacity: 0.2; letter-spacing: 4px; text-transform: uppercase; font-weight: 800; text-align: center; width: 100%; }
-
-        /* For 7th Button Centering */
-        .master-grid a:last-child:nth-child(7) { grid-column: span 1; }
-
-        @media (max-width: 1024px) { .master-grid { grid-template-columns: repeat(3, 1fr); } }
-        @media (max-width: 768px) { .master-grid { grid-template-columns: repeat(2, 1fr); } .top-nav h1 { font-size: 22px; } }
-        @media (max-width: 480px) { .master-grid { grid-template-columns: 1fr; } #time { font-size: 40px; } }
+        @media (max-width: 900px) { .master-grid { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 600px) { .master-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
     <div class="bg-glow"></div>
 
-    <!-- Security Overlay -->
-    <div id="loader">
-        <i class="fas fa-fingerprint animate-pulse" style="font-size: 40px; color: var(--blue); margin-bottom: 15px;"></i>
-        <div style="font-weight: 800; font-size: 14px; color: var(--blue); letter-spacing: 3px;">AUTHENTICATING...</div>
-    </div>
+    <!-- Security Check Screen -->
+    <div id="auth-loader">🔒 Verifying Security Access...</div>
 
     <div id="secure-wrapper">
-        <!-- Top Nav -->
-        <nav class="top-nav">
-            <div class="logo-area">
-                <h1>NUGORTECH IT</h1>
-                <span>Different Creative Think</span>
+        <div class="container">
+            <div class="header">
+                <h1>Nugortech IT Ltd</h1>
+                <p>Different Creative Think</p>
+                <!-- Logout Button -->
+                <button class="logout-btn" onclick="handleLogout()">LOGOUT</button>
             </div>
-            <button class="logout-btn" onclick="signout()">LOGOUT</button>
-        </nav>
 
-        <!-- Greetings Area -->
-        <div class="hero-section">
-            <div id="greet">Syncing Cloud Services...</div>
-            <div id="time">00:00:00</div>
+            <div class="welcome-box">
+                <div id="greet" style="font-size:18px; opacity:0.6; margin-bottom:10px;">Security Verified</div>
+                <div id="time">00:00:00</div>
+            </div>
+
+            <div class="master-grid">
+                <!-- 1. Attendance Check-In -->
+                <a href="https://nugortech-it-attendance.vercel.app" class="tile t-blue" target="_blank">
+                    <i class="fas fa-fingerprint"></i>
+                    <h3>Attendance</h3>
+                    <span>Staff Check-In</span>
+                </a>
+
+                <!-- 2. Daily Sales Entry -->
+                <a href="index.html" class="tile t-green">
+                    <i class="fas fa-file-invoice"></i>
+                    <h3>Sales Entry</h3>
+                    <span>Daily Reporting</span>
+                </a>
+
+                <!-- 3. Sales Analytics Dashboard -->
+                <a href="admin.html" class="tile t-purple">
+                    <i class="fas fa-chart-pie"></i>
+                    <h3>Sales Dashboard</h3>
+                    <span>Performance Log</span>
+                </a>
+
+                <!-- 4. Payroll Management Hub -->
+                <a href="salary.html" class="tile t-orange">
+                    <i class="fas fa-wallet"></i>
+                    <h3>Payroll Hub</h3>
+                    <span>Salaries & Comm.</span>
+                </a>
+
+                <!-- 5. Smart Task Tracker -->
+                <a href="tasks.html" class="tile t-cyan">
+                    <i class="fas fa-list-check"></i>
+                    <h3>Task Tracker</h3>
+                    <span>Project Progress</span>
+                </a>
+
+                <!-- 6. Office Ledger & Vouchers -->
+                <a href="ledger.html" class="tile t-red">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    <h3>Office Ledger</h3>
+                    <span>Voucher Hub</span>
+                </a>
+
+                <!-- 7. Attendance Admin Logs -->
+                <a href="https://nugortech-it-attendance.vercel.app/admin.html" class="tile t-blue" target="_blank">
+                    <i class="fas fa-users-viewfinder"></i>
+                    <h3>Attendance Logs</h3>
+                    <span>Admin View</span>
+                </a>
+            </div>
+
+            <div class="footer">Nugortech SECURE ERP v7.0 | Boss Hasib Edition</div>
         </div>
-
-        <!-- Master Grid with 7 Buttons -->
-        <div class="master-grid">
-            
-            <a href="https://nugortech-it-attendance.vercel.app" class="tile t-attendance" target="_blank">
-                <i class="fas fa-user-clock"></i>
-                <h3>Attendance</h3>
-                <span>Staff Check-In</span>
-            </a>
-
-            <a href="index.html" class="tile t-sales-in">
-                <i class="fas fa-file-invoice"></i>
-                <h3>Sales Entry</h3>
-                <span>Daily Reporting</span>
-            </a>
-
-            <a href="admin.html" class="tile t-sales-dash">
-                <i class="fas fa-chart-line"></i>
-                <h3>Sales Analytics</h3>
-                <span>Performance Dash</span>
-            </a>
-
-            <a href="salary.html" class="tile t-payroll">
-                <i class="fas fa-wallet"></i>
-                <h3>Payroll Hub</h3>
-                <span>Salaries & Comm.</span>
-            </a>
-
-            <a href="tasks.html" class="tile t-task">
-                <i class="fas fa-tasks"></i>
-                <h3>Task Tracker</h3>
-                <span>Project Progress</span>
-            </a>
-
-            <a href="ledger.html" class="tile t-ledger">
-                <i class="fas fa-vault"></i>
-                <h3>Office Ledger</h3>
-                <span>Expense & Voucher</span>
-            </a>
-
-            <a href="https://nugortech-it-attendance.vercel.app/admin.html" class="tile t-admin" target="_blank">
-                <i class="fas fa-shield-halved"></i>
-                <h3>Admin Logs</h3>
-                <span>Attendance Records</span>
-            </a>
-
-        </div>
-
-        <div class="footer-text">NUGORTECH ENTERPRISE OS | SECURE v8.0</div>
     </div>
 
-    <!-- Firebase -->
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 
     <script>
+        // আপনার সেলস প্রজেক্টের কনফিগারেশন
         const firebaseConfig = { 
             apiKey: "AIzaSyBrz1xvq4Fpt9-j75-gUS4d8ebqPRLmOK0", 
             authDomain: "sales-report-nugortech-it.firebaseapp.com",
@@ -193,20 +143,26 @@
         };
         firebase.initializeApp(firebaseConfig);
 
-        // Security Guard
+        // --- SECURITY GUARD LOGIC ---
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
-                document.getElementById('loader').style.display = "none";
+                // ইউজার লগইন থাকলে ড্যাশবোর্ড দেখাবে
+                document.getElementById('auth-loader').style.display = "none";
                 document.getElementById('secure-wrapper').style.display = "block";
-                startSystem();
+                startDashboard();
             } else {
+                // লগইন না থাকলে লগইন পেজে পাঠিয়ে দেবে
                 location.href = "login.html";
             }
         });
 
-        function signout() { firebase.auth().signOut().then(() => location.href = "login.html"); }
+        function handleLogout() {
+            firebase.auth().signOut().then(() => {
+                location.href = "login.html";
+            });
+        }
 
-        function startSystem() {
+        function startDashboard() {
             setInterval(() => {
                 const now = new Date();
                 const h = now.getHours();
