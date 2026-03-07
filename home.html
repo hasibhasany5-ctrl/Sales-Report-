@@ -3,174 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Master Control Center | Nugortech IT Ltd</title>
-    <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <title>Nugortech ERP | Master Dashboard</title>
+    <!-- ১. Tailwind CSS যুক্ত করা হলো -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        :root { 
-            --orange: #FF6B00; --blue: #00A3FF; --green: #10b981; --purple: #a855f7; --red: #f43f5e; --cyan: #06b6d4;
-            --bg: #0b1120; --glass: rgba(255, 255, 255, 0.03); --border: rgba(255, 255, 255, 0.1); 
-        }
-        * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; transition: 0.3s ease; }
-        body { margin: 0; background: var(--bg); color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow-x: hidden; }
-
-        /* Security Layer: Hidden by default */
-        #secure-wrapper { display: none; width: 100%; text-align: center; }
-
-        .bg-glow { position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(0,163,255,0.12) 0%, transparent 70%); z-index: -1; animation: move 15s infinite alternate; }
-        @keyframes move { from { transform: translate(-40%, -40%); } to { transform: translate(40%, 40%); } }
-
-        .container { width: 100%; max-width: 1200px; padding: 40px; margin: auto; }
-        .header { margin-bottom: 50px; position: relative; }
-        .header h1 { font-size: 42px; font-weight: 800; margin: 0; letter-spacing: -2px; }
-        .header p { color: var(--orange); font-weight: 700; text-transform: uppercase; letter-spacing: 4px; font-size: 11px; margin-top: 10px; }
-
-        /* Logout Button */
-        .logout-btn { position: absolute; top: 0; right: 0; padding: 10px 20px; background: rgba(244, 63, 94, 0.1); border: 1px solid var(--red); color: var(--red); border-radius: 12px; cursor: pointer; font-size: 12px; font-weight: 700; }
-        .logout-btn:hover { background: var(--red); color: white; }
-
-        .welcome-box { margin-bottom: 50px; }
-        #time { font-size: 48px; font-weight: 800; color: white; letter-spacing: -1px; }
-
-        /* Master Grid Layout */
-        .master-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-        .tile { background: var(--glass); border: 1px solid var(--border); padding: 35px 20px; border-radius: 40px; backdrop-filter: blur(20px); text-decoration: none; color: white; display: flex; flex-direction: column; align-items: center; gap: 15px; position: relative; overflow: hidden; }
-        .tile:hover { transform: translateY(-12px); background: rgba(255,255,255,0.06); border-color: var(--blue); box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
-        .tile i { font-size: 38px; }
-        .tile h3 { margin: 0; font-size: 15px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
-        .tile span { font-size: 10px; opacity: 0.5; }
-
-        .t-blue i { color: var(--blue); } .t-green i { color: var(--green); } .t-orange i { color: var(--orange); } .t-purple i { color: var(--purple); } .t-red i { color: var(--red); } .t-cyan i { color: var(--cyan); }
-        
-        .footer { position: fixed; bottom: 30px; width: 100%; font-size: 10px; opacity: 0.3; letter-spacing: 2px; font-weight: 700; text-transform: uppercase; pointer-events: none; }
-
-        /* Loading Spinner UI */
-        #auth-loader { font-weight: 800; font-size: 18px; color: var(--blue); }
-
-        @media (max-width: 900px) { .master-grid { grid-template-columns: 1fr 1fr; } }
-        @media (max-width: 600px) { .master-grid { grid-template-columns: 1fr; } }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
     </style>
 </head>
-<body>
 
-    <div class="bg-glow"></div>
+<body class="bg-[#0f172a] text-slate-200 min-h-screen flex flex-col items-center p-4 md:p-10 overflow-x-hidden">
 
-    <!-- Security Check Screen -->
-    <div id="auth-loader">🔒 Verifying Security Access...</div>
-
-    <div id="secure-wrapper">
-        <div class="container">
-            <div class="header">
-                <h1>Nugortech IT Ltd</h1>
-                <p>Different Creative Think</p>
-                <!-- Logout Button -->
-                <button class="logout-btn" onclick="handleLogout()">LOGOUT</button>
-            </div>
-
-            <div class="welcome-box">
-                <div id="greet" style="font-size:18px; opacity:0.6; margin-bottom:10px;">Security Verified</div>
-                <div id="time">00:00:00</div>
-            </div>
-
-            <div class="master-grid">
-                <!-- 1. Attendance Check-In -->
-                <a href="https://nugortech-it-attendance.vercel.app" class="tile t-blue" target="_blank">
-                    <i class="fas fa-fingerprint"></i>
-                    <h3>Attendance</h3>
-                    <span>Staff Check-In</span>
-                </a>
-
-                <!-- 2. Daily Sales Entry -->
-                <a href="index.html" class="tile t-green">
-                    <i class="fas fa-file-invoice"></i>
-                    <h3>Sales Entry</h3>
-                    <span>Daily Reporting</span>
-                </a>
-
-                <!-- 3. Sales Analytics Dashboard -->
-                <a href="admin.html" class="tile t-purple">
-                    <i class="fas fa-chart-pie"></i>
-                    <h3>Sales Dashboard</h3>
-                    <span>Performance Log</span>
-                </a>
-
-                <!-- 4. Payroll Management Hub -->
-                <a href="salary.html" class="tile t-orange">
-                    <i class="fas fa-wallet"></i>
-                    <h3>Payroll Hub</h3>
-                    <span>Salaries & Comm.</span>
-                </a>
-
-                <!-- 5. Smart Task Tracker -->
-                <a href="tasks.html" class="tile t-cyan">
-                    <i class="fas fa-list-check"></i>
-                    <h3>Task Tracker</h3>
-                    <span>Project Progress</span>
-                </a>
-
-                <!-- 6. Office Ledger & Vouchers -->
-                <a href="ledger.html" class="tile t-red">
-                    <i class="fas fa-file-invoice-dollar"></i>
-                    <h3>Office Ledger</h3>
-                    <span>Voucher Hub</span>
-                </a>
-
-                <!-- 7. Attendance Admin Logs -->
-                <a href="https://nugortech-it-attendance.vercel.app/admin.html" class="tile t-blue" target="_blank">
-                    <i class="fas fa-users-viewfinder"></i>
-                    <h3>Attendance Logs</h3>
-                    <span>Admin View</span>
-                </a>
-            </div>
-
-            <div class="footer">Nugortech SECURE ERP v7.0 | Boss Hasib Edition</div>
-        </div>
+    <!-- পেছনের গ্লোয়িং ব্যাকগ্রাউন্ড -->
+    <div class="fixed top-0 left-0 w-full h-full pointer-events-none -z-10">
+        <div class="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px]"></div>
+        <div class="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-orange-600/10 rounded-full blur-[120px]"></div>
     </div>
 
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <!-- টপ হেডার -->
+    <header class="w-full max-w-6xl flex justify-between items-center mb-12 animate-fade-in">
+        <div class="flex flex-col">
+            <h1 class="text-3xl font-black tracking-tighter text-white">NUGORTECH <span class="text-blue-500">IT</span></h1>
+            <p class="text-[10px] uppercase tracking-[0.3em] text-orange-500 font-bold">Different Creative Think</p>
+        </div>
+        <div class="bg-white/5 border border-white/10 px-4 py-2 rounded-2xl backdrop-blur-md hidden sm:block">
+            <p id="clock" class="text-sm font-bold text-blue-400 tracking-wider">00:00:00</p>
+        </div>
+    </header>
+
+    <!-- স্বাগতম সেকশন -->
+    <div class="text-center mb-16">
+        <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-4">Enterprise Control Hub</h2>
+        <p class="text-slate-400 max-w-md mx-auto">Manage attendance, sales, and payroll from one unified secure portal.</p>
+    </div>
+
+    <!-- মাস্টার বাটন গ্রিড (Tailwind Grid System) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl">
+        
+        <!-- Attendance -->
+        <a href="https://nugortech-it-attendance.vercel.app" target="_blank" class="group bg-white/5 border border-white/10 p-8 rounded-[40px] hover:bg-white/10 hover:-translate-y-2 transition-all duration-500">
+            <div class="w-12 h-12 bg-blue-500/20 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-blue-500 transition-colors">
+                <i class="fas fa-fingerprint text-blue-500 group-hover:text-white"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-2">Staff Attendance</h3>
+            <p class="text-xs text-slate-500 mb-4">Check-in with GPS verification.</p>
+            <span class="text-[10px] font-bold text-blue-500 uppercase tracking-widest flex items-center">Open Portal <i class="fas fa-arrow-right ml-2 text-[8px]"></i></span>
+        </a>
+
+        <!-- Sales Dashboard -->
+        <a href="admin.html" class="group bg-white/5 border border-white/10 p-8 rounded-[40px] hover:bg-white/10 hover:-translate-y-2 transition-all duration-500">
+            <div class="w-12 h-12 bg-purple-500/20 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-purple-500 transition-colors">
+                <i class="fas fa-chart-pie text-purple-500 group-hover:text-white"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-2">Sales Analytics</h3>
+            <p class="text-xs text-slate-500 mb-4">Track performance and commissions.</p>
+            <span class="text-[10px] font-bold text-purple-500 uppercase tracking-widest flex items-center">View Stats <i class="fas fa-arrow-right ml-2 text-[8px]"></i></span>
+        </a>
+
+        <!-- Payroll -->
+        <a href="salary.html" class="group bg-white/5 border border-white/10 p-8 rounded-[40px] hover:bg-white/10 hover:-translate-y-2 transition-all duration-500">
+            <div class="w-12 h-12 bg-orange-500/20 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-orange-500 transition-colors">
+                <i class="fas fa-wallet text-orange-500 group-hover:text-white"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-2">Payroll Hub</h3>
+            <p class="text-xs text-slate-500 mb-4">Manage bulk salaries and invoices.</p>
+            <span class="text-[10px] font-bold text-orange-500 uppercase tracking-widest flex items-center">Generate <i class="fas fa-arrow-right ml-2 text-[8px]"></i></span>
+        </a>
+
+        <!-- Ledger -->
+        <a href="ledger.html" class="group bg-white/5 border border-white/10 p-8 rounded-[40px] hover:bg-white/10 hover:-translate-y-2 transition-all duration-500">
+            <div class="w-12 h-12 bg-green-500/20 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-green-500 transition-colors">
+                <i class="fas fa-file-invoice-dollar text-green-500 group-hover:text-white"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-2">Office Ledger</h3>
+            <p class="text-xs text-slate-500 mb-4">Track expenses and vouchers.</p>
+            <span class="text-[10px] font-bold text-green-500 uppercase tracking-widest flex items-center">Manage Ledger <i class="fas fa-arrow-right ml-2 text-[8px]"></i></span>
+        </a>
+
+        <!-- Task Manager -->
+        <a href="tasks.html" class="group bg-white/5 border border-white/10 p-8 rounded-[40px] hover:bg-white/10 hover:-translate-y-2 transition-all duration-500">
+            <div class="w-12 h-12 bg-cyan-500/20 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-cyan-500 transition-colors">
+                <i class="fas fa-list-check text-cyan-500 group-hover:text-white"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-2">Task Control</h3>
+            <p class="text-xs text-slate-500 mb-4">Monitor project live progress.</p>
+            <span class="text-[10px] font-bold text-cyan-500 uppercase tracking-widest flex items-center">Track Tasks <i class="fas fa-arrow-right ml-2 text-[8px]"></i></span>
+        </a>
+
+    </div>
+
+    <!-- ফুটার -->
+    <footer class="mt-20 py-10 opacity-30 text-center">
+        <p class="text-[10px] uppercase font-bold tracking-[0.5em]">System Version 5.0 | Secure Cloud ERP</p>
+    </footer>
 
     <script>
-        // আপনার সেলস প্রজেক্টের কনফিগারেশন
-        const firebaseConfig = { 
-            apiKey: "AIzaSyBrz1xvq4Fpt9-j75-gUS4d8ebqPRLmOK0", 
-            authDomain: "sales-report-nugortech-it.firebaseapp.com",
-            projectId: "sales-report-nugortech-it",
-            appId: "1:848643315031:web:e6fbf92153490ea9d31a12" 
-        };
-        firebase.initializeApp(firebaseConfig);
-
-        // --- SECURITY GUARD LOGIC ---
-        firebase.auth().onAuthStateChanged((user) => {
-            if (user) {
-                // ইউজার লগইন থাকলে ড্যাশবোর্ড দেখাবে
-                document.getElementById('auth-loader').style.display = "none";
-                document.getElementById('secure-wrapper').style.display = "block";
-                startDashboard();
-            } else {
-                // লগইন না থাকলে লগইন পেজে পাঠিয়ে দেবে
-                location.href = "login.html";
-            }
-        });
-
-        function handleLogout() {
-            firebase.auth().signOut().then(() => {
-                location.href = "login.html";
-            });
-        }
-
-        function startDashboard() {
-            setInterval(() => {
-                const now = new Date();
-                const h = now.getHours();
-                let g = h < 12 ? "Good Morning, Boss Hasib" : (h < 17 ? "Good Afternoon, Boss Hasib" : "Good Evening, Boss Hasib");
-                document.getElementById('greet').innerText = g;
-                document.getElementById('time').innerText = now.toLocaleTimeString('en-US', { hour12: false });
-            }, 1000);
-        }
+        // লাইভ ক্লক
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toLocaleTimeString('en-US', { hour12: false });
+        }, 1000);
     </script>
+
 </body>
 </html>
