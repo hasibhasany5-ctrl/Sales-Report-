@@ -9,133 +9,119 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { 
-            --orange: #FF6B00; --blue: #00A3FF; --green: #10b981; --purple: #a855f7; --red: #f43f5e;
+            --orange: #FF6B00; --blue: #00A3FF; --green: #10b981; --purple: #a855f7; --red: #f43f5e; --cyan: #06b6d4;
             --bg: #0b1120; --glass: rgba(255, 255, 255, 0.03); --border: rgba(255, 255, 255, 0.1); 
         }
         * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; transition: 0.3s ease; }
         body { margin: 0; background: var(--bg); color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow-x: hidden; }
 
-        .bg-glow { position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(0,163,255,0.15) 0%, transparent 70%); z-index: -1; animation: move 15s infinite alternate; }
-        @keyframes move { from { transform: translate(-40%, -40%); } to { transform: translate(40%, 40%); } }
+        /* Hidden initially to prevent flickering before auth check */
+        #main-wrapper { display: none; width: 100%; text-align: center; }
 
-        .container { width: 100%; max-width: 1100px; padding: 40px; text-align: center; }
-        
-        .header { margin-bottom: 50px; }
+        .bg-glow { position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(0,163,255,0.12) 0%, transparent 70%); z-index: -1; animation: orbit 15s infinite alternate; }
+        @keyframes orbit { from { transform: translate(-30%, -30%); } to { transform: translate(30%, 30%); } }
+
+        .container { width: 100%; max-width: 1200px; padding: 40px; margin: auto; }
+        .header { margin-bottom: 50px; position: relative; }
         .header h1 { font-size: 42px; font-weight: 800; margin: 0; letter-spacing: -2px; }
         .header p { color: var(--orange); font-weight: 700; text-transform: uppercase; letter-spacing: 4px; font-size: 11px; margin-top: 10px; }
 
+        .btn-logout { position: absolute; top: 0; right: 0; padding: 10px 20px; background: rgba(244, 63, 94, 0.1); border: 1px solid var(--red); color: var(--red); border-radius: 12px; cursor: pointer; font-size: 12px; font-weight: 700; }
+        .btn-logout:hover { background: var(--red); color: white; }
+
         .welcome-box { margin-bottom: 50px; }
-        #greet { font-size: 18px; opacity: 0.6; margin-bottom: 10px; font-weight: 400; }
         #time { font-size: 48px; font-weight: 800; color: white; letter-spacing: -1px; }
 
-        /* Master Grid Layout */
-        .master-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
-
-        .tile { 
-            background: var(--glass); border: 1px solid var(--border); padding: 40px 30px; 
-            border-radius: 40px; backdrop-filter: blur(20px); text-decoration: none; 
-            color: white; display: flex; flex-direction: column; align-items: center; gap: 15px;
-            position: relative; overflow: hidden;
-        }
+        .master-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .tile { background: var(--glass); border: 1px solid var(--border); padding: 35px 20px; border-radius: 40px; backdrop-filter: blur(20px); text-decoration: none; color: white; display: flex; flex-direction: column; align-items: center; gap: 15px; position: relative; overflow: hidden; }
         .tile:hover { transform: translateY(-12px); background: rgba(255,255,255,0.06); border-color: var(--blue); box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
-        .tile i { font-size: 42px; transition: 0.3s; }
-        .tile h3 { margin: 0; font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
-        .tile span { font-size: 11px; opacity: 0.5; font-weight: 500; }
+        .tile i { font-size: 38px; }
+        .tile h3 { margin: 0; font-size: 15px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .tile span { font-size: 10px; opacity: 0.5; }
 
-        /* Icon Colors */
-        .t-blue i { color: var(--blue); text-shadow: 0 0 20px rgba(0, 163, 255, 0.4); }
-        .t-green i { color: var(--green); text-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
-        .t-orange i { color: var(--orange); text-shadow: 0 0 20px rgba(255, 107, 0, 0.4); }
-        .t-purple i { color: var(--purple); text-shadow: 0 0 20px rgba(168, 85, 247, 0.4); }
-        .t-red i { color: var(--red); text-shadow: 0 0 20px rgba(244, 63, 94, 0.4); }
+        .t-blue i { color: var(--blue); } .t-green i { color: var(--green); } .t-orange i { color: var(--orange); } .t-purple i { color: var(--purple); } .t-red i { color: var(--red); } .t-cyan i { color: var(--cyan); }
+        .footer { position: fixed; bottom: 30px; width: 100%; font-size: 10px; opacity: 0.3; letter-spacing: 2px; font-weight: 700; text-transform: uppercase; pointer-events: none; }
 
-        .footer { position: fixed; bottom: 30px; font-size: 10px; opacity: 0.3; letter-spacing: 2px; font-weight: 700; text-transform: uppercase; }
-
-        @media (max-width: 900px) {
-            .master-grid { grid-template-columns: 1fr 1fr; }
-        }
-        @media (max-width: 600px) {
-            .master-grid { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 900px) { .master-grid { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 600px) { .master-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
     <div class="bg-glow"></div>
 
-    <div class="container">
-        <div class="header">
-            <h1>Nugortech IT Ltd</h1>
-            <p>Different Creative Think</p>
+    <!-- Security Loading Screen -->
+    <div id="loading-screen" style="font-weight: 800; font-size: 20px; color: var(--blue);">Verifying Admin Access...</div>
+
+    <div id="main-wrapper">
+        <div class="container">
+            <div class="header">
+                <h1>Nugortech IT Ltd</h1>
+                <p>Different Creative Think</p>
+                <!-- লগআউট বাটন -->
+                <button class="btn-logout" onclick="logout()">LOGOUT</button>
+            </div>
+
+            <div class="welcome-box">
+                <div id="greet" style="font-size:18px; opacity:0.6; margin-bottom:10px;">Security Verified</div>
+                <div id="time">00:00:00</div>
+            </div>
+
+            <div class="master-grid">
+                <a href="https://nugortech-it-attendance.vercel.app" class="tile t-blue" target="_blank"><i class="fas fa-fingerprint"></i><h3>Attendance</h3><span>Staff Check-In</span></a>
+                <a href="index.html" class="tile t-green"><i class="fas fa-file-invoice"></i><h3>Sales Entry</h3><span>Daily Reporting</span></a>
+                <a href="admin.html" class="tile t-purple"><i class="fas fa-chart-pie"></i><h3>Sales Dashboard</h3><span>Performance Log</span></a>
+                <a href="salary.html" class="tile t-orange"><i class="fas fa-wallet"></i><h3>Payroll Hub</h3><span>Salaries & Comm.</span></a>
+                <a href="tasks.html" class="tile t-cyan"><i class="fas fa-list-check"></i><h3>Task Tracker</h3><span>Project Progress</span></a>
+                <a href="ledger.html" class="tile t-red"><i class="fas fa-file-invoice-dollar"></i><h3>Office Ledger</h3><span>Voucher Hub</span></a>
+                <a href="https://nugortech-it-attendance.vercel.app/admin.html" class="tile t-blue" target="_blank"><i class="fas fa-users-viewfinder"></i><h3>Attendance Logs</h3><span>Admin View</span></a>
+            </div>
+
+            <div class="footer">Nugortech SECURE ERP v6.0 | Boss Hasib Edition</div>
         </div>
-
-        <div class="welcome-box">
-            <div id="greet">Initializing Cloud System...</div>
-            <div id="time">00:00:00</div>
-        </div>
-
-        <div class="master-grid">
-            <!-- 1. Attendance Check-In -->
-            <a href="https://nugortech-it-attendance.vercel.app" class="tile t-blue" target="_blank">
-                <i class="fas fa-fingerprint"></i>
-                <h3>Staff Attendance</h3>
-                <span>Office GPS Check-In</span>
-            </a>
-
-            <!-- 2. Daily Sales Entry -->
-            <a href="index.html" class="tile t-green">
-                <i class="fas fa-file-invoice"></i>
-                <h3>Sales Entry</h3>
-                <span>Submit Daily Reports</span>
-            </a>
-
-            <!-- 3. Sales Analytics Dashboard -->
-            <a href="admin.html" class="tile t-purple">
-                <i class="fas fa-chart-pie"></i>
-                <h3>Sales Analytics</h3>
-                <span>Performance Monitoring</span>
-            </a>
-
-            <!-- 4. Payroll Hub -->
-            <a href="salary.html" class="tile t-orange">
-                <i class="fas fa-wallet"></i>
-                <h3>Payroll Master</h3>
-                <span>Commissions & Salaries</span>
-            </a>
-
-            <!-- 5. NEW: Office Ledger & Vouchers -->
-            <a href="ledger.html" class="tile t-red">
-                <i class="fas fa-file-invoice-dollar"></i>
-                <h3>Office Ledger</h3>
-                <span>Expense & Voucher Hub</span>
-            </a>
-
-            <!-- 6. Attendance Logs (Admin View) -->
-            <a href="https://nugortech-it-attendance.vercel.app/admin.html" class="tile t-blue" target="_blank">
-                <i class="fas fa-users-viewfinder"></i>
-                <h3>Attendance Logs</h3>
-                <span>Full System Logs</span>
-            </a>
-        </div>
-
-        <div class="footer">ENTERPRISE CLOUD ERP v4.0 | MANAGED BY BOSS HASIB</div>
     </div>
 
-    <script>
-        function runDashboard() {
-            const now = new Date();
-            const h = now.getHours();
-            let g = "Welcome Back, Boss Hasib";
-            
-            if (h < 12) g = "Good Morning, Boss Hasib";
-            else if (h < 17) g = "Good Afternoon, Boss Hasib";
-            else g = "Good Evening, Boss Hasib";
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 
-            document.getElementById('greet').innerText = g;
-            document.getElementById('time').innerText = now.toLocaleTimeString('en-US', { hour12: false });
+    <script>
+        const firebaseConfig = { 
+            apiKey: "AIzaSyBrz1xvq4Fpt9-j75-gUS4d8ebqPRLmOK0", 
+            authDomain: "sales-report-nugortech-it.firebaseapp.com",
+            projectId: "sales-report-nugortech-it",
+            appId: "1:848643315031:web:e6fbf92153490ea9d31a12" 
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        // --- SECURITY GUARD LOGIC ---
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                // লগইন থাকলে ড্যাশবোর্ড দেখাবে
+                document.getElementById('loading-screen').style.display = "none";
+                document.getElementById('main-wrapper').style.display = "block";
+                startClock();
+            } else {
+                // লগইন না থাকলে সরাসরি লগইন পেজে নিয়ে যাবে
+                location.href = "login.html";
+            }
+        });
+
+        function logout() {
+            firebase.auth().signOut().then(() => {
+                location.href = "login.html";
+            });
         }
-        setInterval(runDashboard, 1000);
-        runDashboard();
+
+        function startClock() {
+            setInterval(() => {
+                const now = new Date();
+                const h = now.getHours();
+                let g = h < 12 ? "Good Morning, Boss Hasib" : (h < 17 ? "Good Afternoon, Boss Hasib" : "Good Evening, Boss Hasib");
+                document.getElementById('greet').innerText = g;
+                document.getElementById('time').innerText = now.toLocaleTimeString('en-US', { hour12: false });
+            }, 1000);
+        }
     </script>
 </body>
 </html>
