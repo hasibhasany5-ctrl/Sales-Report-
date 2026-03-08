@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cloud Master Report | Nugortech IT Ltd</title>
+    <title>Master Report | Nugortech IT Ltd</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -16,7 +16,7 @@
 
         .panel { background: var(--card); border: 1px solid var(--border); padding: 30px; border-radius: 35px; backdrop-filter: blur(15px); margin-bottom: 30px; display: flex; gap: 20px; align-items: flex-end; }
         label { display: block; font-size: 10px; font-weight: 800; color: var(--blue); margin-bottom: 8px; text-transform: uppercase; }
-        input { background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 12px; border-radius: 12px; color: white; outline: none; width: 250px; }
+        input { background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 12px; border-radius: 12px; color: white; outline: none; width: 200px; }
         .btn-gen { padding: 12px 30px; background: linear-gradient(135deg, var(--orange), var(--blue)); border: none; border-radius: 15px; color: white; font-weight: 800; cursor: pointer; transition: 0.3s; }
 
         /* EXCEL STYLE PRINT REPORT */
@@ -30,7 +30,7 @@
         .excel-table td { border: 1px solid #000; padding: 10px 4px; font-size: 10px; font-weight: 800; text-align: center; vertical-align: middle; }
         
         .name-col { text-align: left !important; padding-left: 10px !important; background: #fff; }
-        .month-side { background: #fff; border: 1px solid #000; }
+        .month-side { background: #fff; border: 1px solid #000; font-size: 14px !important; }
         .abs-red { background: #FF0000 !important; color: #fff !important; }
         .total-row { background: #DDEBF7; font-weight: 900 !important; }
         .exp-box { background: #ED7D31; color: #000; font-size: 14px !important; }
@@ -48,30 +48,31 @@
 <div class="sidebar">
     <div style="text-align:center; margin-bottom:50px;">
         <h2 style="margin:0; font-weight:800; color:white;">NUGORTECH IT</h2>
-        <p style="color:var(--orange); font-size:9px; font-weight:800; letter-spacing:1px; text-transform: uppercase;">Reporting Engine</p>
+        <p style="color:var(--orange); font-size:9px; font-weight:800; letter-spacing:1px; text-transform: uppercase;">Cloud Reporting</p>
     </div>
 </div>
 
 <div class="main">
-    <h1 class="dash-title" style="font-weight: 800; margin-bottom:30px;">Cloud Master Report Builder</h1>
+    <h1 style="font-weight: 800; margin-bottom:30px;">Automatic Monthly Report</h1>
 
     <div class="panel">
         <div>
-            <label>Reporting Month (e.g. 3-2026)</label>
+            <label>Month (e.g. 3-2026)</label>
             <input type="text" id="targetMonth" placeholder="MM-YYYY">
         </div>
         <div>
-            <label>Total Working Days</label>
+            <label>Total Work Days</label>
             <input type="number" id="workingDays" value="26">
         </div>
-        <button class="btn-gen" onclick="generateAutoReport()">FETCH & GENERATE</button>
+        <button class="btn-gen" onclick="generateAutoReport()">FETCH DATA</button>
         <button class="btn-gen" style="background:#000; border:1px solid #444" onclick="window.print()">PRINT PDF</button>
     </div>
 
+    <!-- THE REPORT SHEET -->
     <div id="reportSheet" class="report-sheet">
         <div class="rep-top">
             <h1>Nugortech IT Ltd.</h1>
-            <div style="font-size: 14px;">Monthly Performance Master Report</div>
+            <div style="font-size: 14px;">Monthly Performance Report</div>
         </div>
 
         <div class="table-container">
@@ -90,7 +91,7 @@
                         <th width="6%">Attend.</th>
                         <th class="abs-red" width="6%">Absent</th>
                         <th width="6%">Late</th>
-                        <th width="10%">Expenses (Monthly)</th>
+                        <th width="10%">Total Exp.</th>
                     </tr>
                 </thead>
                 <tbody id="tbody"></tbody>
@@ -98,9 +99,9 @@
             </table>
         </div>
         
-        <div style="margin-top:60px; display:flex; justify-content:space-between; padding: 0 60px;">
-            <div style="text-align:center; width:200px; border-top:1.5px solid #000; padding-top:5px; font-size:10px; font-weight:800;">Accountant Signature</div>
-            <div style="text-align:center; width:200px; border-top:1.5px solid #000; padding-top:5px; font-size:10px; font-weight:800;">Director Signature</div>
+        <div style="margin-top:50px; display:flex; justify-content:space-between; padding: 0 60px;">
+            <div style="text-align:center; width:180px; border-top:1.5px solid #000; padding-top:5px; font-size:10px; font-weight:800;">Accountant Signature</div>
+            <div style="text-align:center; width:180px; border-top:1.5px solid #000; padding-top:5px; font-size:10px; font-weight:800;">Director Signature</div>
         </div>
     </div>
 </div>
@@ -114,103 +115,102 @@
     const db = firebase.database();
 
     async function generateAutoReport() {
-        let monthInput = document.getElementById('targetMonth').value;
+        let input = document.getElementById('targetMonth').value;
         const totalW = Number(document.getElementById('workingDays').value);
-        if(!monthInput) return alert("Enter Month!");
+        if(!input) return alert("Enter Month!");
 
-        // মাস ফরম্যাট ফিক্স করা (যেমন 3-2026 কে 03-2026 করা)
-        let parts = monthInput.split('-');
-        if(parts[0].length === 1) parts[0] = '0' + parts[0];
-        let searchMonth = parts.join('-'); 
+        // মাস ফিক্স করা (3-2026 -> 03-2026)
+        let p = input.split('-');
+        if(p[0].length === 1) p[0] = '0' + p[0];
+        let searchMonth = p.join('-'); // এটি হবে 03-2026
 
-        const salesSnap = await db.ref('sales_reports').once('value');
-        const attendSnap = await db.ref('attendance').once('value');
-        const ledgerSnap = await db.ref('nugor_ledger_final_v7').once('value');
+        // ডাটাবেস থেকে সব ডাটা আনা
+        const snaps = await Promise.all([
+            db.ref('sales_reports').once('value'),
+            db.ref('attendance').once('value'),
+            db.ref('nugor_ledger_final_official_v6').once('value')
+        ]);
 
-        const sales = salesSnap.val() || {};
-        const attendance = attendSnap.val() || {};
-        const expenses = ledgerSnap.val() || {};
+        const sales = snaps[0].val() || {};
+        const attendance = snaps[1].val() || {};
+        const ledger = snaps[2].val() || {};
 
         let empMap = {}; 
         let grandExp = 0;
 
-        // ১. খরচ হিসাব করা (Ledger)
-        Object.values(expenses).forEach(d => {
-            if(d.date && d.date.includes(searchMonth.replace(/-/g, "/"))) grandExp += Number(d.amount || 0);
-            if(d.date && d.date.includes(searchMonth)) grandExp += Number(d.amount || 0);
+        // ১. খরচ (Ledger)
+        Object.values(ledger).forEach(d => {
+            if(d.date && (d.date.includes(searchMonth) || d.date.includes(searchMonth.replace('-', '/')))) grandExp += Number(d.amount || 0);
         });
 
-        // ২. সেলস ডাটা থেকে এমপ্লয়ি লিস্ট তৈরি
+        // ২. সেলস ডাটা থেকে এমপ্লয়ি এবং সেলস লিস্ট
         Object.values(sales).forEach(d => {
-            if(d.date && d.date.includes(searchMonth)) {
-                if(!empMap[d.id]) empMap[d.id] = { name: d.name, leads: 0, newC: 0, oldC: 0, sales: 0, calls: 0, present: 0, late: 0 };
+            if(d.date && (d.date.includes(searchMonth) || d.date.includes(searchMonth.replace('-', '/')))) {
+                if(!empMap[d.id]) empMap[d.id] = { name: d.name, leads: 0, new: 0, old: 0, sales: 0, calls: 0, present: 0, late: 0 };
                 empMap[d.id].leads += Number(d.lead || 0);
-                empMap[d.id].newC += Number(d.nc || d.newC || 0);
-                empMap[d.id].oldC += Number(d.oc || d.oldC || 0);
+                empMap[d.id].new += Number(d.nc || d.newC || 0);
+                empMap[d.id].old += Number(d.oc || d.oldC || 0);
                 empMap[d.id].sales += Number(d.sales || 0);
                 empMap[d.id].calls += Number(d.call || d.calls || 0);
             }
         });
 
-        // ৩. হাজিরা ও লেট হিসাব (Attendance)
+        // ৩. হাজিরার আসল জাদু (Attendance Fix)
         Object.keys(attendance).forEach(dateKey => {
-            if(dateKey.includes(searchMonth)) {
+            // চেক করা যে তারিখের মধ্যে মাসের নাম আছে কি না (উভয় ফরম্যাট চেক)
+            if(dateKey.includes(searchMonth) || dateKey.includes(searchMonth.replace('-', '/'))) {
                 Object.keys(attendance[dateKey]).forEach(id => {
+                    // যদি এই এমপ্লয়ি সেলস লিস্টে না থাকে, তাকেও যুক্ত করো
                     if(!empMap[id]) {
-                        // যদি এমপ্লয়ি শুধু হাজিরা দেয় কিন্তু সেলস না থাকে, তাকেও লিস্টে আনো
-                        empMap[id] = { name: attendance[dateKey][id].name || "Staff", leads: 0, newC: 0, oldC: 0, sales: 0, calls: 0, present: 0, late: 0 };
+                        empMap[id] = { name: attendance[dateKey][id].name || "Staff", leads: 0, new: 0, old: 0, sales: 0, calls: 0, present: 0, late: 0 };
                     }
                     empMap[id].present++;
                     
                     const record = attendance[dateKey][id];
                     let isLate = record.status === "Late" || record.attendanceStatus === "Late";
-                    
-                    // অতিরিক্ত চেক (ইন-টাইম দেখে)
                     if(!isLate && record.inTime) {
-                        const [time, mod] = record.inTime.split(' ');
-                        let [h, m] = time.split(':');
-                        if(mod === 'PM' && h !== '12') h = parseInt(h)+12;
-                        if(parseInt(h) > 9 || (parseInt(h) === 9 && parseInt(m) > 30)) isLate = true;
+                        const [t, m] = record.inTime.split(' ');
+                        let [h, min] = t.split(':');
+                        if(m === 'PM' && h !== '12') h = parseInt(h)+12;
+                        if(parseInt(h) > 9 || (parseInt(h) === 9 && parseInt(min) > 30)) isLate = true;
                     }
                     if(isLate) empMap[id].late++;
                 });
             }
         });
 
-        // টেবিল তৈরি করা
+        // টেবিল ডাটা তৈরি করা
         const tbody = document.getElementById('tbody'); tbody.innerHTML = "";
-        let html = "";
         let tL=0, tN=0, tO=0, tS=0, tC=0, tP=0, tA=0, tLt=0;
-
         const ids = Object.keys(empMap);
+
         if(ids.length === 0) return alert("No data found for this month!");
 
         ids.forEach((id, index) => {
             const e = empMap[id];
-            const absent = totalW - e.present;
+            const abs = totalW - e.present;
+            const finalAbs = abs < 0 ? 0 : abs;
             
-            tL+=e.leads; tN+=e.newC; tO+=e.oldC; tS+=e.sales; tC+=e.calls; tP+=e.present; tA+=(absent < 0 ? 0 : absent); tLt+=e.late;
+            tL+=e.leads; tN+=e.new; tO+=e.old; tS+=e.sales; tC+=e.calls; tP+=e.present; tA+=finalAbs; tLt+=e.late;
 
-            html += `<tr>
+            tbody.innerHTML += `<tr>
                 <td class="name-col">${e.name.toUpperCase()}</td>
                 <td>STAFF</td>
                 ${index === 0 ? `<td rowspan="${ids.length}" class="month-side"><div style="transform: rotate(-90deg); white-space:nowrap">${searchMonth}</div></td>` : ''}
                 <td>${e.leads}</td>
-                <td>${e.newC}</td>
-                <td>${e.oldC}</td>
+                <td>${e.new}</td>
+                <td>${e.old}</td>
                 <td>৳${e.sales.toLocaleString()}</td>
                 <td>${e.calls}</td>
                 <td>${totalW}</td>
                 <td>${e.present}</td>
-                <td style="color:red; font-weight:900;">${absent < 0 ? 0 : absent}</td>
+                <td class="abs-red">${finalAbs}</td>
                 <td>${e.late}</td>
                 ${index === 0 ? `<td rowspan="${ids.length}" class="exp-box">৳${grandExp.toLocaleString()}</td>` : ''}
             </tr>`;
         });
 
-        tbody.innerHTML = html;
         document.getElementById('tfoot').innerHTML = `<tr class="total-row"><td colspan="2">TOTAL</td><td></td><td>${tL}</td><td>${tN}</td><td>${tO}</td><td>৳${tS.toLocaleString()}</td><td>${tC}</td><td>${totalW * ids.length}</td><td>${tP}</td><td>${tA}</td><td>${tLt}</td><td>৳${grandExp.toLocaleString()}</td></tr>`;
-
         document.getElementById('reportSheet').style.display = "block";
     }
 </script>
