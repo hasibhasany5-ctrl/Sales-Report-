@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Master Monthly Report | Nugortech IT Ltd</title>
-    <!-- Fonts -->
+    <title>Enterprise Master Report | Nugortech IT Ltd</title>
+    <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -12,48 +12,52 @@
         * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { margin: 0; background: var(--bg); color: white; min-height: 100vh; overflow-x: hidden; }
 
-        /* Sidebar & Main Controls */
-        .sidebar { width: 280px; background: rgba(0,0,0,0.3); backdrop-filter: blur(20px); border-right: 1px solid var(--border); padding: 40px 25px; position: fixed; height: 100vh; z-index: 100; }
+        .sidebar { width: 280px; background: rgba(0,0,0,0.3); backdrop-filter: blur(20px); border-right: 1px solid rgba(255,255,255,0.1); padding: 40px 25px; position: fixed; height: 100vh; z-index: 100; }
         .main { margin-left: 280px; width: calc(100% - 280px); padding: 40px; }
+
+        /* Input Panel */
         .panel { background: var(--card); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 35px; backdrop-filter: blur(15px); margin-bottom: 30px; }
-        .input-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; }
+        .input-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
         label { display: block; font-size: 10px; font-weight: 800; color: var(--blue); margin-bottom: 8px; text-transform: uppercase; }
         input, select { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 12px; border-radius: 12px; color: white; outline: none; width: 100%; }
-        .btn-gen { padding: 15px 40px; background: linear-gradient(135deg, var(--orange), var(--blue)); border: none; border-radius: 20px; color: white; font-weight: 800; cursor: pointer; transition: 0.3s; width: 100%; margin-top: 10px; }
+        
+        .btn { padding: 12px 25px; border: none; border-radius: 15px; font-weight: 800; cursor: pointer; transition: 0.3s; color: white; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-add { background: rgba(255,255,255,0.1); border: 1px dashed var(--blue); color: var(--blue); width: 100%; margin-bottom: 20px; justify-content: center; }
+        .btn-gen { background: linear-gradient(135deg, var(--orange), var(--blue)); width: 100%; font-size: 16px; margin-top: 10px; justify-content: center; }
 
-        /* --- THE COLORFUL PRINT REPORT SHEET --- */
+        /* --- EXCEL STYLE PRINT REPORT (MATCHING YOUR SCREENSHOT) --- */
         #reportArea { 
-            background: white; color: #000; width: 1150px; display: none; margin: 40px auto; 
+            background: white; color: #000; width: 1200px; display: none; margin: 40px auto; 
             border: 1px solid #333; padding: 0; 
             -webkit-print-color-adjust: exact; print-color-adjust: exact; 
         }
         .rep-top { background: #5B9BD5 !important; color: white !important; padding: 25px; text-align: center; border-bottom: 2px solid #000; }
         .rep-top h1 { margin: 0; font-size: 32px; font-weight: 900; }
         
-        .table-container { padding: 20px; }
         .excel-table { width: 100%; border-collapse: collapse; border: 2px solid #000; table-layout: fixed; }
         .excel-table th { background: #C6E0B4 !important; color: #000; border: 1px solid #000; padding: 10px 2px; font-size: 9px; text-transform: uppercase; font-weight: 800; }
-        .excel-table td { border: 1px solid #000; padding: 12px 4px; font-size: 11px; font-weight: 800; text-align: center; vertical-align: middle; }
+        .excel-table td { border: 1px solid #000; padding: 12px 4px; font-size: 10px; font-weight: 800; text-align: center; vertical-align: middle; }
         
+        .name-col { text-align: left !important; padding-left: 10px !important; background: #fff !important; }
         .month-side { background: #fff !important; border: 2px solid #000; font-size: 14px !important; font-weight: 900; }
         .abs-red { background: #FF0000 !important; color: white !important; }
         .total-row { background: #DDEBF7 !important; font-weight: 900 !important; }
-        .exp-box { background: #ED7D31 !important; color: #000 !important; font-size: 12px !important; text-align: left !important; padding-left: 10px !important; }
+        .exp-box { background: #ED7D31 !important; color: #000 !important; font-size: 11px !important; text-align: left !important; padding-left: 5px !important; line-height: 1.4; }
 
-        /* Profit & Loss Final Summary Boxes */
-        .summary-wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; padding: 30px 50px; }
-        .box-outline { border: 3px solid #0b1120; border-radius: 25px; padding: 25px; background: #fff !important; }
-        .sum-item { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 12px 0; font-weight: 800; font-size: 16px; }
-        .profit-val { color: #10b981 !important; font-size: 32px; font-weight: 900; }
+        /* Summary & Signs */
+        .sum-container { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; padding: 30px 50px; }
+        .sum-box { border: 3px solid #0b1120; border-radius: 25px; padding: 25px; background: #f8fafc !important; }
+        .sum-line { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 10px 0; font-weight: 800; font-size: 15px; }
+        .profit-val { color: #10b981 !important; font-size: 28px; font-weight: 900; }
 
-        .sign-area { margin-top: 40px; display: flex; justify-content: space-between; padding: 0 60px 100px; }
-        .sign-box { text-align: center; width: 220px; border-top: 2.5px solid #000; padding-top: 8px; font-size: 11px; font-weight: 800; position: relative; }
+        .sign-area { margin-top: 50px; display: flex; justify-content: space-between; padding: 0 60px 80px; }
+        .sign-box { text-align: center; width: 220px; border-top: 2px solid #000; padding-top: 8px; font-size: 11px; font-weight: 800; position: relative; }
         .sig-font { font-family: 'Dancing Script', cursive; font-size: 32px; color: #1e3a8a !important; position: absolute; top: -45px; left: 0; width: 100%; text-align: center; }
 
         @media print { 
             @page { size: landscape; margin: 5mm; }
-            body { background: white; }
-            .sidebar, .panel, .btn-gen, .dash-title { display: none !important; }
+            body { background: white; color: black; }
+            .sidebar, .panel, .btn-gen, .btn-add, .dash-title { display: none !important; }
             .main { margin: 0; padding: 0; }
             #reportArea { display: block !important; box-shadow: none; border: none; margin: 0; width: 100%; }
         }
@@ -64,41 +68,56 @@
 <div class="sidebar">
     <div style="text-align:center; margin-bottom:50px;">
         <h2 style="margin:0; font-weight:800; color:white;">NUGORTECH IT</h2>
-        <p style="color:var(--orange); font-size:9px; font-weight:800; letter-spacing:1px; text-transform: uppercase; margin-top:5px;">Performance Hub</p>
+        <p style="color:var(--orange); font-size:9px; font-weight:800; letter-spacing:1px; text-transform: uppercase;">Final Report Hub</p>
     </div>
 </div>
 
 <div class="main">
-    <h1 class="dash-title" style="font-weight: 800; margin-bottom:30px;">Monthly Profit & Report Builder</h1>
+    <h1 class="dash-title" style="font-weight: 800; margin-bottom:30px;">Monthly Master Report Builder</h1>
 
     <div class="panel">
+        <!-- Global Inputs -->
         <div class="input-grid">
-            <div><label>Month (MM-YYYY)</label><input type="text" id="tMonth" placeholder="e.g. 02-2026"></div>
-            <div><label>Working Days</label><input type="number" id="wDays" value="26"></div>
-            <div><label>Dollar Cost (BDT)</label><input type="number" id="cDol" value="0"></div>
-            <div><label>Marketing Cost (BDT)</label><input type="number" id="cMark" value="0"></div>
-            <div><label>Salary Cost (BDT)</label><input type="number" id="cSal" value="0"></div>
-            <div><label>Misc Expense (BDT)</label><input type="number" id="cMisc" value="0"></div>
+            <div><label>Reporting Month</label><input type="text" id="targetMonth" placeholder="e.g. 03-2026"></div>
+            <div><label>Working Days</label><input type="number" id="workingDays" value="26"></div>
+            <div><label>Dollar Cost (BDT)</label><input type="number" id="costDol" value="0"></div>
+            <div><label>Marketing Cost (BDT)</label><input type="number" id="costMark" value="0"></div>
+            <div><label>Salary Cost (BDT)</label><input type="number" id="costSal" value="0"></div>
+            <div><label>Misc/Rent (BDT)</label><input type="number" id="costMisc" value="0"></div>
         </div>
 
-        <!-- Employee Selector -->
-        <div id="empEntry" class="panel" style="background:rgba(255,255,255,0.02);">
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
-                <div><label>Select Staff Name</label>
-                    <select class="e-name">
-                        <option value="MD: NUR ISLAM|SALES WITH MANAGEMENT">MD: NUR ISLAM</option>
-                        <option value="MD SHAKHAYAT HOSSAIN HASU|SALES EXCUTATIVE">MD SHAKHAYAT HOSSAIN HASU</option>
-                        <option value="MD :MANIRUZZAMAN|SALES EXCUTATIVE">MD :MANIRUZZAMAN</option>
-                        <option value="MD: EMON|VIDEO & GRAPHIC DESIGNER">MD: EMON</option>
-                        <option value="MD: HASAN ALI|VIDEO & GRAPHIC DESIGNER">MD: HASAN ALI</option>
-                        <option value="MD: AL HASIB|ACCOUNTED& HR">MD: AL HASIB</option>
-                        <option value="MD: ATIKUR RAHMAN|META MARKETER Intern">MD: ATIKUR RAHMAN</option>
-                    </select>
+        <div id="employeeList">
+            <!-- Row 1 Default -->
+            <div class="emp-input-row panel" style="background:rgba(255,255,255,0.02); padding:20px; margin-bottom:15px;">
+                <div class="input-grid" style="grid-template-columns: 1.5fr 1.5fr 1fr 1fr;">
+                    <div><label>Employee Name</label>
+                        <select class="row-name">
+                            <option value="MD: NUR ISLAM">MD: NUR ISLAM</option>
+                            <option value="MD SHAKHAYAT HOSSAIN HASU">MD SHAKHAYAT HOSSAIN HASU</option>
+                            <option value="MD :MANIRUZZAMAN">MD :MANIRUZZAMAN</option>
+                            <option value="MD: EMON">MD: EMON</option>
+                            <option value="MD: HASAN ALI">MD: HASAN ALI</option>
+                            <option value="MD: AL HASIB">MD: AL HASIB</option>
+                            <option value="MD: ATIKUR RAHMAN">MD: ATIKUR RAHMAN</option>
+                        </select>
+                    </div>
+                    <div><label>Position</label>
+                        <select class="row-pos">
+                            <option value="SALES WITH MANAGEMENT">SALES WITH MANAGEMENT</option>
+                            <option value="SALES EXCUTATIVE">SALES EXCUTATIVE</option>
+                            <option value="VIDEO & GRAPHIC DESIGNER">VIDEO & GRAPHIC DESIGNER</option>
+                            <option value="ACCOUNTED & HR">ACCOUNTED & HR</option>
+                            <option value="META MARKETER Intern">META MARKETER Intern</option>
+                        </select>
+                    </div>
+                    <div><label>Proj Completed</label><input type="number" class="row-pcomp" value="0"></div>
+                    <div><label>Employee ID</label><input type="number" class="row-id" placeholder="ID (e.g. 1001)"></div>
                 </div>
-                <div><label>Manual Project Count (if any)</label><input type="number" class="e-proj" value="0"></div>
             </div>
         </div>
-        <button class="btn-gen" onclick="generateReport()">GENERATE COLORFUL PDF REPORT</button>
+        
+        <button class="btn btn-add" onclick="addEmployee()"><i class="fas fa-plus"></i> Add Another Employee Row</button>
+        <button class="btn btn-gen" onclick="generateReport()"><i class="fas fa-file-pdf"></i> GENERATE COLORFUL PDF</button>
     </div>
 
     <!-- PRINTABLE AREA -->
@@ -115,7 +134,7 @@
                         <th width="15%">Employee Name</th>
                         <th width="12%">Position</th>
                         <th width="4%">Month</th>
-                        <th width="6%">Project Comp.</th>
+                        <th width="6%">Projects Comp.</th>
                         <th width="6%">Ads Spend</th>
                         <th width="6%">Total Leads</th>
                         <th width="6%">New/Old</th>
@@ -133,19 +152,19 @@
             </table>
         </div>
 
-        <div class="summary-wrapper">
-            <div class="box-outline">
-                <h3 style="margin-top:0; border-bottom:2px solid #ddd; padding-bottom:10px;">Expense Breakdown</h3>
-                <div class="sum-item"><span>Salary Paid:</span> <span id="rSal">৳0</span></div>
-                <div class="sum-item"><span>Ad/Marketing:</span> <span id="rMark">৳0</span></div>
-                <div class="sum-item"><span>Dollar/API Cost:</span> <span id="rDol">৳0</span></div>
-                <div class="sum-item"><span>Miscellaneous:</span> <span id="rMisc">৳0</span></div>
+        <div class="sum-container">
+            <div class="sum-box">
+                <h3 style="margin-top:0; border-bottom:2px solid #ddd; padding-bottom:5px;">Expense Breakdown</h3>
+                <div class="sum-line"><span>Salary Paid:</span> <span id="rSal">৳0</span></div>
+                <div class="sum-line"><span>Ad/Marketing:</span> <span id="rMark">৳0</span></div>
+                <div class="sum-line"><span>Dollar/API Cost:</span> <span id="rDol">৳0</span></div>
+                <div class="sum-line"><span>Miscellaneous:</span> <span id="rMisc">৳0</span></div>
             </div>
-            <div class="box-outline" style="border: 4px solid #0b1120;">
-                <h3 style="margin-top:0; color:#64748b;">Financial Summary</h3>
-                <div class="sum-item" style="font-size:18px;"><span>Total Revenue:</span> <strong id="rGross">৳0</strong></div>
-                <div class="sum-item" style="font-size:18px; color:var(--red);"><span>Total Expenses:</span> <strong id="rTotalExp">৳0</strong></div>
-                <div class="sum-item" style="border:none; margin-top:20px;">
+            <div class="sum-box" style="border: 4px solid #0b1120;">
+                <h3 style="margin:0 0 10px 0; color:#64748b;">Financial Summary</h3>
+                <div class="sum-line" style="font-size:18px;"><span>Gross Revenue:</span> <strong id="rGross">৳0</strong></div>
+                <div class="sum-line" style="font-size:18px; color:var(--red);"><span>Total Expenses:</span> <strong id="rTotalExp">৳0</strong></div>
+                <div class="sum-line" style="margin-top:20px; border:none;">
                     <span style="font-size:22px;">NET PROFIT:</span>
                     <span id="rNet" class="profit-val">৳0</span>
                 </div>
@@ -166,14 +185,21 @@
     const firebaseConfig = { apiKey: "AIzaSyBrz1xvq4Fpt9-j75-gUS4d8ebqPRLmOK0", databaseURL: "https://sales-report-nugortech-it-default-rtdb.firebaseio.com", projectId: "sales-report-nugortech-it", appId: "1:848643315031:web:e6fbf92153490ea9d31a12" };
     firebase.initializeApp(firebaseConfig); const db = firebase.database();
 
+    function addEmployee() {
+        const list = document.getElementById('employeeList');
+        const newRow = list.children[0].cloneNode(true);
+        newRow.querySelectorAll('input').forEach(i => i.value = "0");
+        list.appendChild(newRow);
+    }
+
     async function generateReport() {
-        const month = document.getElementById('tMonth').value;
-        const wDays = Number(document.getElementById('wDays').value);
-        const dol = Number(document.getElementById('cDol').value);
-        const mark = Number(document.getElementById('cMark').value);
-        const sal = Number(document.getElementById('cSal').value);
-        const misc = Number(document.getElementById('cMisc').value);
-        if(!month) return alert("Enter Month!");
+        const month = document.getElementById('targetMonth').value;
+        const wDays = Number(document.getElementById('workingDays').value);
+        const dol = Number(document.getElementById('costDol').value);
+        const mark = Number(document.getElementById('costMark').value);
+        const sal = Number(document.getElementById('costSal').value);
+        const misc = Number(document.getElementById('costMisc').value);
+        if(!month) return alert("Please enter Month!");
 
         const totalExpenses = dol + mark + sal + misc;
         const salesSnap = await db.ref('sales_reports').once('value');
@@ -181,80 +207,57 @@
         const salesData = salesSnap.val() || {};
         const attendData = attendSnap.val() || {};
 
-        let empMap = {}; let grandSales = 0;
-        // Staff List
-        const staffList = ["MD: NUR ISLAM", "MD SHAKHAYAT HOSSAIN HASU", "MD :MANIRUZZAMAN", "MD: EMON", "MD: HASAN ALI", "MD: AL HASIB", "MD: ATIKUR RAHMAN"];
-        const positions = ["SALES WITH MANAGEMENT", "SALES EXCUTATIVE", "SALES EXCUTATIVE", "VIDEO & GRAPHIC DESIGNER", "VIDEO & GRAPHIC DESIGNER", "ACCOUNTED& HR", "META MARKETER Intern"];
+        let html = "", tS=0, tL=0, tN=0, tO=0, tAt=0, tAb=0, tLt=0, tPj=0;
+        const rows = document.querySelectorAll('.emp-input-row');
 
-        staffList.forEach((name, i) => {
-            empMap[name] = { name: name, pos: positions[i], leads: 0, new: 0, old: 0, sales: 0, calls: 0, attend: 0, late: 0, proj: 0 };
-        });
+        rows.forEach((row, idx) => {
+            const name = row.querySelector('.row-name').value;
+            const pos = row.querySelector('.row-pos').value;
+            const pcomp = Number(row.querySelector('.row-pcomp').value);
+            const id = row.querySelector('.row-id').value;
 
-        // Add manual project count for the selected name in form
-        const selectedStaff = document.querySelector('.e-name').value.split('|')[0];
-        const manualProj = Number(document.querySelector('.e-proj').value);
-        if(empMap[selectedStaff]) empMap[selectedStaff].proj = manualProj;
+            let empSales=0, empLeads=0, empNew=0, empOld=0, empAttend=0, empLate=0;
 
-        // Process Cloud Data
-        Object.values(salesData).forEach(d => {
-            if(d.date && d.date.includes(month)) {
-                let match = staffList.find(s => s.toLowerCase().includes(d.name.toLowerCase()));
-                if(match) {
-                    empMap[match].leads += Number(d.lead || 0);
-                    empMap[match].new += Number(d.nc || d.newC || 0);
-                    empMap[match].old += Number(d.oc || d.oldC || 0);
-                    empMap[match].sales += Number(d.sales || 0);
-                    empMap[match].calls += Number(d.call || d.calls || 0);
-                    grandSales += Number(d.sales || 0);
+            // Fetch from Cloud
+            Object.values(salesData).forEach(d => {
+                if(d.id == id && d.date.includes(month)) {
+                    empSales += Number(d.sales || 0);
+                    empLeads += Number(d.lead || 0);
+                    empNew += Number(d.nc || d.newC || 0);
+                    empOld += Number(d.oc || d.oldC || 0);
                 }
-            }
-        });
+            });
 
-        Object.keys(attendData).forEach(date => {
-            if(date.includes(month)) {
-                Object.keys(attendData[date]).forEach(id => {
-                    const rec = attendData[date][id];
-                    let match = staffList.find(s => s.toLowerCase().includes(rec.name.toLowerCase()));
-                    if(match) {
-                        empMap[match].attend++;
-                        if(rec.status === "Late" || rec.attendanceStatus === "Late") empMap[match].late++;
-                    }
-                });
-            }
-        });
+            Object.keys(attendData).forEach(date => {
+                if(date.includes(month) && attendData[date][id]) {
+                    empAttend++;
+                    if(attendData[date][id].status === "Late" || attendData[date][id].attendanceStatus === "Late") empLate++;
+                }
+            });
 
-        // Build HTML
-        let html = "", tL=0, tN=0, tO=0, tS=0, tC=0, tAt=0, tAb=0, tLt=0, tPj=0;
-        staffList.forEach((name, idx) => {
-            const e = empMap[name];
-            const absent = Math.max(0, wDays - e.attend);
-            tL+=e.leads; tN+=e.new; tO+=e.old; tS+=e.sales; tC+=e.calls; tAt+=e.attend; tAb+=absent; tLt+=e.late; tPj+=e.proj;
+            const absent = Math.max(0, wDays - empAttend);
+            tS+=empSales; tL+=empLeads; tN+=empNew; tO+=empOld; tAt+=empAttend; tAb+=absent; tLt+=empLate; tPj+=pcomp;
 
             html += `<tr>
-                <td class="name-col">${e.name}</td>
-                <td style="font-size:8px">${e.pos}</td>
-                ${idx === 0 ? `<td rowspan="${staffList.length}" class="month-side"><div style="transform: rotate(-90deg); white-space:nowrap">${month}</div></td>` : ''}
-                <td>${e.proj || '0'}</td>
+                <td class="name-col">${name.toUpperCase()}</td>
+                <td style="font-size:8px">${pos}</td>
+                ${idx === 0 ? `<td rowspan="${rows.length}" class="month-side"><div style="transform: rotate(-90deg); white-space:nowrap">${month}</div></td>` : ''}
+                <td>${pcomp}</td>
                 <td>0</td>
-                <td>${e.leads}</td>
-                <td>${e.new}/${e.old}</td>
-                <td>৳${e.sales.toLocaleString()}</td>
-                <td>${e.calls}</td>
+                <td>${empLeads}</td>
+                <td>${empNew}/${empOld}</td>
+                <td>৳${empSales.toLocaleString()}</td>
+                <td>0</td>
                 <td>${wDays}</td>
-                <td>${e.attend}</td>
+                <td>${empAttend}</td>
                 <td class="abs-red">${absent}</td>
-                <td>${e.late}</td>
-                ${idx === 0 ? `<td rowspan="${staffList.length}" class="exp-box">
-                    Salary: ${sal.toLocaleString()}<br>
-                    Marketing: ${mark.toLocaleString()}<br>
-                    Dollar: ${dol.toLocaleString()}<br>
-                    Misc: ${misc.toLocaleString()}
-                </td>` : ''}
+                <td>${empLate}</td>
+                ${idx === 0 ? `<td rowspan="${rows.length}" class="exp-box">Sal: ${sal}<br>Mark: ${mark}<br>Dol: ${dol}<br>Misc: ${misc}</td>` : ''}
             </tr>`;
         });
 
         document.getElementById('tbody').innerHTML = html;
-        document.getElementById('tfoot').innerHTML = `<tr class="total-row"><td colspan="2">TOTAL</td><td></td><td>${tPj}</td><td>0</td><td>${tL}</td><td>${tN}/${tO}</td><td>৳${tS.toLocaleString()}</td><td>${tC}</td><td>${wDays * staffList.length}</td><td>${tAt}</td><td>${tAb}</td><td>${tLt}</td><td>৳${totalExpenses.toLocaleString()}</td></tr>`;
+        document.getElementById('tfoot').innerHTML = `<tr class="total-row"><td colspan="2">TOTAL</td><td></td><td>${tPj}</td><td>0</td><td>${tL}</td><td>${tN}/${tO}</td><td>৳${tS.toLocaleString()}</td><td>0</td><td>${wDays * rows.length}</td><td>${tAt}</td><td>${tAb}</td><td>${tLt}</td><td>৳${totalExpenses.toLocaleString()}</td></tr>`;
         
         document.getElementById('rSal').innerText = "৳" + sal.toLocaleString();
         document.getElementById('rMark').innerText = "৳" + mark.toLocaleString();
@@ -265,7 +268,7 @@
         document.getElementById('rNet').innerText = "৳" + (tS - totalExpenses).toLocaleString();
 
         document.getElementById('reportArea').style.display = "block";
-        window.print();
+        window.print(); // সরাসরি রঙিন প্রিন্ট অপশন আসবে
     }
 </script>
 </body>
