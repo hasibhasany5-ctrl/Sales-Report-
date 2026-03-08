@@ -3,48 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monthly Performance Report | Nugortech IT Ltd</title>
+    <title>Executive Profit Report | Nugortech IT Ltd</title>
     <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --p: #FF6B00; --b: #00A3FF; --bg: #0b1120; --card: rgba(255,255,255,0.03); }
+        :root { --orange: #FF6B00; --blue: #00A3FF; --green: #10b981; --red: #f43f5e; --bg: #0b1120; --card: rgba(255,255,255,0.03); }
         * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-        body { margin: 0; background: var(--bg); color: white; min-height: 100vh; }
+        body { margin: 0; background: var(--bg); color: white; min-height: 100vh; overflow-x: hidden; }
 
-        /* Sidebar UI */
         .sidebar { width: 280px; background: rgba(0,0,0,0.3); backdrop-filter: blur(20px); border-right: 1px solid rgba(255,255,255,0.1); padding: 40px 25px; position: fixed; height: 100vh; z-index: 100; }
         .main { margin-left: 280px; width: calc(100% - 280px); padding: 40px; }
 
-        /* Input Form Panel */
-        .panel { background: var(--card); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 35px; backdrop-filter: blur(15px); margin-bottom: 30px; }
-        .input-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 10px; }
-        input, select { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 10px; border-radius: 12px; color: white; outline: none; font-size: 12px; width: 100%; }
+        .panel { background: var(--card); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 35px; backdrop-filter: blur(15px); margin-bottom: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
         
-        .btn { padding: 12px 25px; border: none; border-radius: 15px; font-weight: 800; cursor: pointer; transition: 0.3s; color: white; display: inline-flex; align-items: center; gap: 8px; justify-content: center; }
-        .btn-add { background: rgba(255,255,255,0.05); border: 1px dashed var(--b); color: var(--b); width: 100%; margin-bottom: 15px; }
-        .btn-gen { background: linear-gradient(135deg, var(--p), var(--b)); width: 100%; font-size: 16px; margin-top: 10px; }
+        .global-input { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; border-bottom: 1px solid var(--border); padding-bottom: 20px; }
+        .emp-input-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 20px; border-radius: 20px; margin-bottom: 15px; }
+        .input-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 10px; }
 
-        /* --- FINAL EXCEL STYLE REPORT (FOR PRINTING) --- */
-        .report-box { background: white; color: #000; display: none; width: 100%; max-width: 1200px; margin: 40px auto; overflow: hidden; padding: 20px; }
-        .header-top { background: #5B9BD5; color: white; padding: 15px; text-align: center; font-weight: 800; border: 1px solid #333; }
-        .header-top h1 { margin: 0; font-size: 24px; }
+        label { display: block; font-size: 10px; font-weight: 800; color: var(--blue); margin-bottom: 5px; text-transform: uppercase; }
+        input, select { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 12px; border-radius: 12px; color: white; outline: none; width: 100%; font-size: 13px; }
+        input:focus, select:focus { border-color: var(--blue); }
+        option { background: #0b1120; color: white; }
 
-        .excel-table { width: 100%; border-collapse: collapse; border: 1px solid #000; table-layout: fixed; }
-        .excel-table th { background: #C6E0B4; color: #000; border: 1px solid #000; padding: 8px 3px; font-size: 10px; text-transform: capitalize; }
-        .excel-table td { border: 1px solid #000; padding: 8px 3px; font-size: 10px; font-weight: 700; text-align: center; vertical-align: middle; word-wrap: break-word; }
+        .btn { padding: 12px 25px; border: none; border-radius: 15px; font-weight: 800; cursor: pointer; transition: 0.3s; color: white; display: inline-flex; align-items: center; gap: 10px; justify-content: center; }
+        .btn-add { background: rgba(0, 163, 255, 0.1); border: 1.5px dashed var(--blue); color: var(--blue); width: 100%; margin-bottom: 20px; }
+        .btn-gen { background: linear-gradient(135deg, var(--orange) 0%, var(--blue) 100%); width: 100%; font-size: 16px; box-shadow: 0 10px 25px rgba(255, 107, 0, 0.2); }
+
+        /* --- FINAL EXCEL PRINT REPORT --- */
+        .report-box { background: white; color: #000; display: none; width: 100%; max-width: 1300px; margin: 40px auto; padding: 20px; border: 1px solid #333; }
+        .rep-top { background: #5B9BD5; color: white; padding: 20px; text-align: center; border-bottom: 2px solid #000; }
+        .excel-table { width: 100%; border-collapse: collapse; border: 2px solid #000; }
+        .excel-table th { background: #C6E0B4; color: #000; border: 1px solid #000; padding: 8px 3px; font-size: 9px; text-transform: uppercase; font-weight: 800; }
+        .excel-table td { border: 1px solid #000; padding: 10px 4px; font-size: 10px; font-weight: 800; text-align: center; vertical-align: middle; }
         
-        .month-col { background: #fff; font-size: 18px !important; transform: rotate(-90deg); }
-        .absent-header { background: #FF0000 !important; color: white !important; }
+        .month-side { background: #fff; border: 1px solid #000; font-size: 14px !important; font-weight: 900; }
+        .abs-red { background: #FF0000 !important; color: #fff !important; }
         .total-row { background: #DDEBF7; font-weight: 900 !important; }
-        .expense-box { background: #ED7D31; color: #000; }
+        .exp-box { background: #ED7D31; color: #000; font-size: 12px !important; text-align: left !important; padding-left: 5px !important; }
+
+        /* Profit & Loss Final Summary */
+        .profit-summary { margin: 30px 50px; padding: 30px; border-radius: 20px; background: #f8fafc; border: 2px solid #0f172a; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        .sum-line { display: flex; justify-content: space-between; border-bottom: 1px solid #ddd; padding: 12px 0; font-weight: 800; font-size: 15px; }
+        .profit-val { color: var(--green); font-size: 30px; font-weight: 900; }
+        .loss-val { color: var(--red); font-size: 30px; font-weight: 900; }
+
+        .sign-area { margin-top: 60px; display: flex; justify-content: space-between; padding: 0 60px 100px; }
+        .sign-box { text-align: center; width: 220px; border-top: 2px solid #000; padding-top: 8px; font-size: 11px; font-weight: 800; position: relative; }
+        .sig-font { font-family: 'Dancing Script', cursive; font-size: 30px; color: #1e3a8a; position: absolute; top: -45px; left: 0; width: 100%; text-align: center; }
 
         @media print { 
             @page { size: landscape; margin: 5mm; }
-            body { background: white; color: black; }
-            .sidebar, .panel, .btn-add, .btn-gen, .main-title, .action-btns { display: none !important; }
-            .main { margin-left: 0; width: 100%; padding: 0; }
-            .report-box { display: block !important; box-shadow: none; border: none; margin: 0; }
+            body * { visibility: hidden; } 
+            .report-box, .report-box * { visibility: visible; } 
+            .report-box { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; display: block !important; border: none; }
         }
     </style>
 </head>
@@ -52,168 +64,223 @@
 
 <div class="sidebar">
     <div style="text-align:center; margin-bottom:50px;">
-        <h2 style="margin:0; font-weight:800;">NUGORTECH IT</h2>
-        <p style="color:var(--p); font-size:9px; font-weight:800; letter-spacing:1px; text-transform: uppercase;">Performance Hub</p>
+        <h2 style="margin:0; font-weight:800; color:white;">NUGORTECH IT</h2>
+        <p style="color:var(--orange); font-size:9px; font-weight:800; letter-spacing:1px; text-transform: uppercase; margin-top:5px;">Business Analytics</p>
+    </div>
+    <div style="padding:15px; border-radius:20px; background:var(--card); border:1px solid var(--blue); color:var(--blue); font-weight:800; text-align:center; font-size:12px;">
+        <i class="fas fa-chart-line"></i> PROFIT & LOSS MASTER
     </div>
 </div>
 
 <div class="main">
-    <h1 class="main-title" style="font-weight: 800; margin-bottom:30px;">Monthly Excel Report Builder</h1>
+    <h1 class="dash-title" style="font-weight: 800; margin-bottom:30px; letter-spacing: -1.5px;">Performance & Profit Builder</h1>
 
     <div class="panel">
-        <div style="margin-bottom: 20px; display: flex; gap: 15px;">
-            <div style="flex:1"><label style="font-size:10px; color:var(--b);">REPORT MONTH</label><input type="text" id="repMonth" placeholder="e.g. February"></div>
-            <div style="flex:1"><label style="font-size:10px; color:var(--b);">TOTAL EXPENSES (JAN-FEB)</label><input type="number" id="totalExp" placeholder="Total Expenses"></div>
+        <!-- Global Monthly Expenses -->
+        <div class="global-input">
+            <div><label>Report Month</label><input type="text" id="targetMonth" placeholder="e.g. March-2026"></div>
+            <div><label>Total Working Days</label><input type="number" id="workingDays" value="26"></div>
+            <div><label>Dollar Cost (BDT)</label><input type="number" id="cDollar" value="0"></div>
+            <div><label>Marketing Cost (BDT)</label><input type="number" id="cMarketing" value="0"></div>
+            <div><label>Salary Cost (BDT)</label><input type="number" id="cSalary" value="0"></div>
+            <div><label>Misc Expense (BDT)</label><input type="number" id="cMisc" value="0"></div>
         </div>
 
         <div id="inputList">
-            <div class="emp-row panel" style="background:rgba(255,255,255,0.02); padding:20px; margin-bottom:15px; border-radius:20px;">
-                <div class="input-row">
-                    <input type="text" class="e-name" placeholder="Employee Name">
-                    <input type="text" class="e-pos" placeholder="Position">
-                    <input type="number" class="e-pcomp" placeholder="Projects Comp.">
-                    <input type="number" class="e-prun" placeholder="Running Proj.">
-                    <input type="number" class="e-ads" placeholder="Ads Spend">
+            <!-- Employee Entry Card -->
+            <div class="emp-input-card">
+                <div class="input-grid">
+                    <div>
+                        <label>Name</label>
+                        <select class="e-name">
+                            <option value="">-- Select Name --</option>
+                            <option value="MD: Nur Islam">MD: Nur Islam</option>
+                            <option value="Md Shakhayat Hossain Hasu">Md Shakhayat Hossain Hasu</option>
+                            <option value="MD: Maniruzzaman">MD: Maniruzzaman</option>
+                            <option value="MD: Emon">MD: Emon</option>
+                            <option value="Md: Hasan Ali">Md: Hasan Ali</option>
+                            <option value="MD: Al Hasib">MD: Al Hasib</option>
+                            <option value="MD: Atikur Rahman">MD: Atikur Rahman</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Position</label>
+                        <select class="e-pos">
+                            <option value="SALES WITH MANAGEMENT">SALES WITH MANAGEMENT</option>
+                            <option value="SALES EXCUTATIVE">SALES EXCUTATIVE</option>
+                            <option value="VIDEO & GRAPHIC DESIGNER">VIDEO & GRAPHIC DESIGNER</option>
+                            <option value="ACCOUNTED & HR">ACCOUNTED & HR</option>
+                            <option value="META MARKETER Intern">META MARKETER Intern</option>
+                        </select>
+                    </div>
+                    <div><label>Projects Comp.</label><input type="number" class="e-pcomp" placeholder="0"></div>
+                    <div><label>Running Proj.</label><input type="number" class="e-prun" placeholder="0"></div>
                 </div>
-                <div class="input-row">
-                    <input type="number" class="e-leads" placeholder="Total Leads">
-                    <input type="number" class="e-new" placeholder="New Clients">
-                    <input type="number" class="e-old" placeholder="Old Clients">
-                    <input type="number" class="e-sales" placeholder="Sales Amount">
-                    <input type="number" class="e-calls" placeholder="Customer Calls">
+                <div class="input-grid">
+                    <div><label>Leads</label><input type="number" class="e-leads" placeholder="0"></div>
+                    <div><label>New Clients</label><input type="number" class="e-new" placeholder="0"></div>
+                    <div><label>Old Clients</label><input type="number" class="e-old" placeholder="0"></div>
+                    <div><label>Sales Amount</label><input type="number" class="e-sales" placeholder="0" style="border: 1px solid var(--green);"></div>
                 </div>
-                <div class="input-row" style="grid-template-columns: 1fr 1fr 1fr 1fr;">
-                    <input type="number" class="e-wdays" placeholder="Working Days">
-                    <input type="number" class="e-attend" placeholder="Attendance">
-                    <input type="number" class="e-absent" placeholder="Absent">
-                    <input type="number" class="e-late" placeholder="Late/Leave">
+                <div class="input-grid" style="grid-template-columns: repeat(5, 1fr);">
+                    <div><label>Calls</label><input type="number" class="e-calls" placeholder="0"></div>
+                    <div><label>Attend.</label><input type="number" class="e-attend" placeholder="0"></div>
+                    <div><label>Absent</label><input type="number" class="e-absent" placeholder="0" style="border: 1px solid var(--red);"></div>
+                    <div><label>Late</label><input type="number" class="e-late" placeholder="0"></div>
+                    <div><label>Ads Spend</label><input type="number" class="e-ads" placeholder="0"></div>
                 </div>
             </div>
         </div>
         
-        <button class="btn btn-add" onclick="addRow()"><i class="fas fa-plus"></i> Add Another Employee</button>
-        <button class="btn btn-gen" onclick="generateReport()"><i class="fas fa-file-excel"></i> GENERATE EXCEL FORMAT REPORT</button>
+        <button class="btn btn-add" onclick="addNewRow()"><i class="fas fa-user-plus"></i> Add Another Employee</button>
+        <button class="btn btn-gen" onclick="generateReport()"><i class="fas fa-file-invoice-dollar"></i> GENERATE FINAL PROFIT REPORT</button>
     </div>
 
-    <!-- Final Report Content -->
+    <!-- THE REPORT SHEET (PRINTABLE) -->
     <div id="printArea" class="report-box">
-        <div class="header-top">
-            <h1>Nugortech It .</h1>
-            <div style="font-size:14px; margin-top:5px;">Salary Sheet</div>
-            <div style="font-size:12px;" id="monthLabel">Month : ---</div>
+        <div class="rep-top">
+            <h1 style="color:white">Nugortech IT Ltd.</h1>
+            <div style="font-size: 14px;">Monthly Performance Master Report</div>
         </div>
 
-        <table class="excel-table">
-            <thead>
-                <tr>
-                    <th width="15%">Employee Name</th>
-                    <th width="12%">Position</th>
-                    <th width="5%">Report Month</th>
-                    <th width="6%">Total Projects Completed</th>
-                    <th width="6%">Running Projects</th>
-                    <th width="7%">Total Ads Spend (BDT)</th>
-                    <th width="5%">Total Leads</th>
-                    <th width="5%">New Clients</th>
-                    <th width="5%">Old Clients</th>
-                    <th width="8%">Total Sales Amount (BDT)</th>
-                    <th width="5%">Total Customer Call</th>
-                    <th width="5%">Total Working Days</th>
-                    <th width="6%">Attendance</th>
-                    <th class="absent-header" width="5%">Absent</th>
-                    <th width="5%">Late / Leave</th>
-                    <th width="10%">( Jan- Feb ) Total Expenses</th>
-                </tr>
-            </thead>
-            <tbody id="tableBody"></tbody>
-            <tfoot id="tableFooter"></tfoot>
-        </table>
-
-        <div class="action-btns" style="text-align: center; margin-top: 30px;">
-            <button class="btn" style="background:#0b0f19" onclick="window.print()"><i class="fas fa-print"></i> PRINT THIS REPORT</button>
+        <div class="table-container">
+            <table class="excel-table">
+                <thead>
+                    <tr>
+                        <th width="15%">Employee Name</th>
+                        <th width="10%">Position</th>
+                        <th width="4%">Month</th>
+                        <th width="5%">Project Comp.</th>
+                        <th width="5%">Ads Spend</th>
+                        <th width="6%">Leads</th>
+                        <th width="5%">New/Old</th>
+                        <th width="9%">Sales (BDT)</th>
+                        <th width="5%">Calls</th>
+                        <th width="5%">W. Days</th>
+                        <th width="5%">Attend.</th>
+                        <th class="abs-red" width="5%">Absent</th>
+                        <th width="5%">Late</th>
+                        <th width="12%">Monthly Expense</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+                <tfoot id="tableFooter"></tfoot>
+            </table>
         </div>
+
+        <!-- Profit & Loss Final Summary -->
+        <div class="profit-summary">
+            <div>
+                <h3 style="margin:0 0 15px 0; border-bottom:2px solid #ddd; padding-bottom:5px;">Expense Breakdown</h3>
+                <div class="sum-line"><span>Total Salary Paid:</span> <span id="resSal">৳0</span></div>
+                <div class="sum-line"><span>Ad/Marketing Cost:</span> <span id="resMark">৳0</span></div>
+                <div class="sum-line"><span>Dollar/API Cost:</span> <span id="resDol">৳0</span></div>
+                <div class="sum-line"><span>Miscellaneous:</span> <span id="resMisc">৳0</span></div>
+            </div>
+            <div style="background:white; border: 2px solid #0b1120; border-radius:15px; padding:20px;">
+                <h3 style="margin:0 0 10px 0; color:#64748b;">Financial Summary</h3>
+                <div class="sum-line" style="font-size:18px;"><span>Total Revenue:</span> <span id="resGross" style="color:var(--blue)">৳0</span></div>
+                <div class="sum-line" style="font-size:18px;"><span>Total Expenses:</span> <span id="resTotalExp" style="color:var(--red)">৳0</span></div>
+                <div class="sum-line" style="margin-top:20px; border:none;">
+                    <span style="font-size:22px;">NET PROFIT:</span>
+                    <span id="resNet" class="profit-val">৳0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="sign-area">
+            <div class="sign-box"><div class="sig-font">Hasib</div>Accountant Signature</div>
+            <div class="sign-box"><div class="sig-font">Nur Islam</div>Managing Director</div>
+        </div>
+
+        <div class="v-addr" style="text-align:center; font-size:9px; font-weight:800; color:#666; margin-top:20px;">HOUSE #85/2, ROAD #4, MOHAMMADIA HOUSING LTD, MOHAMMADPUR, DHAKA-1207</div>
     </div>
 </div>
 
 <script>
-    function addRow() {
+    function addNewRow() {
         const list = document.getElementById('inputList');
         const newRow = list.children[0].cloneNode(true);
-        newRow.querySelectorAll('input').forEach(i => i.value = "");
+        newRow.querySelectorAll('input').forEach(i => i.value = (i.classList.contains('e-absent')?"":"0"));
+        newRow.querySelector('select').selectedIndex = 0;
         list.appendChild(newRow);
     }
 
     function generateReport() {
-        const month = document.getElementById('repMonth').value || "Month";
-        const totalExp = document.getElementById('totalExp').value || "0";
-        const rows = document.querySelectorAll('.emp-row');
+        const month = document.getElementById('targetMonth').value || "Month";
+        const wDays = Number(document.getElementById('workingDays').value);
+        const dollar = Number(document.getElementById('cDollar').value || 0);
+        const marketing = Number(document.getElementById('cMarketing').value || 0);
+        const salary = Number(document.getElementById('cSalary').value || 0);
+        const misc = Number(document.getElementById('cMisc').value || 0);
+        
+        const totalExp = dollar + marketing + salary + misc;
+
+        const rows = document.querySelectorAll('.emp-input-card');
         const body = document.getElementById('tableBody');
         const footer = document.getElementById('tableFooter');
-        
-        document.getElementById('monthLabel').innerText = "Month : " + month + " 2026";
 
         let html = "";
-        let t_pcomp=0, t_prun=0, t_ads=0, t_leads=0, t_new=0, t_old=0, t_sales=0, t_calls=0, t_wdays=0, t_attend=0, t_abs=0, t_late=0;
+        let t_pc=0, t_ads=0, t_l=0, t_n=0, t_o=0, t_s=0, t_c=0, t_at=0, t_ab=0, t_lt=0;
 
         rows.forEach((row, index) => {
             const name = row.querySelector('.e-name').value;
             const pos = row.querySelector('.e-pos').value;
-            const pcomp = Number(row.querySelector('.e-pcomp').value || 0);
-            const prun = Number(row.querySelector('.e-prun').value || 0);
+            const pc = Number(row.querySelector('.e-pcomp').value || 0);
             const ads = Number(row.querySelector('.e-ads').value || 0);
             const leads = Number(row.querySelector('.e-leads').value || 0);
-            const nc = Number(row.querySelector('.e-new').value || 0);
-            const oc = Number(row.querySelector('.e-old').value || 0);
+            const n = Number(row.querySelector('.e-new').value || 0);
+            const o = Number(row.querySelector('.e-old').value || 0);
             const sales = Number(row.querySelector('.e-sales').value || 0);
             const calls = Number(row.querySelector('.e-calls').value || 0);
-            const wdays = Number(row.querySelector('.e-wdays').value || 0);
             const attend = Number(row.querySelector('.e-attend').value || 0);
-            const abs = Number(row.querySelector('.e-absent').value || 0);
+            const absent = Number(row.querySelector('.e-absent').value || 0);
             const late = Number(row.querySelector('.e-late').value || 0);
 
             if(!name) return;
 
-            // Update Totals
-            t_pcomp+=pcomp; t_prun+=prun; t_ads+=ads; t_leads+=leads; t_new+=nc; t_old+=oc; t_sales+=sales; t_calls+=calls; t_wdays+=wdays; t_attend+=attend; t_abs+=abs; t_late+=late;
+            // Totals
+            t_pc+=pc; t_ads+=ads; t_l+=leads; t_n+=n; t_o+=o; t_s+=sales; t_c+=calls; t_at+=attend; t_ab+=absent; t_lt+=late;
 
             html += `<tr>
-                <td style="text-align:left;">${name.toUpperCase()}</td>
+                <td class="name-col">${name.toUpperCase()}</td>
                 <td>${pos.toUpperCase()}</td>
-                ${index === 0 ? `<td rowspan="${rows.length}" style="background:#fff; font-size:16px; width:40px; border:1px solid #000;"><div style="transform: rotate(-90deg); white-space: nowrap;">${month}</div></td>` : ''}
-                <td>${pcomp || ''}</td>
-                <td>${prun || ''}</td>
-                <td>${ads || ''}</td>
-                <td>${leads || ''}</td>
-                <td>${nc || ''}</td>
-                <td>${oc || ''}</td>
-                <td>${sales || ''}</td>
-                <td>${calls || ''}</td>
-                <td>${wdays || ''}</td>
-                <td>${attend || ''}</td>
-                <td style="color:red">${abs || ''}</td>
-                <td>${late || ''}</td>
-                ${index === 0 ? `<td rowspan="${rows.length}" class="expense-box" style="font-size:16px;">${totalExp}</td>` : ''}
+                ${index === 0 ? `<td rowspan="${rows.length}" class="month-side"><div style="transform: rotate(-90deg); white-space:nowrap">${month}</div></td>` : ''}
+                <td>${pc}</td>
+                <td>${ads}</td>
+                <td>${leads}</td>
+                <td>${n}/${o}</td>
+                <td>৳${sales.toLocaleString()}</td>
+                <td>${calls}</td>
+                <td>${wDays}</td>
+                <td>${attend}</td>
+                <td class="abs-red">${absent}</td>
+                <td>${late}</td>
+                ${index === 0 ? `<td rowspan="${rows.length}" class="exp-box">
+                    Salary: ${salary}<br>
+                    Marketing: ${marketing}<br>
+                    Dollar: ${dollar}<br>
+                    Misc: ${misc}
+                </td>` : ''}
             </tr>`;
         });
 
-        body.innerHTML = html;
-        footer.innerHTML = `<tr class="total-row">
-            <td colspan="2">Total</td>
-            <td></td>
-            <td>${t_pcomp}</td>
-            <td>${t_prun}</td>
-            <td>${t_ads}</td>
-            <td>${t_leads}</td>
-            <td>${t_new}</td>
-            <td>${t_old}</td>
-            <td>${t_sales}</td>
-            <td>${t_calls}</td>
-            <td>${t_wdays}</td>
-            <td>${t_attend}</td>
-            <td>${t_abs}</td>
-            <td>${t_late}</td>
-            <td>${totalExp}</td>
-        </tr>`;
+        // Summary Calculations
+        document.getElementById('resSal').innerText = "৳" + salary.toLocaleString();
+        document.getElementById('resMark').innerText = "৳" + marketing.toLocaleString();
+        document.getElementById('resDol').innerText = "৳" + dollar.toLocaleString();
+        document.getElementById('resMisc').innerText = "৳" + misc.toLocaleString();
+        document.getElementById('resGross').innerText = "৳" + t_s.toLocaleString();
+        document.getElementById('resTotalExp').innerText = "৳" + totalExp.toLocaleString();
+        
+        const netProfit = t_s - totalExp;
+        const resNet = document.getElementById('resNet');
+        resNet.innerText = "৳" + netProfit.toLocaleString();
+        resNet.className = netProfit >= 0 ? "profit-val" : "loss-val";
 
+        body.innerHTML = html;
+        footer.innerHTML = `<tr class="total-row"><td colspan="2">TOTAL</td><td></td><td>${t_pc}</td><td>${t_ads}</td><td>${t_l}</td><td>${t_n}/${t_o}</td><td>৳${t_s.toLocaleString()}</td><td>${t_c}</td><td>${wDays * rows.length}</td><td>${t_at}</td><td>${t_ab}</td><td>${t_lt}</td><td>৳${totalExp.toLocaleString()}</td></tr>`;
+        
         document.getElementById('printArea').style.display = "block";
         document.getElementById('printArea').scrollIntoView({ behavior: 'smooth' });
     }
