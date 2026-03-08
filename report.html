@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nugortech Master Report | Automatic</title>
+    <title>Master Monthly Report | Nugortech IT Ltd</title>
     <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --orange: #FF6B00; --blue: #00A3FF; --green: #10b981; --red: #f43f5e; --bg: #0b1120; --card: rgba(255,255,255,0.03); }
@@ -20,18 +20,18 @@
         input { background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 12px; border-radius: 12px; color: white; outline: none; width: 200px; }
         .btn-gen { padding: 12px 30px; background: linear-gradient(135deg, var(--orange), var(--blue)); border: none; border-radius: 15px; color: white; font-weight: 800; cursor: pointer; transition: 0.3s; }
 
-        /* --- EXCEL STYLE PRINT REPORT --- */
+        /* EXCEL STYLE PRINT REPORT */
         .report-sheet { background: white; color: #000; width: 1250px; display: none; margin: 0 auto; border: 1px solid #333; }
         .rep-top { background: #5B9BD5; color: white; padding: 20px; text-align: center; font-weight: 900; border-bottom: 2px solid #000; }
         .rep-top h1 { margin: 0; font-size: 28px; text-transform: uppercase; }
         
         .table-container { padding: 15px; }
-        .excel-table { width: 100%; border-collapse: collapse; border: 2px solid #000; }
+        .excel-table { width: 100%; border-collapse: collapse; border: 2px solid #000; table-layout: fixed; }
         .excel-table th { background: #C6E0B4; color: #000; border: 1px solid #000; padding: 8px 2px; font-size: 9px; text-transform: uppercase; font-weight: 800; }
         .excel-table td { border: 1px solid #000; padding: 10px 4px; font-size: 10px; font-weight: 800; text-align: center; vertical-align: middle; }
         
         .name-col { text-align: left !important; padding-left: 10px !important; background: #fff; }
-        .month-side { background: #fff; border: 1px solid #000; font-size: 14px !important; }
+        .month-side { background: #fff; border: 1px solid #000; font-size: 14px !important; font-weight: 900; }
         .abs-red { background: #FF0000 !important; color: #fff !important; }
         .total-row { background: #DDEBF7; font-weight: 900 !important; }
         .exp-box { background: #ED7D31; color: #000; font-size: 14px !important; }
@@ -49,12 +49,12 @@
 <div class="sidebar">
     <div style="text-align:center; margin-bottom:50px;">
         <h2 style="margin:0; font-weight:800; color:white;">NUGORTECH IT</h2>
-        <p style="color:var(--orange); font-size:9px; font-weight:800; letter-spacing:1px; text-transform: uppercase;">Cloud Auto Report</p>
+        <p style="color:var(--orange); font-size:9px; font-weight:800; letter-spacing:1px; text-transform: uppercase;">Reporting AI</p>
     </div>
 </div>
 
 <div class="main">
-    <h1 style="font-weight: 800; margin-bottom:30px;">Monthly Automatic Report</h1>
+    <h1 style="font-weight: 800; margin-bottom:30px;">Automatic Monthly Report</h1>
 
     <div class="panel">
         <div>
@@ -62,10 +62,10 @@
             <input type="text" id="targetMonth" placeholder="e.g. 03-2026">
         </div>
         <div>
-            <label>Total Office Days</label>
+            <label>Working Days</label>
             <input type="number" id="workingDays" value="26">
         </div>
-        <button class="btn-gen" onclick="generateUltimateReport()">GENERATE REPORT</button>
+        <button class="btn-gen" onclick="generateReport()">FETCH CLOUD DATA</button>
         <button class="btn-gen" style="background:#000; border:1px solid #444" onclick="window.print()">PRINT PDF</button>
     </div>
 
@@ -73,7 +73,7 @@
     <div id="reportSheet" class="report-sheet">
         <div class="rep-top">
             <h1>Nugortech IT Ltd.</h1>
-            <div style="font-size: 14px;">Monthly Staff Performance Report</div>
+            <div style="font-size: 14px;">Monthly Performance Master Sheet</div>
         </div>
 
         <div class="table-container">
@@ -82,16 +82,16 @@
                     <tr>
                         <th width="15%">Employee Name</th>
                         <th width="10%">Position</th>
-                        <th width="4%">Month</th>
-                        <th width="7%">Total Leads</th>
+                        <th width="5%">Month</th>
+                        <th width="7%">Leads</th>
                         <th width="5%">New</th>
                         <th width="5%">Old</th>
                         <th width="9%">Sales (BDT)</th>
                         <th width="6%">Calls</th>
-                        <th width="6%">Working Days</th>
-                        <th width="6%">Attendance</th>
+                        <th width="6%">W. Days</th>
+                        <th width="6%">Attend.</th>
                         <th class="abs-red" width="6%">Absent</th>
-                        <th width="6%">Late Count</th>
+                        <th width="6%">Late</th>
                         <th width="10%">Total Exp.</th>
                     </tr>
                 </thead>
@@ -100,109 +100,104 @@
             </table>
         </div>
         
-        <div style="margin-top:60px; display:flex; justify-content:space-between; padding: 0 60px;">
+        <div style="margin-top:50px; display:flex; justify-content:space-between; padding: 0 50px;">
             <div style="text-align:center; width:180px; border-top:1.5px solid #000; padding-top:5px; font-size:10px; font-weight:800;">Accountant Signature</div>
             <div style="text-align:center; width:180px; border-top:1.5px solid #000; padding-top:5px; font-size:10px; font-weight:800;">Director Signature</div>
         </div>
     </div>
 </div>
 
-<!-- Firebase Compat SDK -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 <script>
-    const firebaseConfig = { apiKey: "AIzaSyB-AWYawVDTCAX0_ocZYQMqUI5ZteoDsIg", databaseURL: "https://sales-report-nugortech-it-default-rtdb.firebaseio.com", projectId: "sales-report-nugortech-it", appId: "1:799184024638:web:82a23c732c074d98e80d6f" };
+    const firebaseConfig = { apiKey: "AIzaSyBrz1xvq4Fpt9-j75-gUS4d8ebqPRLmOK0", databaseURL: "https://sales-report-nugortech-it-default-rtdb.firebaseio.com", projectId: "sales-report-nugortech-it", appId: "1:848643315031:web:e6fbf92153490ea9d31a12" };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    async function generateUltimateReport() {
-        let monthInput = document.getElementById('targetMonth').value;
-        const totalOfficeDays = Number(document.getElementById('workingDays').value);
-        if(!monthInput) return alert("Please enter Month!");
+    async function generateReport() {
+        let input = document.getElementById('targetMonth').value;
+        const totalW = Number(document.getElementById('workingDays').value);
+        if(!input) return alert("Please enter Month (MM-YYYY)!");
 
-        // Normalize month (e.g. 3-2026 to 03-2026)
-        let parts = monthInput.split('-');
+        // Normalize Month to MM-YYYY (handle 3-2026 as 03-2026)
+        let parts = input.split('-');
         if(parts[0].length === 1) parts[0] = '0' + parts[0];
         let searchMonth = parts.join('-'); 
 
-        // Fetch Data
-        const snaps = await Promise.all([
-            db.ref('sales_reports').once('value'),
-            db.ref('attendance').once('value'),
-            db.ref('nugor_ledger_final_v7').once('value')
-        ]);
+        // 1. Fetch all data in parallel
+        const salesSnap = await db.ref('sales_reports').once('value');
+        const attendSnap = await db.ref('attendance').once('value');
+        const ledgerSnap = await db.ref('nugor_ledger_final_official_v6').once('value');
 
-        const sales = snaps[0].val() || {};
-        const attendance = snaps[1].val() || {};
-        const ledger = snaps[2].val() || {};
+        const salesRaw = salesSnap.val() || {};
+        const attendRaw = attendSnap.val() || {};
+        const ledgerRaw = ledgerSnap.val() || {};
 
         let empMap = {}; 
-        let monthlyExp = 0;
+        let totalMonthlyExp = 0;
 
-        // 1. Calculate Monthly Expenses
-        Object.values(ledger).forEach(d => {
-            if(d.date && d.date.includes(searchMonth)) monthlyExp += Number(d.amount || 0);
+        // 2. Process Ledger (Expenses)
+        Object.values(ledgerRaw).forEach(d => {
+            if(d.date && d.date.includes(searchMonth)) totalMonthlyExp += Number(d.amount || 0);
         });
 
-        // 2. Aggregate Sales Reports
-        Object.values(sales).forEach(d => {
+        // 3. Process Sales (Get names and sales data)
+        Object.values(salesRaw).forEach(d => {
             if(d.date && d.date.includes(searchMonth)) {
-                if(!empMap[d.id]) empMap[d.id] = { name: d.name, leads: 0, new: 0, old: 0, sales: 0, calls: 0, attend: 0, late: 0 };
+                if(!empMap[d.id]) empMap[d.id] = { name: d.name, leads: 0, new: 0, old: 0, sales: 0, calls: 0, present: 0, late: 0 };
                 empMap[d.id].leads += Number(d.lead || 0);
-                empMap[d.id].new += Number(d.newC || 0);
-                empMap[d.id].old += Number(d.oldC || 0);
+                empMap[d.id].new += Number(d.newC || d.nc || 0);
+                empMap[d.id].old += Number(d.oldC || d.oc || 0);
                 empMap[d.id].sales += Number(d.sales || 0);
-                empMap[d.id].calls += Number(d.call || 0);
+                empMap[d.id].calls += Number(d.call || d.calls || 0);
             }
         });
 
-        // 3. Process Attendance (Smart Check)
-        // Date format in DB: DD-MM-YYYY
-        Object.keys(attendance).forEach(dateKey => {
-            const dateParts = dateKey.split('-'); 
-            if(dateParts.length === 3) {
-                const dbMonthYear = dateParts[1] + '-' + dateParts[2]; // extracting MM-YYYY
-                if(dbMonthYear === searchMonth) {
-                    Object.keys(attendance[dateKey]).forEach(id => {
-                        if(!empMap[id]) {
-                            empMap[id] = { name: attendance[dateKey][id].name || "Staff", leads: 0, new: 0, old: 0, sales: 0, calls: 0, attend: 0, late: 0 };
+        // 4. Process Attendance (Count Presence & Lates) - The Fix
+        Object.keys(attendRaw).forEach(dateKey => {
+            // Check if this dateKey (e.g. "01-03-2026") belongs to our target month
+            if(dateKey.includes(searchMonth)) {
+                const dayRecords = attendRaw[dateKey];
+                Object.keys(dayRecords).forEach(id => {
+                    const record = dayRecords[id];
+                    // Ensure Emp exists in map
+                    if(!empMap[id]) {
+                        empMap[id] = { name: record.name || "Staff", leads: 0, new: 0, old: 0, sales: 0, calls: 0, present: 0, late: 0 };
+                    }
+                    
+                    empMap[id].present++; // Increment attendance count
+
+                    // Late Logic
+                    let isLate = record.attendanceStatus === "Late" || record.status === "Late";
+                    if(!isLate && record.inTime) {
+                        const [time, mod] = record.inTime.split(' ');
+                        if(time) {
+                            let [h, m] = time.split(':');
+                            if(mod === 'PM' && h !== '12') h = parseInt(h)+12;
+                            if(parseInt(h) > 9 || (parseInt(h) === 9 && parseInt(m) > 30)) isLate = true;
                         }
-                        empMap[id].attend++;
-                        
-                        const record = attendance[dateKey][id];
-                        let isLate = record.attendanceStatus === "Late" || record.status === "Late";
-                        
-                        // Fallback: Check time manually if status is missing
-                        if(!isLate && record.inTime) {
-                            const [time, mod] = record.inTime.split(' ');
-                            if(time) {
-                                let [h, m] = time.split(':');
-                                if(mod === 'PM' && h !== '12') h = parseInt(h) + 12;
-                                if(parseInt(h) > 9 || (parseInt(h) === 9 && parseInt(m) > 30)) isLate = true;
-                            }
-                        }
-                        if(isLate) empMap[id].late++;
-                    });
-                }
+                    }
+                    if(isLate) empMap[id].late++;
+                });
             }
         });
 
-        // Build HTML
+        // 5. Build Final Table
         const tbody = document.getElementById('tbody'); tbody.innerHTML = "";
-        let h="", sl=1;
-        let sumL=0, sumN=0, sumO=0, sumS=0, sumC=0, sumAt=0, sumAb=0, sumLt=0;
-        const ids = Object.keys(empMap);
+        let finalHtml = "";
+        let tL=0, tN=0, tO=0, tS=0, tC=0, tP=0, tA=0, tLt=0;
 
+        const ids = Object.keys(empMap);
         if(ids.length === 0) return alert("No Data Found for this month!");
 
         ids.forEach((id, idx) => {
             const e = empMap[id];
-            const absent = Math.max(0, totalOfficeDays - e.attend);
+            const absentCount = Math.max(0, totalW - e.present);
             
-            sumL+=e.leads; sumN+=e.new; sumO+=e.old; sumS+=e.sales; sumC+=e.calls; sumAt+=e.attend; sumAb+=absent; sumLt+=e.late;
+            tL+=e.leads; tN+=e.new; tO+=e.old; tS+=e.sales; tC+=e.calls; tP+=e.present; tA+=absentCount; tLt+=e.late;
 
-            h += `<tr>
+            finalHtml += `<tr>
                 <td class="name-col">${e.name.toUpperCase()}</td>
                 <td>STAFF</td>
                 ${idx === 0 ? `<td rowspan="${ids.length}" class="month-side"><div style="transform: rotate(-90deg); white-space:nowrap">${searchMonth}</div></td>` : ''}
@@ -211,16 +206,16 @@
                 <td>${e.old}</td>
                 <td>৳${e.sales.toLocaleString()}</td>
                 <td>${e.calls}</td>
-                <td>${totalOfficeDays}</td>
-                <td>${e.attend}</td>
-                <td class="abs-red">${absent}</td>
+                <td>${totalW}</td>
+                <td>${e.present}</td>
+                <td class="abs-red">${absentCount}</td>
                 <td>${e.late}</td>
-                ${idx === 0 ? `<td rowspan="${ids.length}" class="exp-box">৳${monthlyExp.toLocaleString()}</td>` : ''}
+                ${idx === 0 ? `<td rowspan="${ids.length}" class="exp-box">৳${totalMonthlyExp.toLocaleString()}</td>` : ''}
             </tr>`;
         });
 
-        tbody.innerHTML = h;
-        document.getElementById('tfoot').innerHTML = `<tr class="total-row"><td colspan="2">TOTAL</td><td></td><td>${sumL}</td><td>${sumN}</td><td>${sumO}</td><td>৳${sumS.toLocaleString()}</td><td>${sumC}</td><td>${totalOfficeDays * ids.length}</td><td>${sumAt}</td><td>${sumAb}</td><td>${sumLt}</td><td>৳${monthlyExp.toLocaleString()}</td></tr>`;
+        tbody.innerHTML = finalHtml;
+        document.getElementById('tfoot').innerHTML = `<tr class="total-row"><td colspan="2">TOTAL</td><td></td><td>${tL}</td><td>${tN}</td><td>${tO}</td><td>৳${tS.toLocaleString()}</td><td>${tC}</td><td>${totalW * ids.length}</td><td>${tP}</td><td>${tA}</td><td>${tLt}</td><td>৳${totalMonthlyExp.toLocaleString()}</td></tr>`;
         
         document.getElementById('reportSheet').style.display = "block";
     }
