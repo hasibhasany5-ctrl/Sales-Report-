@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Master Report | Nugortech IT Ltd</title>
+    <title>Nugortech Master Report | Automatic</title>
+    <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -19,7 +20,7 @@
         input { background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 12px; border-radius: 12px; color: white; outline: none; width: 200px; }
         .btn-gen { padding: 12px 30px; background: linear-gradient(135deg, var(--orange), var(--blue)); border: none; border-radius: 15px; color: white; font-weight: 800; cursor: pointer; transition: 0.3s; }
 
-        /* EXCEL STYLE PRINT REPORT */
+        /* --- EXCEL STYLE PRINT REPORT --- */
         .report-sheet { background: white; color: #000; width: 1250px; display: none; margin: 0 auto; border: 1px solid #333; }
         .rep-top { background: #5B9BD5; color: white; padding: 20px; text-align: center; font-weight: 900; border-bottom: 2px solid #000; }
         .rep-top h1 { margin: 0; font-size: 28px; text-transform: uppercase; }
@@ -48,23 +49,23 @@
 <div class="sidebar">
     <div style="text-align:center; margin-bottom:50px;">
         <h2 style="margin:0; font-weight:800; color:white;">NUGORTECH IT</h2>
-        <p style="color:var(--orange); font-size:9px; font-weight:800; letter-spacing:1px; text-transform: uppercase;">Cloud Reporting</p>
+        <p style="color:var(--orange); font-size:9px; font-weight:800; letter-spacing:1px; text-transform: uppercase;">Cloud Auto Report</p>
     </div>
 </div>
 
 <div class="main">
-    <h1 style="font-weight: 800; margin-bottom:30px;">Automatic Monthly Report</h1>
+    <h1 style="font-weight: 800; margin-bottom:30px;">Monthly Automatic Report</h1>
 
     <div class="panel">
         <div>
-            <label>Month (e.g. 3-2026)</label>
-            <input type="text" id="targetMonth" placeholder="MM-YYYY">
+            <label>Reporting Month (MM-YYYY)</label>
+            <input type="text" id="targetMonth" placeholder="e.g. 03-2026">
         </div>
         <div>
-            <label>Total Work Days</label>
+            <label>Total Office Days</label>
             <input type="number" id="workingDays" value="26">
         </div>
-        <button class="btn-gen" onclick="generateAutoReport()">FETCH DATA</button>
+        <button class="btn-gen" onclick="generateUltimateReport()">GENERATE REPORT</button>
         <button class="btn-gen" style="background:#000; border:1px solid #444" onclick="window.print()">PRINT PDF</button>
     </div>
 
@@ -72,7 +73,7 @@
     <div id="reportSheet" class="report-sheet">
         <div class="rep-top">
             <h1>Nugortech IT Ltd.</h1>
-            <div style="font-size: 14px;">Monthly Performance Report</div>
+            <div style="font-size: 14px;">Monthly Staff Performance Report</div>
         </div>
 
         <div class="table-container">
@@ -82,15 +83,15 @@
                         <th width="15%">Employee Name</th>
                         <th width="10%">Position</th>
                         <th width="4%">Month</th>
-                        <th width="7%">Leads</th>
+                        <th width="7%">Total Leads</th>
                         <th width="5%">New</th>
                         <th width="5%">Old</th>
                         <th width="9%">Sales (BDT)</th>
                         <th width="6%">Calls</th>
-                        <th width="6%">W. Days</th>
-                        <th width="6%">Attend.</th>
+                        <th width="6%">Working Days</th>
+                        <th width="6%">Attendance</th>
                         <th class="abs-red" width="6%">Absent</th>
-                        <th width="6%">Late</th>
+                        <th width="6%">Late Count</th>
                         <th width="10%">Total Exp.</th>
                     </tr>
                 </thead>
@@ -99,36 +100,37 @@
             </table>
         </div>
         
-        <div style="margin-top:50px; display:flex; justify-content:space-between; padding: 0 60px;">
+        <div style="margin-top:60px; display:flex; justify-content:space-between; padding: 0 60px;">
             <div style="text-align:center; width:180px; border-top:1.5px solid #000; padding-top:5px; font-size:10px; font-weight:800;">Accountant Signature</div>
             <div style="text-align:center; width:180px; border-top:1.5px solid #000; padding-top:5px; font-size:10px; font-weight:800;">Director Signature</div>
         </div>
     </div>
 </div>
 
+<!-- Firebase Compat SDK -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 <script>
-    const firebaseConfig = { apiKey: "AIzaSyBrz1xvq4Fpt9-j75-gUS4d8ebqPRLmOK0", databaseURL: "https://sales-report-nugortech-it-default-rtdb.firebaseio.com", projectId: "sales-report-nugortech-it", appId: "1:848643315031:web:e6fbf92153490ea9d31a12" };
+    const firebaseConfig = { apiKey: "AIzaSyB-AWYawVDTCAX0_ocZYQMqUI5ZteoDsIg", databaseURL: "https://sales-report-nugortech-it-default-rtdb.firebaseio.com", projectId: "sales-report-nugortech-it", appId: "1:799184024638:web:82a23c732c074d98e80d6f" };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    async function generateAutoReport() {
-        let input = document.getElementById('targetMonth').value;
-        const totalW = Number(document.getElementById('workingDays').value);
-        if(!input) return alert("Enter Month!");
+    async function generateUltimateReport() {
+        let monthInput = document.getElementById('targetMonth').value;
+        const totalOfficeDays = Number(document.getElementById('workingDays').value);
+        if(!monthInput) return alert("Please enter Month!");
 
-        // মাস ফিক্স করা (3-2026 -> 03-2026)
-        let p = input.split('-');
-        if(p[0].length === 1) p[0] = '0' + p[0];
-        let searchMonth = p.join('-'); // এটি হবে 03-2026
+        // Normalize month (e.g. 3-2026 to 03-2026)
+        let parts = monthInput.split('-');
+        if(parts[0].length === 1) parts[0] = '0' + parts[0];
+        let searchMonth = parts.join('-'); 
 
-        // ডাটাবেস থেকে সব ডাটা আনা
+        // Fetch Data
         const snaps = await Promise.all([
             db.ref('sales_reports').once('value'),
             db.ref('attendance').once('value'),
-            db.ref('nugor_ledger_final_official_v6').once('value')
+            db.ref('nugor_ledger_final_v7').once('value')
         ]);
 
         const sales = snaps[0].val() || {};
@@ -136,81 +138,90 @@
         const ledger = snaps[2].val() || {};
 
         let empMap = {}; 
-        let grandExp = 0;
+        let monthlyExp = 0;
 
-        // ১. খরচ (Ledger)
+        // 1. Calculate Monthly Expenses
         Object.values(ledger).forEach(d => {
-            if(d.date && (d.date.includes(searchMonth) || d.date.includes(searchMonth.replace('-', '/')))) grandExp += Number(d.amount || 0);
+            if(d.date && d.date.includes(searchMonth)) monthlyExp += Number(d.amount || 0);
         });
 
-        // ২. সেলস ডাটা থেকে এমপ্লয়ি এবং সেলস লিস্ট
+        // 2. Aggregate Sales Reports
         Object.values(sales).forEach(d => {
-            if(d.date && (d.date.includes(searchMonth) || d.date.includes(searchMonth.replace('-', '/')))) {
-                if(!empMap[d.id]) empMap[d.id] = { name: d.name, leads: 0, new: 0, old: 0, sales: 0, calls: 0, present: 0, late: 0 };
+            if(d.date && d.date.includes(searchMonth)) {
+                if(!empMap[d.id]) empMap[d.id] = { name: d.name, leads: 0, new: 0, old: 0, sales: 0, calls: 0, attend: 0, late: 0 };
                 empMap[d.id].leads += Number(d.lead || 0);
-                empMap[d.id].new += Number(d.nc || d.newC || 0);
-                empMap[d.id].old += Number(d.oc || d.oldC || 0);
+                empMap[d.id].new += Number(d.newC || 0);
+                empMap[d.id].old += Number(d.oldC || 0);
                 empMap[d.id].sales += Number(d.sales || 0);
-                empMap[d.id].calls += Number(d.call || d.calls || 0);
+                empMap[d.id].calls += Number(d.call || 0);
             }
         });
 
-        // ৩. হাজিরার আসল জাদু (Attendance Fix)
+        // 3. Process Attendance (Smart Check)
+        // Date format in DB: DD-MM-YYYY
         Object.keys(attendance).forEach(dateKey => {
-            // চেক করা যে তারিখের মধ্যে মাসের নাম আছে কি না (উভয় ফরম্যাট চেক)
-            if(dateKey.includes(searchMonth) || dateKey.includes(searchMonth.replace('-', '/'))) {
-                Object.keys(attendance[dateKey]).forEach(id => {
-                    // যদি এই এমপ্লয়ি সেলস লিস্টে না থাকে, তাকেও যুক্ত করো
-                    if(!empMap[id]) {
-                        empMap[id] = { name: attendance[dateKey][id].name || "Staff", leads: 0, new: 0, old: 0, sales: 0, calls: 0, present: 0, late: 0 };
-                    }
-                    empMap[id].present++;
-                    
-                    const record = attendance[dateKey][id];
-                    let isLate = record.status === "Late" || record.attendanceStatus === "Late";
-                    if(!isLate && record.inTime) {
-                        const [t, m] = record.inTime.split(' ');
-                        let [h, min] = t.split(':');
-                        if(m === 'PM' && h !== '12') h = parseInt(h)+12;
-                        if(parseInt(h) > 9 || (parseInt(h) === 9 && parseInt(min) > 30)) isLate = true;
-                    }
-                    if(isLate) empMap[id].late++;
-                });
+            const dateParts = dateKey.split('-'); 
+            if(dateParts.length === 3) {
+                const dbMonthYear = dateParts[1] + '-' + dateParts[2]; // extracting MM-YYYY
+                if(dbMonthYear === searchMonth) {
+                    Object.keys(attendance[dateKey]).forEach(id => {
+                        if(!empMap[id]) {
+                            empMap[id] = { name: attendance[dateKey][id].name || "Staff", leads: 0, new: 0, old: 0, sales: 0, calls: 0, attend: 0, late: 0 };
+                        }
+                        empMap[id].attend++;
+                        
+                        const record = attendance[dateKey][id];
+                        let isLate = record.attendanceStatus === "Late" || record.status === "Late";
+                        
+                        // Fallback: Check time manually if status is missing
+                        if(!isLate && record.inTime) {
+                            const [time, mod] = record.inTime.split(' ');
+                            if(time) {
+                                let [h, m] = time.split(':');
+                                if(mod === 'PM' && h !== '12') h = parseInt(h) + 12;
+                                if(parseInt(h) > 9 || (parseInt(h) === 9 && parseInt(m) > 30)) isLate = true;
+                            }
+                        }
+                        if(isLate) empMap[id].late++;
+                    });
+                }
             }
         });
 
-        // টেবিল ডাটা তৈরি করা
+        // Build HTML
         const tbody = document.getElementById('tbody'); tbody.innerHTML = "";
-        let tL=0, tN=0, tO=0, tS=0, tC=0, tP=0, tA=0, tLt=0;
+        let h="", sl=1;
+        let sumL=0, sumN=0, sumO=0, sumS=0, sumC=0, sumAt=0, sumAb=0, sumLt=0;
         const ids = Object.keys(empMap);
 
-        if(ids.length === 0) return alert("No data found for this month!");
+        if(ids.length === 0) return alert("No Data Found for this month!");
 
-        ids.forEach((id, index) => {
+        ids.forEach((id, idx) => {
             const e = empMap[id];
-            const abs = totalW - e.present;
-            const finalAbs = abs < 0 ? 0 : abs;
+            const absent = Math.max(0, totalOfficeDays - e.attend);
             
-            tL+=e.leads; tN+=e.new; tO+=e.old; tS+=e.sales; tC+=e.calls; tP+=e.present; tA+=finalAbs; tLt+=e.late;
+            sumL+=e.leads; sumN+=e.new; sumO+=e.old; sumS+=e.sales; sumC+=e.calls; sumAt+=e.attend; sumAb+=absent; sumLt+=e.late;
 
-            tbody.innerHTML += `<tr>
+            h += `<tr>
                 <td class="name-col">${e.name.toUpperCase()}</td>
                 <td>STAFF</td>
-                ${index === 0 ? `<td rowspan="${ids.length}" class="month-side"><div style="transform: rotate(-90deg); white-space:nowrap">${searchMonth}</div></td>` : ''}
+                ${idx === 0 ? `<td rowspan="${ids.length}" class="month-side"><div style="transform: rotate(-90deg); white-space:nowrap">${searchMonth}</div></td>` : ''}
                 <td>${e.leads}</td>
                 <td>${e.new}</td>
                 <td>${e.old}</td>
                 <td>৳${e.sales.toLocaleString()}</td>
                 <td>${e.calls}</td>
-                <td>${totalW}</td>
-                <td>${e.present}</td>
-                <td class="abs-red">${finalAbs}</td>
+                <td>${totalOfficeDays}</td>
+                <td>${e.attend}</td>
+                <td class="abs-red">${absent}</td>
                 <td>${e.late}</td>
-                ${index === 0 ? `<td rowspan="${ids.length}" class="exp-box">৳${grandExp.toLocaleString()}</td>` : ''}
+                ${idx === 0 ? `<td rowspan="${ids.length}" class="exp-box">৳${monthlyExp.toLocaleString()}</td>` : ''}
             </tr>`;
         });
 
-        document.getElementById('tfoot').innerHTML = `<tr class="total-row"><td colspan="2">TOTAL</td><td></td><td>${tL}</td><td>${tN}</td><td>${tO}</td><td>৳${tS.toLocaleString()}</td><td>${tC}</td><td>${totalW * ids.length}</td><td>${tP}</td><td>${tA}</td><td>${tLt}</td><td>৳${grandExp.toLocaleString()}</td></tr>`;
+        tbody.innerHTML = h;
+        document.getElementById('tfoot').innerHTML = `<tr class="total-row"><td colspan="2">TOTAL</td><td></td><td>${sumL}</td><td>${sumN}</td><td>${sumO}</td><td>৳${sumS.toLocaleString()}</td><td>${sumC}</td><td>${totalOfficeDays * ids.length}</td><td>${sumAt}</td><td>${sumAb}</td><td>${sumLt}</td><td>৳${monthlyExp.toLocaleString()}</td></tr>`;
+        
         document.getElementById('reportSheet').style.display = "block";
     }
 </script>
