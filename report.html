@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly Performance Report | Nugortech IT Ltd</title>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --p: #FF6B00; --b: #00A3FF; --bg: #0b1120; --card: rgba(255,255,255,0.03); }
+        * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { margin: 0; background: var(--bg); color: white; min-height: 100vh; }
+
+        /* Sidebar UI */
+        .sidebar { width: 280px; background: rgba(0,0,0,0.3); backdrop-filter: blur(20px); border-right: 1px solid rgba(255,255,255,0.1); padding: 40px 25px; position: fixed; height: 100vh; z-index: 100; }
+        .main { margin-left: 280px; width: calc(100% - 280px); padding: 40px; }
+
+        /* Input Form Panel */
+        .panel { background: var(--card); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 35px; backdrop-filter: blur(15px); margin-bottom: 30px; }
+        .input-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 10px; }
+        input, select { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 10px; border-radius: 12px; color: white; outline: none; font-size: 12px; width: 100%; }
+        
+        .btn { padding: 12px 25px; border: none; border-radius: 15px; font-weight: 800; cursor: pointer; transition: 0.3s; color: white; display: inline-flex; align-items: center; gap: 8px; justify-content: center; }
+        .btn-add { background: rgba(255,255,255,0.05); border: 1px dashed var(--b); color: var(--b); width: 100%; margin-bottom: 15px; }
+        .btn-gen { background: linear-gradient(135deg, var(--p), var(--b)); width: 100%; font-size: 16px; margin-top: 10px; }
+
+        /* --- FINAL EXCEL STYLE REPORT (FOR PRINTING) --- */
+        .report-box { background: white; color: #000; display: none; width: 100%; max-width: 1200px; margin: 40px auto; overflow: hidden; padding: 20px; }
+        .header-top { background: #5B9BD5; color: white; padding: 15px; text-align: center; font-weight: 800; border: 1px solid #333; }
+        .header-top h1 { margin: 0; font-size: 24px; }
+
+        .excel-table { width: 100%; border-collapse: collapse; border: 1px solid #000; table-layout: fixed; }
+        .excel-table th { background: #C6E0B4; color: #000; border: 1px solid #000; padding: 8px 3px; font-size: 10px; text-transform: capitalize; }
+        .excel-table td { border: 1px solid #000; padding: 8px 3px; font-size: 10px; font-weight: 700; text-align: center; vertical-align: middle; word-wrap: break-word; }
+        
+        .month-col { background: #fff; font-size: 18px !important; transform: rotate(-90deg); }
+        .absent-header { background: #FF0000 !important; color: white !important; }
+        .total-row { background: #DDEBF7; font-weight: 900 !important; }
+        .expense-box { background: #ED7D31; color: #000; }
+
+        @media print { 
+            @page { size: landscape; margin: 5mm; }
+            body { background: white; color: black; }
+            .sidebar, .panel, .btn-add, .btn-gen, .main-title, .action-btns { display: none !important; }
+            .main { margin-left: 0; width: 100%; padding: 0; }
+            .report-box { display: block !important; box-shadow: none; border: none; margin: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div style="text-align:center; margin-bottom:50px;">
+        <h2 style="margin:0; font-weight:800;">NUGORTECH IT</h2>
+        <p style="color:var(--p); font-size:9px; font-weight:800; letter-spacing:1px; text-transform: uppercase;">Performance Hub</p>
+    </div>
+</div>
+
+<div class="main">
+    <h1 class="main-title" style="font-weight: 800; margin-bottom:30px;">Monthly Excel Report Builder</h1>
+
+    <div class="panel">
+        <div style="margin-bottom: 20px; display: flex; gap: 15px;">
+            <div style="flex:1"><label style="font-size:10px; color:var(--b);">REPORT MONTH</label><input type="text" id="repMonth" placeholder="e.g. February"></div>
+            <div style="flex:1"><label style="font-size:10px; color:var(--b);">TOTAL EXPENSES (JAN-FEB)</label><input type="number" id="totalExp" placeholder="Total Expenses"></div>
+        </div>
+
+        <div id="inputList">
+            <div class="emp-row panel" style="background:rgba(255,255,255,0.02); padding:20px; margin-bottom:15px; border-radius:20px;">
+                <div class="input-row">
+                    <input type="text" class="e-name" placeholder="Employee Name">
+                    <input type="text" class="e-pos" placeholder="Position">
+                    <input type="number" class="e-pcomp" placeholder="Projects Comp.">
+                    <input type="number" class="e-prun" placeholder="Running Proj.">
+                    <input type="number" class="e-ads" placeholder="Ads Spend">
+                </div>
+                <div class="input-row">
+                    <input type="number" class="e-leads" placeholder="Total Leads">
+                    <input type="number" class="e-new" placeholder="New Clients">
+                    <input type="number" class="e-old" placeholder="Old Clients">
+                    <input type="number" class="e-sales" placeholder="Sales Amount">
+                    <input type="number" class="e-calls" placeholder="Customer Calls">
+                </div>
+                <div class="input-row" style="grid-template-columns: 1fr 1fr 1fr 1fr;">
+                    <input type="number" class="e-wdays" placeholder="Working Days">
+                    <input type="number" class="e-attend" placeholder="Attendance">
+                    <input type="number" class="e-absent" placeholder="Absent">
+                    <input type="number" class="e-late" placeholder="Late/Leave">
+                </div>
+            </div>
+        </div>
+        
+        <button class="btn btn-add" onclick="addRow()"><i class="fas fa-plus"></i> Add Another Employee</button>
+        <button class="btn btn-gen" onclick="generateReport()"><i class="fas fa-file-excel"></i> GENERATE EXCEL FORMAT REPORT</button>
+    </div>
+
+    <!-- Final Report Content -->
+    <div id="printArea" class="report-box">
+        <div class="header-top">
+            <h1>Nugortech It .</h1>
+            <div style="font-size:14px; margin-top:5px;">Salary Sheet</div>
+            <div style="font-size:12px;" id="monthLabel">Month : ---</div>
+        </div>
+
+        <table class="excel-table">
+            <thead>
+                <tr>
+                    <th width="15%">Employee Name</th>
+                    <th width="12%">Position</th>
+                    <th width="5%">Report Month</th>
+                    <th width="6%">Total Projects Completed</th>
+                    <th width="6%">Running Projects</th>
+                    <th width="7%">Total Ads Spend (BDT)</th>
+                    <th width="5%">Total Leads</th>
+                    <th width="5%">New Clients</th>
+                    <th width="5%">Old Clients</th>
+                    <th width="8%">Total Sales Amount (BDT)</th>
+                    <th width="5%">Total Customer Call</th>
+                    <th width="5%">Total Working Days</th>
+                    <th width="6%">Attendance</th>
+                    <th class="absent-header" width="5%">Absent</th>
+                    <th width="5%">Late / Leave</th>
+                    <th width="10%">( Jan- Feb ) Total Expenses</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+            <tfoot id="tableFooter"></tfoot>
+        </table>
+
+        <div class="action-btns" style="text-align: center; margin-top: 30px;">
+            <button class="btn" style="background:#0b0f19" onclick="window.print()"><i class="fas fa-print"></i> PRINT THIS REPORT</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function addRow() {
+        const list = document.getElementById('inputList');
+        const newRow = list.children[0].cloneNode(true);
+        newRow.querySelectorAll('input').forEach(i => i.value = "");
+        list.appendChild(newRow);
+    }
+
+    function generateReport() {
+        const month = document.getElementById('repMonth').value || "Month";
+        const totalExp = document.getElementById('totalExp').value || "0";
+        const rows = document.querySelectorAll('.emp-row');
+        const body = document.getElementById('tableBody');
+        const footer = document.getElementById('tableFooter');
+        
+        document.getElementById('monthLabel').innerText = "Month : " + month + " 2026";
+
+        let html = "";
+        let t_pcomp=0, t_prun=0, t_ads=0, t_leads=0, t_new=0, t_old=0, t_sales=0, t_calls=0, t_wdays=0, t_attend=0, t_abs=0, t_late=0;
+
+        rows.forEach((row, index) => {
+            const name = row.querySelector('.e-name').value;
+            const pos = row.querySelector('.e-pos').value;
+            const pcomp = Number(row.querySelector('.e-pcomp').value || 0);
+            const prun = Number(row.querySelector('.e-prun').value || 0);
+            const ads = Number(row.querySelector('.e-ads').value || 0);
+            const leads = Number(row.querySelector('.e-leads').value || 0);
+            const nc = Number(row.querySelector('.e-new').value || 0);
+            const oc = Number(row.querySelector('.e-old').value || 0);
+            const sales = Number(row.querySelector('.e-sales').value || 0);
+            const calls = Number(row.querySelector('.e-calls').value || 0);
+            const wdays = Number(row.querySelector('.e-wdays').value || 0);
+            const attend = Number(row.querySelector('.e-attend').value || 0);
+            const abs = Number(row.querySelector('.e-absent').value || 0);
+            const late = Number(row.querySelector('.e-late').value || 0);
+
+            if(!name) return;
+
+            // Update Totals
+            t_pcomp+=pcomp; t_prun+=prun; t_ads+=ads; t_leads+=leads; t_new+=nc; t_old+=oc; t_sales+=sales; t_calls+=calls; t_wdays+=wdays; t_attend+=attend; t_abs+=abs; t_late+=late;
+
+            html += `<tr>
+                <td style="text-align:left;">${name.toUpperCase()}</td>
+                <td>${pos.toUpperCase()}</td>
+                ${index === 0 ? `<td rowspan="${rows.length}" style="background:#fff; font-size:16px; width:40px; border:1px solid #000;"><div style="transform: rotate(-90deg); white-space: nowrap;">${month}</div></td>` : ''}
+                <td>${pcomp || ''}</td>
+                <td>${prun || ''}</td>
+                <td>${ads || ''}</td>
+                <td>${leads || ''}</td>
+                <td>${nc || ''}</td>
+                <td>${oc || ''}</td>
+                <td>${sales || ''}</td>
+                <td>${calls || ''}</td>
+                <td>${wdays || ''}</td>
+                <td>${attend || ''}</td>
+                <td style="color:red">${abs || ''}</td>
+                <td>${late || ''}</td>
+                ${index === 0 ? `<td rowspan="${rows.length}" class="expense-box" style="font-size:16px;">${totalExp}</td>` : ''}
+            </tr>`;
+        });
+
+        body.innerHTML = html;
+        footer.innerHTML = `<tr class="total-row">
+            <td colspan="2">Total</td>
+            <td></td>
+            <td>${t_pcomp}</td>
+            <td>${t_prun}</td>
+            <td>${t_ads}</td>
+            <td>${t_leads}</td>
+            <td>${t_new}</td>
+            <td>${t_old}</td>
+            <td>${t_sales}</td>
+            <td>${t_calls}</td>
+            <td>${t_wdays}</td>
+            <td>${t_attend}</td>
+            <td>${t_abs}</td>
+            <td>${t_late}</td>
+            <td>${totalExp}</td>
+        </tr>`;
+
+        document.getElementById('printArea').style.display = "block";
+        document.getElementById('printArea').scrollIntoView({ behavior: 'smooth' });
+    }
+</script>
+</body>
+</html>
