@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Call Entry | Nugortech IT Ltd</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #0b1120; font-family: 'Plus Jakarta Sans', sans-serif; color: white; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+    </style>
+</head>
+<body class="flex justify-center items-center min-h-screen p-6">
+    <div class="glass p-8 rounded-[35px] w-full max-w-md shadow-2xl">
+        <div class="text-center mb-8">
+            <h2 class="text-2xl font-extrabold">Nugortech IT Ltd</h2>
+            <p class="text-[10px] text-orange-500 font-bold uppercase tracking-widest mt-2">Daily Call Entry Portal</p>
+        </div>
+
+        <div class="space-y-4">
+            <div><label class="text-[10px] font-bold text-blue-400 ml-2 uppercase">Your Name</label>
+            <input type="text" id="staffName" class="w-full bg-white/5 border border-white/10 p-3 rounded-xl outline-none focus:border-blue-500 text-sm mt-1" placeholder="Executive Name"></div>
+            
+            <div class="grid grid-cols-2 gap-3">
+                <div><label class="text-[10px] font-bold text-blue-400 ml-2 uppercase">Client Name</label>
+                <input type="text" id="cName" class="w-full bg-white/5 border border-white/10 p-3 rounded-xl outline-none focus:border-blue-500 text-sm mt-1" placeholder="Customer Name"></div>
+                <div><label class="text-[10px] font-bold text-blue-400 ml-2 uppercase">Phone No</label>
+                <input type="number" id="cPhone" class="w-full bg-white/5 border border-white/10 p-3 rounded-xl outline-none focus:border-blue-500 text-sm mt-1" placeholder="017..."></div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <div><label class="text-[10px] font-bold text-blue-400 ml-2 uppercase">Page Name/No</label>
+                <input type="text" id="pNo" class="w-full bg-white/5 border border-white/10 p-3 rounded-xl outline-none focus:border-blue-500 text-sm mt-1" placeholder="Page Details"></div>
+                <div><label class="text-[10px] font-bold text-blue-400 ml-2 uppercase">Customer Type</label>
+                <select id="cType" class="w-full bg-slate-800 border border-white/10 p-3 rounded-xl outline-none focus:border-blue-500 text-sm mt-1">
+                    <option value="Regular">Regular</option>
+                    <option value="Irregular">Irregular</option>
+                </select></div>
+            </div>
+
+            <div><label class="text-[10px] font-bold text-blue-400 ml-2 uppercase">Remarks</label>
+            <textarea id="notes" class="w-full bg-white/5 border border-white/10 p-3 rounded-xl outline-none focus:border-blue-500 text-sm mt-1" rows="3" placeholder="What did they say?"></textarea></div>
+
+            <button onclick="submitCall()" class="w-full bg-gradient-to-r from-orange-500 to-blue-500 p-4 rounded-2xl font-extrabold uppercase text-sm shadow-lg hover:scale-[1.02] transition-all">Submit Call Record</button>
+        </div>
+        <div id="status" class="mt-4 text-center font-bold text-xs"></div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script>
+        const firebaseConfig = { apiKey: "AIzaSyBrz1xvq4Fpt9-j75-gUS4d8ebqPRLmOK0", databaseURL: "https://sales-report-nugortech-it-default-rtdb.firebaseio.com", projectId: "sales-report-nugortech-it", appId: "1:848643315031:web:e6fbf92153490ea9d31a12" };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        function submitCall() {
+            const staff = document.getElementById('staffName').value;
+            const phone = document.getElementById('cPhone').value;
+            if(!staff || !phone) return alert("Please fill Name & Phone!");
+
+            const data = {
+                staff, phone, client: document.getElementById('cName').value, page: document.getElementById('pNo').value, type: document.getElementById('cType').value, remarks: document.getElementById('notes').value,
+                time: new Date().toLocaleTimeString(), date: new Date().toLocaleDateString('en-GB').replace(/\//g, "-")
+            };
+
+            db.ref('customer_calls').push(data).then(() => {
+                document.getElementById('status').innerText = "✅ Record Sent to Admin!";
+                document.getElementById('cName').value = ""; document.getElementById('cPhone').value = ""; document.getElementById('notes').value = "";
+                setTimeout(()=> document.getElementById('status').innerText="", 3000);
+            });
+        }
+    </script>
+</body>
+</html>
