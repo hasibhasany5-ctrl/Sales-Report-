@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Call Logs | Nugortech IT Ltd</title>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --orange: #FF6B00; --blue: #00A3FF; --green: #10b981; --bg: #0b1120; --card: rgba(255, 255, 255, 0.03); --border: rgba(255, 255, 255, 0.1); }
+        * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { margin: 0; background: var(--bg); color: white; display: flex; min-height: 100vh; overflow-x: hidden; }
+
+        /* Sidebar */
+        .sidebar { width: 280px; background: rgba(0,0,0,0.3); backdrop-filter: blur(20px); border-right: 1px solid var(--border); padding: 40px 25px; position: fixed; height: 100vh; z-index: 100; }
+        .main { margin-left: 280px; width: calc(100% - 280px); padding: 40px; }
+
+        /* Form Panel */
+        .panel { background: var(--card); border: 1px solid var(--border); padding: 30px; border-radius: 40px; backdrop-filter: blur(15px); margin-bottom: 30px; }
+        .grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        
+        label { display: block; font-size: 10px; font-weight: 800; color: var(--blue); margin-bottom: 8px; text-transform: uppercase; }
+        input, select, textarea { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 14px; border-radius: 15px; color: white; outline: none; margin-bottom: 15px; font-size: 14px; }
+        input:focus { border-color: var(--blue); }
+
+        .btn-submit { width: 100%; padding: 18px; background: linear-gradient(to right, var(--orange), var(--blue)); border: none; border-radius: 20px; color: white; font-weight: 800; cursor: pointer; transition: 0.3s; font-size: 15px; }
+        .btn-submit:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0, 163, 255, 0.3); }
+
+        /* Table UI */
+        .table-wrap { max-height: 500px; overflow-y: auto; border-radius: 20px; margin-top: 10px; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th { padding: 15px; font-size: 10px; color: #64748b; text-transform: uppercase; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: #0b1120; z-index: 10; }
+        td { padding: 18px 15px; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 13px; font-weight: 600; }
+        
+        .badge { padding: 5px 10px; border-radius: 8px; font-size: 10px; font-weight: 800; text-transform: uppercase; }
+        .b-reg { background: rgba(16, 185, 129, 0.1); color: var(--green); }
+        .b-irreg { background: rgba(244, 63, 94, 0.1); color: var(--red); }
+
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: var(--blue); border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div style="text-align:center; margin-bottom:50px;">
+        <h2 style="margin:0; font-weight:800; color:white;">NUGORTECH IT</h2>
+        <p style="color:var(--orange); font-size:9px; font-weight:800; letter-spacing:1px; text-transform: uppercase; margin-top:5px;">Customer Relation Hub</p>
+    </div>
+    <div style="padding:15px; border-radius:15px; background:var(--card); border:1px solid var(--blue); color:var(--blue); font-weight:800; text-align:center; font-size:12px;">
+        <i class="fas fa-headset"></i> DAILY CALL TRACKER
+    </div>
+</div>
+
+<div class="main">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+        <h1 style="margin:0; font-weight:800; font-size: 28px;">Customer Follow-up Log</h1>
+        <div id="stats" style="font-weight: 700; color: #64748b;">Total Calls Today: <span id="todayCount" style="color:var(--blue)">0</span></div>
+    </div>
+
+    <div class="grid-layout">
+        <!-- Input Form -->
+        <div class="panel">
+            <h3 style="margin-top:0; color: var(--blue); font-size: 18px;">Submit New Call Info</h3>
+            
+            <label>Executive Name</label>
+            <input type="text" id="staffName" placeholder="Your Name">
+            
+            <div class="grid-inputs">
+                <div><label>Client Name</label><input type="text" id="clientName" placeholder="Customer Name"></div>
+                <div><label>Phone Number</label><input type="number" id="clientPhone" placeholder="017XXXXXXXX"></div>
+            </div>
+
+            <div class="grid-inputs">
+                <div><label>Page Name / No.</label><input type="text" id="pageName" placeholder="Page Info"></div>
+                <div>
+                    <label>Customer Type</label>
+                    <select id="custType">
+                        <option value="Regular">Regular Customer</option>
+                        <option value="Irregular">Irregular / One-time</option>
+                    </select>
+                </div>
+            </div>
+            
+            <label>Remarks (Conversation Summary)</label>
+            <textarea id="remarks" placeholder="What did they say? (e.g. Will pay tomorrow)" rows="3"></textarea>
+            
+            <button class="btn-submit" onclick="submitCall()"><i class="fas fa-cloud-upload-alt"></i> SAVE CALL RECORD</button>
+        </div>
+
+        <!-- Monitoring Board -->
+        <div class="panel">
+            <h3 style="margin:0 0 20px 0; font-size: 18px;">Live Call Logs</h3>
+            <div class="table-wrap">
+                <table id="callTable">
+                    <thead>
+                        <tr><th>Time</th><th>Staff</th><th>Client</th><th>Page</th><th>Type</th><th>Remarks</th><th>Del</th></tr>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
+            <button onclick="wipe()" style="margin-top:20px; background:none; border:none; color:var(--red); cursor:pointer; font-size:10px; font-weight:800;">Reset (8087)</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+<script>
+    const firebaseConfig = { 
+        apiKey: "AIzaSyBrz1xvq4Fpt9-j75-gUS4d8ebqPRLmOK0", 
+        databaseURL: "https://sales-report-nugortech-it-default-rtdb.firebaseio.com", 
+        projectId: "sales-report-nugortech-it", 
+        appId: "1:848643315031:web:e6fbf92153490ea9d31a12" 
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    function submitCall() {
+        const staff = document.getElementById('staffName').value;
+        const phone = document.getElementById('clientPhone').value;
+        if(!staff || !phone) return alert("Fill Name & Phone Number!");
+
+        const data = {
+            staff: staff,
+            client: document.getElementById('clientName').value,
+            phone: phone,
+            page: document.getElementById('pageName').value,
+            type: document.getElementById('custType').value,
+            remarks: document.getElementById('remarks').value,
+            time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+            date: new Date().toLocaleDateString('en-GB').replace(/\//g, "-")
+        };
+
+        db.ref('customer_calls').push(data).then(() => {
+            alert("Record Saved!");
+            document.getElementById('clientName').value = "";
+            document.getElementById('clientPhone').value = "";
+            document.getElementById('remarks').value = "";
+        });
+    }
+
+    db.ref('customer_calls').on('value', snap => {
+        const tbody = document.getElementById('tbody'); tbody.innerHTML = "";
+        const all = snap.val();
+        let count = 0;
+        const todayStr = new Date().toLocaleDateString('en-GB').replace(/\//g, "-");
+
+        if(all) {
+            Object.keys(all).reverse().forEach(k => {
+                const d = all[k];
+                if(d.date === todayStr) count++;
+
+                let typeBadge = d.type === "Regular" ? "b-reg" : "b-irreg";
+
+                tbody.innerHTML += `<tr>
+                    <td style="font-size:10px; opacity:0.6;">${d.time}<br>${d.date}</td>
+                    <td style="color:var(--orange)">${d.staff}</td>
+                    <td>${d.client}<br><small>${d.phone}</small></td>
+                    <td>${d.page}</td>
+                    <td><span class="badge ${typeBadge}">${d.type}</span></td>
+                    <td style="font-size:11px; opacity:0.8; max-width:180px;">${d.remarks}</td>
+                    <td><button onclick="del('${k}')" style="background:none; border:none; color:red; cursor:pointer;"><i class="fas fa-trash"></i></button></td>
+                </tr>`;
+            });
+        }
+        document.getElementById('todayCount').innerText = count;
+    });
+
+    function del(k) { if(prompt("Pass: 8087") === "8087") db.ref('customer_calls/'+k).remove(); }
+    function wipe() { if(prompt("RESET ALL? 8087") === "8087") db.ref('customer_calls').remove(); }
+</script>
+</body>
+</html>
