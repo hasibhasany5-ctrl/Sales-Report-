@@ -2,43 +2,45 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Call Analytics | Nugortech Boss Mode</title>
+    <title>Call Hub Admin | Nugortech IT Ltd</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>body { background: #050810; font-family: 'Plus Jakarta Sans', sans-serif; color: white; }</style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background: #050810; font-family: 'Plus Jakarta Sans', sans-serif; color: white; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        /* পাসওয়ার্ড পপ-আপ ডিজাইন */
+        #pinModal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 1000; }
+        .modal-box { background: #111827; padding: 30px; border-radius: 25px; border: 1px solid #374151; width: 320px; text-align: center; box-shadow: 0 0 50px rgba(0, 163, 255, 0.2); }
+    </style>
 </head>
 <body class="p-10">
     <div class="max-w-7xl mx-auto">
-        <header class="flex justify-between items-center mb-8 bg-white/5 p-6 rounded-3xl border border-white/10">
+        <header class="flex justify-between items-center mb-8 glass p-6 rounded-3xl">
             <div>
                 <h1 class="text-3xl font-black">Call Monitoring Hub</h1>
-                <p class="text-xs text-blue-400 font-bold uppercase tracking-widest mt-1">Nugortech IT Ltd</p>
+                <p class="text-xs text-blue-400 font-bold uppercase tracking-widest mt-1">Boss Monitoring Center</p>
             </div>
             <div class="text-right">
-                <p class="text-[10px] opacity-50 uppercase font-bold">Total Daily Follow-ups</p>
+                <p class="text-[10px] opacity-50 uppercase font-bold">Total Follow-ups</p>
                 <p id="tCount" class="text-4xl font-black text-orange-500">0</p>
             </div>
         </header>
 
-        <div class="bg-white/5 border border-white/10 p-8 rounded-[40px] backdrop-blur-xl shadow-2xl">
+        <div class="glass p-8 rounded-[40px] shadow-2xl">
             <div class="flex justify-between mb-8">
-                <input type="text" id="find" onkeyup="filter()" placeholder="Search Staff, Date or Customer Type..." class="bg-white/5 border border-white/10 p-4 rounded-2xl outline-none focus:border-blue-500 w-1/3 text-sm">
+                <input type="text" id="find" onkeyup="filter()" placeholder="Search Staff or Date..." class="bg-white/5 border border-white/10 p-4 rounded-2xl outline-none focus:border-blue-500 w-1/3 text-sm text-white">
                 <div class="flex gap-4">
-                    <button onclick="exportCSV()" class="bg-blue-600 px-6 py-2 rounded-xl text-xs font-bold uppercase">Export Excel</button>
-                    <button onclick="wipe()" class="bg-red-600/20 text-red-500 px-6 py-2 rounded-xl text-xs font-bold uppercase">Clear (8087)</button>
+                    <button onclick="exportCSV()" class="bg-blue-600 px-6 py-2 rounded-xl text-xs font-bold uppercase hover:bg-blue-500 transition-all">Export Excel</button>
+                    <button onclick="askPIN('WIPE')" class="bg-red-600/20 text-red-500 px-6 py-2 rounded-xl text-xs font-bold uppercase border border-red-500/20">Clear (8087)</button>
                 </div>
             </div>
             
-            <div class="overflow-x-auto max-h-[600px]">
+            <div class="overflow-x-auto max-h-[550px]">
                 <table id="callTable" class="w-full text-left">
-                    <thead class="sticky top-0 bg-[#050810] border-b border-white/10">
+                    <thead class="sticky top-0 bg-[#050810] border-b border-white/10 z-10">
                         <tr class="text-[10px] text-slate-500 uppercase">
-                            <th class="p-4">Date/Time</th>
-                            <th class="p-4">Executive</th>
-                            <th class="p-4">Client Info</th>
-                            <th class="p-4">Type</th>
-                            <th class="p-4">Remarks</th>
-                            <th class="p-4">Del</th>
+                            <th class="p-4">Date/Time</th><th class="p-4">Executive</th><th class="p-4">Client Info</th><th class="p-4">Type</th><th class="p-4">Remarks</th><th class="p-4">Del</th>
                         </tr>
                     </thead>
                     <tbody id="tbody" class="text-sm"></tbody>
@@ -47,6 +49,20 @@
         </div>
     </div>
 
+    <!-- গোপন পাসওয়ার্ড পপ-আপ -->
+    <div id="pinModal">
+        <div class="modal-box">
+            <i class="fas fa-lock text-blue-500 text-3xl mb-4"></i>
+            <h3 class="font-bold mb-4">Enter Admin PIN</h3>
+            <input type="password" id="adminPIN" placeholder="****" class="w-full bg-black/50 border border-white/10 p-3 rounded-xl text-center text-xl tracking-[1em] mb-6 outline-none focus:border-blue-500">
+            <div class="flex gap-3">
+                <button onclick="confirmAction()" class="flex-1 bg-blue-600 py-3 rounded-xl font-bold">OK</button>
+                <button onclick="closeModal()" class="flex-1 bg-slate-800 py-3 rounded-xl font-bold">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script>
@@ -54,6 +70,10 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
+        let pendingAction = null;
+        let pendingKey = null;
+
+        // ডাটা লোড
         db.ref('customer_calls').on('value', snap => {
             const tbody = document.getElementById('tbody'); tbody.innerHTML = "";
             let count = 0; const today = new Date().toLocaleDateString('en-GB').replace(/\//g, "-");
@@ -61,42 +81,53 @@
                 Object.keys(snap.val()).reverse().forEach(k => {
                     const d = snap.val()[k];
                     if(d.date === today) count++;
-
-                    let badgeColor = d.type === 'Regular' ? 'bg-green-500/10 text-green-500' : (d.type === 'Irregular' ? 'bg-red-500/10 text-red-500' : 'bg-yellow-500/10 text-yellow-500');
-
-                    tbody.innerHTML += `<tr class="border-b border-white/5 hover:bg-white/5">
+                    let badge = d.type === 'Regular' ? 'text-green-500 bg-green-500/10' : (d.type === 'Irregular' ? 'text-red-500 bg-red-500/10' : 'text-yellow-500 bg-yellow-500/10');
+                    tbody.innerHTML += `<tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
                         <td class="p-4 opacity-50 text-[10px]">${d.date}<br>${d.time}</td>
                         <td class="p-4 font-bold text-orange-500 uppercase">${d.staff}</td>
-                        <td class="p-4 font-bold">${d.client}<br><span class="text-blue-400 font-medium">${d.phone}</span></td>
-                        <td class="p-4"><span class="px-2 py-1 rounded-md text-[9px] font-black uppercase ${badgeColor}">${d.type}</span></td>
+                        <td class="p-4"><strong>${d.client}</strong><br><span class="text-blue-400 font-medium">${d.phone}</span></td>
+                        <td class="p-4"><span class="px-2 py-1 rounded-md text-[9px] font-black uppercase ${badge}">${d.type}</span></td>
                         <td class="p-4 opacity-70 italic text-xs max-w-xs">${d.remarks}</td>
-                        <td class="p-4"><button onclick="del('${k}')" class="text-slate-700 hover:text-red-500"><i class="fas fa-trash"></i></button></td>
+                        <td class="p-4"><button onclick="askPIN('DEL', '${k}')" class="text-slate-700 hover:text-red-500"><i class="fas fa-trash"></i></button></td>
                     </tr>`;
                 });
             }
             document.getElementById('tCount').innerText = count;
         });
 
+        // পাসওয়ার্ড হ্যান্ডেলিং
+        function askPIN(action, key) {
+            pendingAction = action; pendingKey = key;
+            document.getElementById('pinModal').style.display = "flex";
+            document.getElementById('adminPIN').focus();
+        }
+        function closeModal() { document.getElementById('pinModal').style.display = "none"; document.getElementById('adminPIN').value = ""; }
+
+        function confirmAction() {
+            const pin = document.getElementById('adminPIN').value;
+            if(pin === "8087") {
+                if(pendingAction === "DEL") db.ref('customer_calls/' + pendingKey).remove();
+                else if(pendingAction === "WIPE") db.ref('customer_calls').remove();
+                closeModal();
+            } else { alert("Wrong PIN!"); }
+        }
+
         function filter() {
             const val = document.getElementById('find').value.toUpperCase();
             const rows = document.getElementById('tbody').getElementsByTagName('tr');
             for (let r of rows) { r.style.display = r.innerText.toUpperCase().includes(val) ? "" : "none"; }
         }
-        function del(k) { if(prompt("8087 PIN?") === "8087") db.ref('customer_calls/'+k).remove(); }
-        function wipe() { if(prompt("8087 PIN?") === "8087") db.ref('customer_calls').remove(); }
+
         function exportCSV() {
-            let csv = "Date,Time,Executive,Client,Phone,Type,Remarks\n";
+            let csv = "\uFEFFDate,Time,Executive,Client,Phone,Type,Remarks\n";
             document.querySelectorAll("#callTable tr").forEach((row, i) => {
                 if(i === 0) return;
                 let cols = row.querySelectorAll("td");
-                let rowData = Array.from(cols).slice(0, 5).map(c => c.innerText.replace(/\n/g, " "));
-                rowData.push(cols[5].innerText);
-                csv += rowData.join(",") + "\n";
+                csv += Array.from(cols).slice(0, 5).map(c => c.innerText.replace(/\n/g, " ")).join(",") + "," + cols[5].innerText + "\n";
             });
-            let blob = new Blob(["\ufeff" + csv], { type: 'text/csv;charset=utf-8;' });
-            let link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "Call_Report.csv"; link.click();
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "Call_Report.csv"; link.click();
         }
     </script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </body>
 </html>
