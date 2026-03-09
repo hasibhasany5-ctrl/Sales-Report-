@@ -3,50 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Call Entry | Nugortech IT Ltd</title>
+    <title>Bulk Call Entry | Nugortech IT Ltd</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background: #0b1120; font-family: 'Plus Jakarta Sans', sans-serif; color: white; }
         .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        input, select, textarea { background: rgba(255, 255, 255, 0.05) !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; color: white !important; font-size: 12px !important; padding: 10px !important; border-radius: 10px !important; width: 100%; outline: none; }
+        input:focus, select:focus { border-color: #00A3FF !important; }
+        th { font-size: 10px; color: #64748b; text-transform: uppercase; padding: 10px; text-align: left; }
     </style>
 </head>
-<body class="flex justify-center items-center min-h-screen p-6">
-    <div class="glass p-8 rounded-[35px] w-full max-w-md shadow-2xl">
-        <div class="text-center mb-8">
-            <h2 class="text-2xl font-extrabold">Nugortech IT Ltd</h2>
-            <p class="text-[10px] text-orange-500 font-bold uppercase tracking-widest mt-2">Daily Call Entry Portal</p>
+<body class="p-6">
+    <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-10">
+            <h1 class="text-3xl font-black tracking-tight">NUGORTECH <span class="text-blue-500">IT</span></h1>
+            <p class="text-[10px] text-orange-500 font-bold uppercase tracking-[0.3em] mt-2">Daily 5-Call Follow-up Portal</p>
         </div>
 
-        <div class="space-y-4">
-            <div><label class="text-[10px] font-bold text-blue-400 ml-2 uppercase">Your Name</label>
-            <input type="text" id="staffName" class="w-full bg-white/5 border border-white/10 p-3 rounded-xl outline-none focus:border-blue-500 text-sm mt-1" placeholder="Executive Name"></div>
-            
-            <div class="grid grid-cols-2 gap-3">
-                <div><label class="text-[10px] font-bold text-blue-400 ml-2 uppercase">Client Name</label>
-                <input type="text" id="cName" class="w-full bg-white/5 border border-white/10 p-3 rounded-xl outline-none focus:border-blue-500 text-sm mt-1" placeholder="Customer Name"></div>
-                <div><label class="text-[10px] font-bold text-blue-400 ml-2 uppercase">Phone No</label>
-                <input type="number" id="cPhone" class="w-full bg-white/5 border border-white/10 p-3 rounded-xl outline-none focus:border-blue-500 text-sm mt-1" placeholder="017..."></div>
+        <div class="glass p-8 rounded-[40px] shadow-2xl">
+            <!-- Executive Info -->
+            <div class="mb-8 max-w-sm">
+                <label class="text-[10px] font-bold text-blue-400 ml-2 uppercase">Executive Name</label>
+                <input type="text" id="staffName" placeholder="Enter Your Name" class="mt-1">
             </div>
 
-            <div class="grid grid-cols-2 gap-3">
-                <div><label class="text-[10px] font-bold text-blue-400 ml-2 uppercase">Page Name/No</label>
-                <input type="text" id="pNo" class="w-full bg-white/5 border border-white/10 p-3 rounded-xl outline-none focus:border-blue-500 text-sm mt-1" placeholder="Page Details"></div>
-                <div><label class="text-[10px] font-bold text-blue-400 ml-2 uppercase">Customer Type</label>
-                <select id="cType" class="w-full bg-slate-800 border border-white/10 p-3 rounded-xl outline-none focus:border-blue-500 text-sm mt-1">
-                    <option value="Regular">Regular</option>
-                    <option value="Irregular">Irregular</option>
-                </select></div>
+            <!-- Bulk Entry Table -->
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr>
+                            <th width="5%">#</th>
+                            <th width="20%">Client Name</th>
+                            <th width="15%">Phone Number</th>
+                            <th width="20%">Customer Type</th>
+                            <th width="40%">Remarks (Conversation Details)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="callRows">
+                        <!-- 5 Rows for Bulk Entry -->
+                        <script>
+                            for(let i=1; i<=5; i++) {
+                                document.write(`
+                                    <tr class="call-entry-row">
+                                        <td class="p-2 text-slate-500 font-bold">${i}</td>
+                                        <td class="p-2"><input type="text" class="c-name" placeholder="Name"></td>
+                                        <td class="p-2"><input type="number" class="c-phone" placeholder="017..."></td>
+                                        <td class="p-2">
+                                            <select class="c-type">
+                                                <option value="Regular">Regular (নিমিত)</option>
+                                                <option value="Irregular">Irregular (অনিয়মিত)</option>
+                                                <option value="Occasional">Occasional Service (মাঝে মাঝে নেয়)</option>
+                                            </select>
+                                        </td>
+                                        <td class="p-2"><textarea class="c-notes" rows="1" placeholder="What happened on call?"></textarea></td>
+                                    </tr>
+                                `);
+                            }
+                        </script>
+                    </tbody>
+                </table>
             </div>
 
-            <div><label class="text-[10px] font-bold text-blue-400 ml-2 uppercase">Remarks</label>
-            <textarea id="notes" class="w-full bg-white/5 border border-white/10 p-3 rounded-xl outline-none focus:border-blue-500 text-sm mt-1" rows="3" placeholder="What did they say?"></textarea></div>
-
-            <button onclick="submitCall()" class="w-full bg-gradient-to-r from-orange-500 to-blue-500 p-4 rounded-2xl font-extrabold uppercase text-sm shadow-lg hover:scale-[1.02] transition-all">Submit Call Record</button>
+            <div class="mt-10 flex justify-center">
+                <button onclick="submitBulkCalls()" class="bg-gradient-to-r from-orange-600 to-blue-600 px-12 py-4 rounded-2xl font-black uppercase text-sm shadow-xl hover:scale-[1.05] transition-all">
+                    Sync All 5 Records to Hub
+                </button>
+            </div>
+            <p id="status" class="mt-6 text-center font-bold text-sm"></p>
         </div>
-        <div id="status" class="mt-4 text-center font-bold text-xs"></div>
     </div>
 
+    <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script>
@@ -54,21 +82,38 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        function submitCall() {
+        async function submitBulkCalls() {
             const staff = document.getElementById('staffName').value;
-            const phone = document.getElementById('cPhone').value;
-            if(!staff || !phone) return alert("Please fill Name & Phone!");
+            if(!staff) return alert("Executive Name is required!");
 
-            const data = {
-                staff, phone, client: document.getElementById('cName').value, page: document.getElementById('pNo').value, type: document.getElementById('cType').value, remarks: document.getElementById('notes').value,
-                time: new Date().toLocaleTimeString(), date: new Date().toLocaleDateString('en-GB').replace(/\//g, "-")
-            };
+            const rows = document.querySelectorAll('.call-entry-row');
+            let promises = [];
+            const date = new Date().toLocaleDateString('en-GB').replace(/\//g, "-");
+            const time = new Date().toLocaleTimeString();
 
-            db.ref('customer_calls').push(data).then(() => {
-                document.getElementById('status').innerText = "✅ Record Sent to Admin!";
-                document.getElementById('cName').value = ""; document.getElementById('cPhone').value = ""; document.getElementById('notes').value = "";
-                setTimeout(()=> document.getElementById('status').innerText="", 3000);
+            rows.forEach(row => {
+                const name = row.querySelector('.c-name').value;
+                const phone = row.querySelector('.c-phone').value;
+                const type = row.querySelector('.c-type').value;
+                const remarks = row.querySelector('.c-notes').value;
+
+                // শুধু সেই রোগুলো সেভ হবে যেগুলোতে নাম আর ফোন আছে
+                if(name && phone) {
+                    const data = { staff, client: name, phone, type, remarks, time, date };
+                    promises.push(db.ref('customer_calls').push(data));
+                }
             });
+
+            if(promises.length === 0) return alert("Please fill at least one client info!");
+
+            document.getElementById('status').innerText = "⏳ Syncing with Cloud...";
+            
+            Promise.all(promises).then(() => {
+                document.getElementById('status').className = "mt-6 text-center font-bold text-sm text-green-500";
+                document.getElementById('status').innerText = "✅ All Records Submitted Successfully!";
+                // ফর্ম ক্লিয়ার করা
+                document.querySelectorAll('.c-name, .c-phone, .c-notes').forEach(i => i.value = "");
+            }).catch(err => alert("Error: " + err.message));
         }
     </script>
 </body>
