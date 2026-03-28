@@ -3,205 +3,254 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Control Center | Nugortech IT Ltd</title>
-    <!-- Premium Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>Content Calendar | Nugortech IT Ltd</title>
+    <!-- Modern UI Fonts & Icons -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root { --p: #FF6B00; --b: #00A3FF; --s: #10b981; --bg: #0b1120; --card: rgba(255,255,255,0.03); --border: rgba(255,255,255,0.1); }
-        * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-        body { margin: 0; background: var(--bg); color: white; display: flex; min-height: 100vh; overflow-x: hidden; }
-
-        /* Sidebar */
-        .sidebar { width: 280px; background: rgba(0,0,0,0.3); backdrop-filter: blur(20px); border-right: 1px solid var(--border); padding: 40px 25px; position: fixed; height: 100vh; z-index: 100; }
-        .logo-box { text-align: center; margin-bottom: 40px; }
-        .logo-text { font-size: 22px; font-weight: 800; color: white; margin: 0; }
-        .logo-slogan { font-size: 9px; color: var(--p); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
-
-        .main { margin-left: 280px; width: calc(100% - 280px); padding: 40px; }
-
-        /* Stats Row */
-        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 35px; }
-        .stat-card { padding: 30px; border-radius: 30px; border: 1px solid var(--border); text-align: center; background: var(--card); transition: 0.3s; }
-        .stat-val { font-size: 32px; font-weight: 800; color: var(--b); display: block; }
-        .stat-lbl { font-size: 11px; font-weight: 700; opacity: 0.6; text-transform: uppercase; }
-
-        /* Layout Grid */
-        .grid-layout { display: grid; grid-template-columns: 1fr 2.5fr; gap: 30px; }
-        .panel { background: var(--card); border: 1px solid var(--border); padding: 30px; border-radius: 40px; backdrop-filter: blur(15px); }
-
-        label { font-size: 10px; font-weight: 800; color: var(--b); margin-bottom: 8px; display: block; text-transform: uppercase; }
-        input, select, textarea { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 12px; border-radius: 12px; color: white; outline: none; margin-bottom: 15px; font-size: 14px; }
-        input:focus { border-color: var(--b); }
-
-        .btn { padding: 15px; border: none; border-radius: 18px; font-weight: 800; cursor: pointer; transition: 0.3s; color: white; width: 100%; }
-        .btn-assign { background: linear-gradient(to right, var(--p), var(--b)); }
-        
-        /* Task Cards UI */
-        .task-list { max-height: 550px; overflow-y: auto; padding-right: 10px; }
-        .task-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 20px; border-radius: 25px; margin-bottom: 15px; position: relative; }
-        .priority-high { border-left: 5px solid var(--red); }
-        .priority-normal { border-left: 5px solid var(--b); }
-        
-        .task-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
-        .task-name { font-size: 16px; font-weight: 800; margin: 0; }
-        .task-meta { font-size: 11px; color: #64748b; margin-top: 5px; }
-
-        .status-pill { padding: 5px 12px; border-radius: 10px; font-size: 10px; font-weight: 800; text-transform: uppercase; }
-        .s-pending { background: rgba(255, 255, 255, 0.05); color: #94a3b8; }
-        .s-progress { background: rgba(0, 163, 255, 0.1); color: var(--b); }
-        .s-done { background: rgba(16, 185, 129, 0.1); color: var(--s); }
-
-        .action-grid { display: flex; gap: 10px; margin-top: 15px; }
-        .small-btn { padding: 8px 15px; font-size: 11px; border-radius: 8px; flex: 1; border: 1px solid var(--border); background: var(--card); color: white; cursor: pointer; }
-        .btn-done { background: var(--s); border: none; color: #000; }
-
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: var(--b); border-radius: 10px; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #050810; color: white; }
+        .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        input, select, textarea { background: rgba(255, 255, 255, 0.05) !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; color: white !important; outline: none; transition: 0.3s; }
+        input:focus, select:focus, textarea:focus { border-color: #00A3FF !important; background: rgba(255, 255, 255, 0.1) !important; }
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-thumb { background: #00A3FF; border-radius: 10px; }
     </style>
 </head>
-<body>
+<body class="flex min-h-screen overflow-x-hidden">
 
-<div class="sidebar">
-    <div class="logo-box">
-        <h2 class="logo-text">NUGORTECH IT</h2>
-        <p class="logo-slogan">Different Creative Think</p>
-    </div>
-    <div style="padding:15px; border-radius:15px; background:var(--card); border:1px solid var(--b); color:var(--b); font-weight:800; text-align:center; font-size:12px;">
-        <i class="fas fa-list-check"></i> TASK COMMAND CENTER
-    </div>
-</div>
-
-<div class="main">
-    <div class="stat-grid">
-        <div class="stat-card"><span class="stat-val" id="totalTasks">0</span><span class="stat-lbl">Assigned Tasks</span></div>
-        <div class="stat-card"><span class="stat-val" id="inProgress" style="color:var(--p)">0</span><span class="stat-lbl">In Progress</span></div>
-        <div class="stat-card"><span class="stat-val" id="completedTasks" style="color:var(--s)">0</span><span class="stat-lbl">Completed</span></div>
-    </div>
-
-    <div class="grid-layout">
-        <!-- Task Assignment (Admin Only) -->
-        <div class="panel">
-            <h3 style="margin-top:0; color: var(--b); font-size: 18px;">Assign New Task</h3>
-            <label>Employee Name/ID</label>
-            <input type="text" id="targetEmp" placeholder="e.g. #1001 or Hasib">
-            
-            <label>Task Title</label>
-            <input type="text" id="taskTitle" placeholder="What needs to be done?">
-            
-            <label>Priority Level</label>
-            <select id="priority">
-                <option value="Normal">Normal Priority</option>
-                <option value="High">🔥 High Priority</option>
-            </select>
-
-            <label>Deadline</label>
-            <input type="text" id="deadline" placeholder="e.g. Today 5:00 PM">
-            
-            <textarea id="details" placeholder="Additional details or instructions..." rows="3"></textarea>
-            
-            <button class="btn btn-assign" onclick="assignTask()"><i class="fas fa-paper-plane"></i> PUBLISH TASK</button>
+    <!-- Sidebar -->
+    <div class="w-[280px] bg-black/40 backdrop-blur-3xl border-r border-white/5 p-8 fixed h-full z-50">
+        <div class="text-center mb-10">
+            <h2 class="text-2xl font-black tracking-tighter">NUGORTECH <span class="text-blue-500">IT</span></h2>
+            <p class="text-[9px] text-orange-500 font-bold uppercase tracking-[3px] mt-1">Content Strategy Hub</p>
         </div>
-
-        <!-- Task Monitoring Board -->
-        <div class="panel">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
-                <h3 style="margin:0; font-size: 18px;">Live Project Progress</h3>
-                <input type="text" id="search" onkeyup="filterTasks()" placeholder="Search by Employee..." style="width:250px; margin-bottom:0;">
+        <div class="space-y-4">
+            <div class="p-4 rounded-2xl bg-blue-600/10 border border-blue-500/20 text-blue-400 text-center font-bold text-xs uppercase tracking-widest">
+                <i class="fas fa-calendar-alt mr-2"></i> Content Calendar
             </div>
-            
-            <div class="task-list" id="taskBoard">
-                <!-- Tasks will load here -->
-            </div>
+            <a href="home.html" class="block p-4 rounded-2xl hover:bg-white/5 text-slate-500 hover:text-white transition-all text-xs font-bold uppercase">
+                <i class="fas fa-home mr-2"></i> Master Hub
+            </a>
         </div>
     </div>
-</div>
 
-<!-- Firebase Compat SDK -->
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <!-- Main Content -->
+    <div class="ml-[280px] w-full p-8 lg:p-12">
+        
+        <!-- Summary Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+            <div class="glass p-6 rounded-[30px] text-center border-b-4 border-blue-500">
+                <span class="text-3xl font-black block" id="statTotal">0</span>
+                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Total Plans</span>
+            </div>
+            <div class="glass p-6 rounded-[30px] text-center border-b-4 border-orange-500">
+                <span class="text-3xl font-black block text-orange-500" id="statPending">0</span>
+                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">In Progress</span>
+            </div>
+            <div class="glass p-6 rounded-[30px] text-center border-b-4 border-emerald-500">
+                <span class="text-3xl font-black block text-emerald-500" id="statDone">0</span>
+                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Published</span>
+            </div>
+            <div class="glass p-6 rounded-[30px] text-center border-b-4 border-purple-500">
+                <span class="text-3xl font-black block text-purple-500" id="statToday">0</span>
+                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Today's Goal</span>
+            </div>
+        </div>
 
-<script>
-    const firebaseConfig = { 
-        apiKey: "AIzaSyBrz1xvq4Fpt9-j75-gUS4d8ebqPRLmOK0", 
-        databaseURL: "https://sales-report-nugortech-it-default-rtdb.firebaseio.com", 
-        projectId: "sales-report-nugortech-it", 
-        appId: "1:848643315031:web:e6fbf92153490ea9d31a12" 
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-
-    function assignTask() {
-        const emp = document.getElementById('targetEmp').value;
-        const title = document.getElementById('taskTitle').value;
-        if(!emp || !title) return alert("Fill Name & Title!");
-
-        const data = {
-            emp: emp,
-            title: title,
-            priority: document.getElementById('priority').value,
-            deadline: document.getElementById('deadline').value,
-            details: document.getElementById('details').value,
-            status: "Pending",
-            assignedAt: new Date().toLocaleString()
-        };
-
-        db.ref('nugor_tasks').push(data).then(() => {
-            alert("Task Assigned Live!");
-            document.getElementById('taskTitle').value = "";
-            document.getElementById('details').value = "";
-        });
-    }
-
-    db.ref('nugor_tasks').on('value', snap => {
-        const board = document.getElementById('taskBoard'); board.innerHTML = "";
-        const all = snap.val();
-        let total = 0, prog = 0, done = 0;
-
-        if(all) {
-            Object.keys(all).reverse().forEach(k => {
-                const t = all[k];
-                total++;
-                if(t.status === "In Progress") prog++;
-                if(t.status === "Completed") done++;
-
-                let pClass = t.priority === "High" ? "priority-high" : "priority-normal";
-                let sClass = t.status === "In Progress" ? "s-progress" : (t.status === "Completed" ? "s-done" : "s-pending");
-
-                board.innerHTML += `
-                    <div class="task-card ${pClass}">
-                        <div class="task-header">
-                            <div>
-                                <h4 class="task-name">${t.title}</h4>
-                                <div class="task-meta">Assigned to: <strong>${t.emp}</strong> | Deadline: ${t.deadline}</div>
-                            </div>
-                            <span class="status-pill ${sClass}">${t.status}</span>
-                        </div>
-                        <p style="font-size:12px; color:#94a3b8; margin:10px 0;">${t.details || 'No extra details provided.'}</p>
-                        
-                        <div class="action-grid">
-                            <button class="small-btn" onclick="updateTask('${k}', 'In Progress')">Start</button>
-                            <button class="small-btn btn-done" onclick="updateTask('${k}', 'Completed')">Complete</button>
-                            <button class="small-btn" style="border-color:red; color:red;" onclick="delTask('${k}')"><i class="fas fa-trash"></i></button>
-                        </div>
+        <!-- Planning Form (Collapsible for Boss) -->
+        <div class="glass p-8 rounded-[40px] mb-10">
+            <h3 class="text-lg font-extrabold text-blue-400 mb-6 flex items-center gap-3">
+                <i class="fas fa-plus-circle"></i> Create New Content Plan
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div>
+                    <label class="text-[10px] font-bold text-slate-500 uppercase mb-2 block">Publish Date</label>
+                    <input type="date" id="pubDate" class="w-full p-3 rounded-xl text-sm">
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-slate-500 uppercase mb-2 block">Content Type</label>
+                    <select id="cType" class="w-full p-3 rounded-xl text-sm">
+                        <option value="Images">Images</option>
+                        <option value="Video/Reels">Video / Reels</option>
+                        <option value="Carousel">Carousel</option>
+                        <option value="Article/Blog">Article / Blog</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-slate-500 uppercase mb-2 block">Assign To</label>
+                    <select id="assignTo" class="w-full p-3 rounded-xl text-sm text-blue-400 font-bold">
+                        <option value="Emon">MD: EMON</option>
+                        <option value="Hasan Ali">MD: HASAN ALI</option>
+                        <option value="Nur Islam">MD: NUR ISLAM</option>
+                        <option value="Shakhayat">MD: SHAKHAYAT</option>
+                        <option value="Manir">MD: MANIR</option>
+                        <option value="Atikur">MD: ATIKUR</option>
+                        <option value="Hasib">MD: AL HASIB</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-slate-500 uppercase mb-2 block">Status</label>
+                    <select id="cStatus" class="w-full p-3 rounded-xl text-sm">
+                        <option value="Pending">Pending</option>
+                        <option value="Working">Working</option>
+                        <option value="Review">In Review</option>
+                        <option value="Complited">Complited</option>
+                    </select>
+                </div>
+                <div class="md:col-span-2">
+                    <label class="text-[10px] font-bold text-slate-500 uppercase mb-2 block">Content Idea / Ref Link</label>
+                    <input type="text" id="cIdea" placeholder="Idea summary or reference link" class="w-full p-3 rounded-xl text-sm">
+                </div>
+                <div class="md:col-span-2">
+                    <label class="text-[10px] font-bold text-slate-500 uppercase mb-2 block">Purpose</label>
+                    <input type="text" id="cPurpose" placeholder="e.g. Service Promotion" class="w-full p-3 rounded-xl text-sm">
+                </div>
+                <div class="md:col-span-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="text-[10px] font-bold text-slate-500 uppercase mb-2 block">Script</label>
+                        <textarea id="cScript" rows="3" class="w-full p-3 rounded-xl text-xs" placeholder="Video script here..."></textarea>
                     </div>
-                `;
+                    <div>
+                        <label class="text-[10px] font-bold text-slate-500 uppercase mb-2 block">AD Copy</label>
+                        <textarea id="cAdCopy" rows="3" class="w-full p-3 rounded-xl text-xs" placeholder="Primary text..."></textarea>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-slate-500 uppercase mb-2 block">Post Caption</label>
+                        <textarea id="cCaption" rows="3" class="w-full p-3 rounded-xl text-xs" placeholder="Social media caption..."></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-6 flex justify-end">
+                <button onclick="savePlan()" class="bg-gradient-to-r from-blue-600 to-blue-400 px-10 py-4 rounded-2xl font-black uppercase text-sm shadow-xl hover:scale-[1.03] transition-all">
+                    Publish to Calendar
+                </button>
+            </div>
+        </div>
+
+        <!-- Master List Board -->
+        <div class="glass p-8 rounded-[40px]">
+            <div class="flex justify-between items-center mb-8">
+                <h3 class="text-xl font-black">Calendar Timeline</h3>
+                <div class="flex gap-4">
+                    <input type="text" id="src" onkeyup="filter()" placeholder="Search staff or content..." class="p-3 rounded-xl text-xs w-64 border-white/10">
+                    <button onclick="wipe()" class="text-red-500 text-[10px] font-bold uppercase hover:underline">Clear (8087)</button>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left min-w-[1200px]">
+                    <thead>
+                        <tr class="text-[10px] text-slate-500 uppercase border-b border-white/5">
+                            <th class="p-4">Publish Date</th>
+                            <th class="p-4">Staff</th>
+                            <th class="p-4">Type</th>
+                            <th class="p-4">Idea / Purpose</th>
+                            <th class="p-4">AD Copy & Caption</th>
+                            <th class="p-4">Status</th>
+                            <th class="p-4 text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody" class="text-sm">
+                        <!-- Data load here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script>
+        const firebaseConfig = { 
+            apiKey: "AIzaSyBrz1xvq4Fpt9-j75-gUS4d8ebqPRLmOK0", 
+            databaseURL: "https://sales-report-nugortech-it-default-rtdb.firebaseio.com", 
+            projectId: "sales-report-nugortech-it", 
+            appId: "1:848643315031:web:e6fbf92153490ea9d31a12" 
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        function savePlan() {
+            const data = {
+                entryDate: new Date().toLocaleDateString('en-GB'),
+                pubDate: document.getElementById('pubDate').value,
+                type: document.getElementById('cType').value,
+                assign: document.getElementById('assignTo').value,
+                status: document.getElementById('cStatus').value,
+                idea: document.getElementById('cIdea').value,
+                purpose: document.getElementById('cPurpose').value,
+                script: document.getElementById('cScript').value,
+                adCopy: document.getElementById('cAdCopy').value,
+                caption: document.getElementById('cCaption').value
+            };
+
+            if(!data.pubDate || !data.idea) return alert("Fill essential fields!");
+
+            db.ref('content_calendar').push(data).then(() => {
+                alert("Task Published!");
+                location.reload();
             });
         }
-        document.getElementById('totalTasks').innerText = total;
-        document.getElementById('inProgress').innerText = prog;
-        document.getElementById('completedTasks').innerText = done;
-    });
 
-    function updateTask(k, s) { db.ref('nugor_tasks/'+k).update({ status: s }); }
-    function delTask(k) { if(prompt("Pass: 8087") === "8087") db.ref('nugor_tasks/'+k).remove(); }
-    
-    function filterTasks() {
-        const val = document.getElementById('search').value.toUpperCase();
-        const cards = document.getElementsByClassName('task-card');
-        for (let c of cards) { c.style.display = c.innerText.toUpperCase().includes(val) ? "" : "none"; }
-    }
-</script>
+        db.ref('content_calendar').on('value', snap => {
+            const tbody = document.getElementById('tbody'); tbody.innerHTML = "";
+            const all = snap.val();
+            let total=0, pend=0, done=0, today=0;
+            const todayStr = new Date().toISOString().split('T')[0];
+
+            if(all) {
+                Object.keys(all).reverse().forEach(k => {
+                    const d = all[k];
+                    total++;
+                    if(d.status === "Complited") done++; else pend++;
+                    if(d.pubDate === todayStr) today++;
+
+                    let sClass = d.status === 'Complited' ? 'bg-emerald-500/20 text-emerald-500' : (d.status === 'Working' ? 'bg-blue-500/20 text-blue-500' : 'bg-slate-500/20 text-slate-400');
+
+                    tbody.innerHTML += `
+                        <tr class="border-b border-white/5 hover:bg-white/5 transition-all">
+                            <td class="p-4 font-bold text-blue-400">${d.pubDate}</td>
+                            <td class="p-4 font-black uppercase text-orange-500">${d.assign}</td>
+                            <td class="p-4 italic text-xs">${d.type}</td>
+                            <td class="p-4">
+                                <div class="font-bold text-white">${d.idea}</div>
+                                <div class="text-[10px] text-slate-500 mt-1">${d.purpose}</div>
+                            </td>
+                            <td class="p-4 max-w-xs">
+                                <div class="text-[10px] line-clamp-1 opacity-70">${d.adCopy}</div>
+                                <div class="text-[10px] line-clamp-1 text-blue-300 mt-1">${d.caption}</div>
+                            </td>
+                            <td class="p-4">
+                                <select onchange="updateStatus('${k}', this.value)" class="text-[10px] font-black p-1 rounded ${sClass}">
+                                    <option value="Pending" ${d.status === 'Pending' ? 'selected' : ''}>Pending</option>
+                                    <option value="Working" ${d.status === 'Working' ? 'selected' : ''}>Working</option>
+                                    <option value="Review" ${d.status === 'Review' ? 'selected' : ''}>Review</option>
+                                    <option value="Complited" ${d.status === 'Complited' ? 'selected' : ''}>Complited</option>
+                                </select>
+                            </td>
+                            <td class="p-4 text-center">
+                                <button onclick="del('${k}')" class="text-slate-700 hover:text-red-500"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
+            document.getElementById('statTotal').innerText = total;
+            document.getElementById('statPending').innerText = pend;
+            document.getElementById('statDone').innerText = done;
+            document.getElementById('statToday').innerText = today;
+        });
+
+        function updateStatus(k, s) { db.ref('content_calendar/'+k).update({ status: s }); }
+        function del(k) { if(prompt("8087 PIN?") === "8087") db.ref('content_calendar/'+k).remove(); }
+        function wipe() { if(prompt("8087 PIN?") === "8087") db.ref('content_calendar').remove(); }
+        function filter() {
+            const v = document.getElementById('src').value.toUpperCase();
+            const rows = document.getElementById('tbody').getElementsByTagName('tr');
+            for(let r of rows) { r.style.display = r.innerText.toUpperCase().includes(v) ? "" : "none"; }
+        }
+    </script>
 </body>
 </html>
