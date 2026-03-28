@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Content Calendar | Nugortech IT Ltd</title>
+    <title>Smart Content Calendar | Nugortech IT Ltd</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -12,6 +12,9 @@
         .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.08); }
         input, select, textarea { background: rgba(255, 255, 255, 0.05) !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; color: white !important; font-size: 13px !important; padding: 12px !important; border-radius: 12px !important; width: 100%; outline: none; }
         input:focus, select:focus, textarea:focus { border-color: #00A3FF !important; }
+        .table-text { white-space: pre-wrap; word-break: break-word; line-height: 1.6; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: #00A3FF; border-radius: 10px; }
     </style>
 </head>
 <body class="flex min-h-screen overflow-x-hidden">
@@ -34,6 +37,7 @@
 
     <!-- Main Content -->
     <div class="ml-[280px] w-full p-8 lg:p-12">
+        
         <!-- Stats Row -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
             <div class="glass p-6 rounded-[30px] text-center border-b-4 border-blue-500">
@@ -60,10 +64,7 @@
                 <i class="fas fa-plus-circle"></i> Create New Content Plan
             </h3>
             <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                <div>
-                    <label class="text-[10px] font-bold text-slate-500 uppercase mb-2 block">Publish Date</label>
-                    <input type="date" id="pubDate">
-                </div>
+                <div><label class="text-[10px] font-bold text-slate-500 uppercase mb-2 block">Publish Date</label><input type="date" id="pubDate"></div>
                 <div>
                     <label class="text-[10px] font-bold text-slate-500 uppercase mb-2 block">Content Type</label>
                     <select id="cType">
@@ -82,32 +83,20 @@
                         <option value="Hasib">MD: AL HASIB</option>
                     </select>
                 </div>
-                <div>
-                    <label class="text-[10px] font-bold text-slate-500 uppercase mb-2 block">Status</label>
-                    <select id="cStatus">
-                        <option value="Pending">Pending</option>
-                        <option value="Working">Working</option>
-                        <option value="Complited">Complited</option>
-                    </select>
-                </div>
-                <div class="md:col-span-2">
-                    <label class="text-[10px] font-bold text-slate-500 uppercase mb-2 block">Content Idea / Ref Link</label>
-                    <input type="text" id="cIdea" placeholder="Idea summary or link">
-                </div>
-                <div class="md:col-span-2">
-                    <label class="text-[10px] font-bold text-slate-500 uppercase mb-2 block">Purpose</label>
-                    <input type="text" id="cPurpose" placeholder="e.g. Service Promotion">
-                </div>
+                <div><label class="text-[10px] font-bold text-slate-500 uppercase mb-2 block">Status</label>
+                <select id="cStatus"><option value="Pending">Pending</option><option value="Working">Working</option><option value="Complited">Complited</option></select></div>
+                
+                <div class="md:col-span-2"><label class="text-[10px] font-bold text-slate-500 uppercase mb-2 block">Content Idea / Ref Link</label><input type="text" id="cIdea" placeholder="Idea summary or link"></div>
+                <div class="md:col-span-2"><label class="text-[10px] font-bold text-slate-500 uppercase mb-2 block">Purpose</label><input type="text" id="cPurpose" placeholder="e.g. Service Promotion"></div>
+                
                 <div class="md:col-span-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <textarea id="cScript" rows="3" placeholder="Script..."></textarea>
-                    <textarea id="cAdCopy" rows="3" placeholder="AD Copy..."></textarea>
-                    <textarea id="cCaption" rows="3" placeholder="Caption..."></textarea>
+                    <div><label class="text-[10px] font-bold text-slate-500 mb-1 block uppercase">Script</label><textarea id="cScript" rows="3" placeholder="Script details..."></textarea></div>
+                    <div><label class="text-[10px] font-bold text-slate-500 mb-1 block uppercase">AD Copy</label><textarea id="cAdCopy" rows="3" placeholder="Primary text..."></textarea></div>
+                    <div><label class="text-[10px] font-bold text-slate-500 mb-1 block uppercase">Post Caption</label><textarea id="cCaption" rows="3" placeholder="Final caption..."></textarea></div>
                 </div>
             </div>
             <div class="mt-6 flex justify-end">
-                <button onclick="savePlan()" class="bg-gradient-to-r from-blue-600 to-blue-400 px-10 py-4 rounded-2xl font-black uppercase text-sm shadow-xl hover:scale-[1.03] transition-all">
-                    Publish to Calendar
-                </button>
+                <button onclick="savePlan()" class="bg-gradient-to-r from-blue-600 to-blue-400 px-10 py-4 rounded-2xl font-black uppercase text-sm shadow-xl hover:scale-[1.03] transition-all">Publish to Calendar</button>
             </div>
         </div>
 
@@ -115,16 +104,21 @@
         <div class="glass p-8 rounded-[40px]">
             <div class="flex justify-between items-center mb-8">
                 <h3 class="text-xl font-black">Calendar Timeline</h3>
-                <div class="flex gap-4">
+                <div class="flex gap-4 items-center">
                     <input type="text" id="src" onkeyup="filter()" placeholder="Search staff..." class="w-64">
-                    <button onclick="wipe()" class="text-red-500 text-[10px] font-bold uppercase hover:underline">Clear (8087)</button>
+                    <button onclick="wipe()" class="text-red-500 text-[10px] font-bold uppercase hover:underline">Reset Database</button>
                 </div>
             </div>
             <div class="overflow-x-auto">
-                <table class="w-full text-left min-w-[1000px]">
+                <table class="w-full text-left min-w-[1200px]">
                     <thead>
                         <tr class="text-[10px] text-slate-500 uppercase border-b border-white/5">
-                            <th class="p-4">Date</th><th class="p-4">Staff</th><th class="p-4">Idea</th><th class="p-4">Copy/Caption</th><th class="p-4">Status</th><th class="p-4">Del</th>
+                            <th class="p-4" width="10%">Date</th>
+                            <th class="p-4" width="10%">Staff</th>
+                            <th class="p-4" width="20%">Idea & Purpose</th>
+                            <th class="p-4" width="45%">Script / Copy / Caption</th>
+                            <th class="p-4" width="10%">Status</th>
+                            <th class="p-4 text-center" width="5%">Del</th>
                         </tr>
                     </thead>
                     <tbody id="tbody"></tbody>
@@ -133,6 +127,7 @@
         </div>
     </div>
 
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script>
@@ -142,22 +137,23 @@
 
         function savePlan() {
             const pubDate = document.getElementById('pubDate').value;
-            if(!pubDate) return alert("Please select a Publish Date!");
+            const idea = document.getElementById('cIdea').value;
+            if(!pubDate || !idea) return alert("Publish Date and Idea are required!");
 
             const data = {
                 pubDate,
                 type: document.getElementById('cType').value,
                 assign: document.getElementById('assignTo').value,
                 status: document.getElementById('cStatus').value,
-                idea: document.getElementById('cIdea').value || "No Idea Provided",
+                idea: idea,
                 purpose: document.getElementById('cPurpose').value || "General",
-                script: document.getElementById('cScript').value || "",
-                adCopy: document.getElementById('cAdCopy').value || "",
-                caption: document.getElementById('cCaption').value || ""
+                script: document.getElementById('cScript').value || "N/A",
+                adCopy: document.getElementById('cAdCopy').value || "N/A",
+                caption: document.getElementById('cCaption').value || "N/A"
             };
 
             db.ref('content_calendar').push(data).then(() => {
-                alert("Saved!");
+                alert("Task Published!");
                 location.reload();
             });
         }
@@ -170,25 +166,34 @@
 
             if(all) {
                 Object.keys(all).reverse().forEach(k => {
-                    const d = all[k];
+                    const d = all[all[k] ? k : ''];
                     total++;
                     if(d.status === "Complited") done++; else pend++;
                     if(d.pubDate === todayStr) today++;
 
+                    let sClass = d.status === 'Complited' ? 'bg-emerald-500/20 text-emerald-500' : (d.status === 'Working' ? 'bg-blue-500/20 text-blue-500' : 'bg-slate-500/20 text-slate-400');
+
                     tbody.innerHTML += `
                         <tr class="border-b border-white/5 hover:bg-white/5 transition-all">
                             <td class="p-4 text-blue-400 font-bold">${d.pubDate}</td>
-                            <td class="p-4 text-orange-500 font-black">${d.assign}</td>
-                            <td class="p-4"><b>${d.idea}</b><br><small class="opacity-50">${d.purpose}</small></td>
-                            <td class="p-4 text-xs opacity-70">Copy: ${d.adCopy.substring(0,20)}...</td>
+                            <td class="p-4 text-orange-500 font-black uppercase">${d.assign}</td>
                             <td class="p-4">
-                                <select onchange="updateStatus('${k}', this.value)" class="p-1 rounded bg-slate-800 text-[10px] font-bold">
+                                <div class="font-bold text-white mb-1 uppercase text-xs">${d.idea}</div>
+                                <div class="text-[10px] text-slate-500 font-bold italic">(${d.type}) - ${d.purpose}</div>
+                            </td>
+                            <td class="p-4 text-xs">
+                                <div class="table-text mb-2"><span class="text-blue-400 font-bold">📜 SCRIPT:</span> ${d.script}</div>
+                                <div class="table-text mb-2"><span class="text-orange-400 font-bold">📝 AD COPY:</span> ${d.adCopy}</div>
+                                <div class="table-text"><span class="text-emerald-400 font-bold">📢 CAPTION:</span> ${d.caption}</div>
+                            </td>
+                            <td class="p-4">
+                                <select onchange="updateStatus('${k}', this.value)" class="p-2 rounded bg-slate-900 text-[10px] font-black uppercase cursor-pointer ${sClass}">
                                     <option value="Pending" ${d.status === 'Pending' ? 'selected' : ''}>Pending</option>
                                     <option value="Working" ${d.status === 'Working' ? 'selected' : ''}>Working</option>
                                     <option value="Complited" ${d.status === 'Complited' ? 'selected' : ''}>Complited</option>
                                 </select>
                             </td>
-                            <td class="p-4 text-center"><button onclick="del('${k}')" style="color:red">×</button></td>
+                            <td class="p-4 text-center"><button onclick="del('${k}')" class="text-slate-800 hover:text-red-500 transition-colors"><i class="fas fa-trash"></i></button></td>
                         </tr>
                     `;
                 });
@@ -200,8 +205,8 @@
         });
 
         function updateStatus(k, s) { db.ref('content_calendar/'+k).update({ status: s }); }
-        function del(k) { if(prompt("Pass?") === "8087") db.ref('content_calendar/'+k).remove(); }
-        function wipe() { if(prompt("Pass?") === "8087") db.ref('content_calendar').remove(); }
+        function del(k) { if(prompt("ENTER ADMIN PIN TO DELETE:") === "8087") db.ref('content_calendar/'+k).remove(); }
+        function wipe() { if(prompt("DANGER: ENTER PIN TO RESET ENTIRE DATABASE:") === "8087") db.ref('content_calendar').remove(); }
         function filter() {
             const v = document.getElementById('src').value.toUpperCase();
             const rows = document.getElementById('tbody').getElementsByTagName('tr');
