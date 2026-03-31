@@ -13,50 +13,49 @@
             --bg: #0b1120; --card: rgba(255, 255, 255, 0.03); --border: rgba(255, 255, 255, 0.1); 
         }
         * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-        body { margin: 0; background: var(--bg); color: white; min-height: 100vh; }
+        body { margin: 0; background: var(--bg); color: white; min-height: 100vh; overflow-x: hidden; }
 
         .sidebar { width: 280px; background: rgba(0,0,0,0.3); backdrop-filter: blur(20px); border-right: 1px solid var(--border); padding: 40px 25px; position: fixed; height: 100vh; }
         .main { margin-left: 280px; width: calc(100% - 280px); padding: 40px; }
 
-        .panel { background: var(--card); border: 1px solid var(--border); padding: 35px; border-radius: 40px; backdrop-filter: blur(15px); margin-bottom: 30px; }
+        .panel { background: var(--card); border: 1px solid var(--border); padding: 35px; border-radius: 40px; backdrop-filter: blur(15px); margin-bottom: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
         .input-table { width: 100%; border-collapse: separate; border-spacing: 0 10px; }
-        input, select { background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 12px; border-radius: 14px; color: white; outline: none; width: 100%; font-size: 13px; }
+        .input-table th { text-align: left; font-size: 10px; padding: 12px; text-transform: uppercase; background: linear-gradient(to right, #1e293b, #0f172a); border-radius: 8px; color: #94a3b8; }
+        input, select { background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 12px; border-radius: 14px; color: white; outline: none; width: 100%; font-size: 13px; transition: 0.3s; }
+        input:focus { border-color: var(--blue); box-shadow: 0 0 15px rgba(0, 163, 255, 0.2); }
+        option { background: #0b1120; color: white; }
 
         .btn { padding: 14px 25px; border: none; border-radius: 18px; font-weight: 800; cursor: pointer; transition: 0.3s; color: white; display: inline-flex; align-items: center; gap: 10px; justify-content: center; }
         .btn-add { background: rgba(0, 163, 255, 0.1); border: 2px dashed var(--blue); color: var(--blue); width: 100%; margin-bottom: 15px; }
         .btn-gen { background: linear-gradient(135deg, var(--orange) 0%, var(--blue) 100%); width: 100%; font-size: 16px; }
 
-        /* --- REPORT STYLES (PRINT OPTIMIZED) --- */
-        .report-box { background: white; color: #1e293b; display: none; width: 100%; max-width: 1100px; margin: 20px auto; padding: 20px 40px; border-radius: 20px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-        .report-header { text-align: center; border-bottom: 3px solid var(--blue); padding-bottom: 10px; }
-        .report-header h1 { margin: 0; font-size: 32px; font-weight: 800; color: #0f172a; text-transform: uppercase; }
-        .report-header .slogan { color: var(--orange); font-weight: 800; font-size: 12px; text-transform: uppercase; margin: 3px 0; letter-spacing: 2px; }
-        .report-header .address { font-size: 9px; font-weight: 700; color: #64748b; text-transform: uppercase; }
-        
-        .sheet-title { text-align:center; font-size: 18px; font-weight: 800; text-transform: uppercase; color: #0f172a; background: #f8fafc; padding: 5px 40px; border-radius: 50px; border: 1px solid #e2e8f0; display: inline-block; margin: 15px 0; }
+        /* Report Styles (Print Ready) */
+        .report-box { background: white; color: #1e293b; display: none; width: 100%; max-width: 1050px; margin: 40px auto; overflow: hidden; border-radius: 30px; box-shadow: 0 40px 80px rgba(0,0,0,0.6); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .report-header { padding: 45px 50px 20px; text-align: center; border-bottom: 5px solid var(--blue); }
+        .report-header h1 { margin: 0; font-size: 38px; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: -1px; }
+        .report-header .slogan { margin: 5px 0; color: var(--orange); font-weight: 800; font-size: 14px; letter-spacing: 3px; text-transform: uppercase; }
+        .report-header .address { margin-top: 15px; font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; border-top: 1px solid #f1f5f9; padding-top: 12px; }
+        .sheet-title { text-align:center; font-size: 22px; font-weight: 800; text-transform: uppercase; color: #0f172a; background: #f8fafc; padding: 8px 50px; border-radius: 50px; border: 1.5px solid #e2e8f0; display: inline-block; margin: 25px 0; }
 
-        .final-table { width: 100%; border-collapse: collapse; page-break-inside: avoid; }
-        .final-table th { background: #0f172a !important; color: white !important; padding: 10px 5px; font-size: 9px; border: 1px solid #334155; text-transform: uppercase; }
-        .final-table td { padding: 8px 5px; border: 1px solid #e2e8f0; font-size: 10px; font-weight: 700; text-align: center; color: #0b0f19; }
+        .final-table { width: 100%; border-collapse: collapse; margin-top: 5px; }
+        .final-table th { background: #0f172a !important; color: white !important; padding: 12px 5px; font-size: 9px; border: 1px solid #334155; text-transform: uppercase; }
+        .final-table td { padding: 12px 5px; border: 1px solid #e2e8f0; font-size: 10px; font-weight: 700; text-align: center; color: #0b0f19; }
         
         .total-row { background: #0f172a !important; color: white !important; }
-        .total-row td { font-weight: 800 !important; color: white !important; padding: 10px 5px; border: none; }
-        .grand-net { color: var(--green) !important; font-size: 13px !important; border: 1.5px solid var(--green) !important; }
+        .total-row td { font-weight: 800 !important; color: white !important; border-top: 3px solid #000; padding: 15px 5px; }
+        .grand-net { color: var(--green) !important; font-size: 16px !important; border: 2px solid var(--green) !important; background: rgba(16, 185, 129, 0.05) !important; }
 
-        .sign-area { margin-top: 40px; display: flex; justify-content: space-between; padding: 0 40px; page-break-inside: avoid; }
-        .sign-box { text-align: center; width: 180px; }
-        .signature { font-family: 'Dancing Script', cursive; font-size: 26px; color: #1e3a8a; margin-bottom: -10px; }
-        .sign-line { border-top: 2px solid #0f172a; padding-top: 5px; font-size: 10px; font-weight: 800; text-transform: uppercase; }
+        .sign-area { margin-top: 70px; display: flex; justify-content: space-between; padding: 0 60px; }
+        .sign-box { text-align: center; width: 220px; }
+        .signature { font-family: 'Dancing Script', cursive; font-size: 34px; color: #1e3a8a; margin-bottom: -12px; }
+        .sign-line { border-top: 2.5px solid #0f172a; padding-top: 8px; font-size: 11px; font-weight: 800; color: #0f172a; text-transform: uppercase; }
 
-        /* FORCING ONE PAGE PRINT */
         @media print { 
             @page { size: A4 landscape; margin: 5mm; }
             body { background: white; color: black; }
-            .sidebar, .panel, .btn-add, .btn-gen, .action-btns, .dash-title { display: none !important; }
-            .main { margin: 0; width: 100%; padding: 0; }
-            .report-box { display: block !important; box-shadow: none; border: none; margin: 0; padding: 10px; }
-            .final-table td, .final-table th { padding: 6px 3px; font-size: 9px; }
-            .signature { font-size: 22px; }
+            .sidebar, .panel, .btn-add, .btn-gen, .action-btns, h1.dash-title { display: none !important; }
+            .main { margin-left: 0; width: 100%; padding: 0; }
+            .report-box { display: block !important; box-shadow: none; border: none; margin: 0; width: 100%; }
         }
     </style>
 </head>
@@ -65,7 +64,7 @@
 <div class="sidebar">
     <div style="text-align:center; margin-bottom:50px;">
         <h2 style="margin:0; font-weight:800; color:white;">Nugortech IT</h2>
-        <p style="color:var(--orange); font-size:9px; font-weight:800; letter-spacing:1px; text-transform: uppercase;">Payroll Hub</p>
+        <p style="color:var(--orange); font-size:9px; font-weight:800; letter-spacing:1px; text-transform: uppercase;">Cloud Payroll Hub</p>
     </div>
 </div>
 
@@ -75,26 +74,29 @@
     <div class="panel">
         <div style="margin-bottom: 25px;">
             <label style="color:var(--blue); font-weight: 800;">CALCULATION MONTH (MM-YYYY)</label>
-            <input type="text" id="targetMonth" placeholder="e.g. 02-2026" style="max-width: 300px;">
+            <input type="text" id="targetMonth" placeholder="e.g. 03-2026" style="max-width: 350px;">
         </div>
 
         <table class="input-table">
             <thead>
-                <tr><th width="20%">Name</th><th width="8%">ID</th><th width="18%">Designation</th><th width="12%">Gross</th><th width="12%">Manual Sales</th><th width="10%">Abs Days</th><th width="12%">Advance</th></tr>
+                <tr><th width="20%">Employee Name</th><th width="8%">ID</th><th width="18%">Designation</th><th width="12%">Gross</th><th width="12%">Manual Sales</th><th width="10%">Abs Days</th><th width="12%">Advance</th></tr>
             </thead>
             <tbody id="inputBody">
                 <tr class="emp-row">
                     <td>
-                        <select class="row-name">
-                            <option value="MD; NUR ISLAM">MD; NUR ISLAM</option>
-                            <option value="MD SHAKHAYAT HOSSAIN HASU">MD SHAKHAYAT HOSSAIN HASU</option>
-                            <option value="MD :MANIRUZZAMAN">MD :MANIRUZZAMAN</option>
-                            <option value="MD: EMON">MD: EMON</option>
-                            <option value="MD: HASAN ALI">MD: HASAN ALI</option>
-                            <option value="MD: AL HASIB">MD: AL HASIB</option>
-                            <option value="MD: ATIKUR RAHMAN">MD: ATIKUR RAHMAN</option>
-                            <option value="MS: SANIR MA">MS: SANIR MA</option>
-                        </select>
+                        <!-- হাসিব ভাই, এখন আপনি এখানে টাইপও করতে পারবেন আবার সিলেক্টও করতে পারবেন -->
+                        <input list="nameList" class="row-name" placeholder="Type or Select Name">
+                        <datalist id="nameList">
+                            <option value="MD; NUR ISLAM">
+                            <option value="MD SHAKHAYAT HOSSAIN HASU">
+                            <option value="MD :MANIRUZZAMAN">
+                            <option value="MD: EMON">
+                            <option value="MD: HASAN ALI">
+                            <option value="MD: AL HASIB">
+                            <option value="MD: ATIKUR RAHMAN">
+                            <option value="ABDUL HALIM"> <!-- নতুন মেম্বার -->
+                            <option value="MS: SANIR MA">
+                        </datalist>
                     </td>
                     <td><input type="number" class="row-id" placeholder="ID"></td>
                     <td>
@@ -129,11 +131,11 @@
 
         <div class="report-content">
             <div style="text-align:center;"><span class="sheet-title">Salary Sheet</span></div>
-            <div style="text-align:center; font-weight:800; font-size:12px; margin-bottom:10px; color:#1e293b;" id="displayMonth">Month : ---</div>
+            <div style="text-align:center; font-weight:800; font-size:14px; margin-bottom:20px; color:#1e293b;" id="displayMonth">Month : ---</div>
 
             <table class="final-table">
                 <thead>
-                    <tr><th>SL</th><th style="text-align:left;">Employee Name</th><th>ID</th><th>Designation</th><th>Gross</th><th>Total Sales</th><th>Comm(5%)</th><th>Abs Ded.</th><th>Advance</th><th>Net Salary</th></tr>
+                    <tr><th>SL</th><th style="text-align:left;">Name of Employee</th><th>ID</th><th>Designation</th><th>Gross</th><th>Total Sales</th><th>Comm(5%)</th><th>Abs Ded.</th><th>Advance</th><th>Net Salary</th></tr>
                 </thead>
                 <tbody id="finalBody"></tbody>
                 <tfoot id="finalFooter"></tfoot>
@@ -145,9 +147,9 @@
             </div>
         </div>
 
-        <div class="action-btns" style="text-align: center; margin-top: 20px;">
+        <div class="action-btns" style="text-align: center; margin-top: 10px; padding-bottom: 40px;">
             <button class="btn" style="background:var(--green)" onclick="downloadExcel()"><i class="fas fa-file-excel"></i> Export Excel</button>
-            <button class="btn" style="background:#0b0f19; margin-left:15px;" onclick="window.print()"><i class="fas fa-print"></i> Save PDF</button>
+            <button class="btn" style="background:var(--bg); margin-left:15px;" onclick="window.print()"><i class="fas fa-print"></i> Save PDF</button>
         </div>
     </div>
 </div>
@@ -168,7 +170,7 @@
         const finalBody = document.getElementById('finalBody');
         const finalFooter = document.getElementById('finalFooter');
         
-        finalBody.innerHTML = "<tr><td colspan='10'>Syncing...</td></tr>";
+        finalBody.innerHTML = "<tr><td colspan='10'>Syncing Cloud Data...</td></tr>";
         const salesSnap = await database.ref('sales_reports').once('value');
         const salesData = salesSnap.val() || {};
 
@@ -179,6 +181,7 @@
             const desig = row.querySelector('.row-desig').value, gross = Number(row.querySelector('.row-gross').value);
             const manualSales = Number(row.querySelector('.row-sales').value || 0);
             const absDays = Number(row.querySelector('.row-absent').value || 0), adv = Number(row.querySelector('.row-adv').value || 0);
+            
             if(!name || !id || !gross) return;
 
             let cloudSales = 0;
@@ -194,7 +197,7 @@
         });
 
         finalBody.innerHTML = html;
-        finalFooter.innerHTML = `<tr class="total-row"><td colspan="9" style="text-align:right; padding-right:15px; font-size:10px;">GRAND TOTAL NET PAYABLE AMOUNT:</td><td class="grand-net">৳${sumNet.toLocaleString()}</td></tr>`;
+        finalFooter.innerHTML = `<tr class="total-row"><td colspan="9" style="text-align:right; padding-right:15px; color:white;">GRAND TOTAL NET PAYABLE AMOUNT:</td><td class="grand-net">৳${sumNet.toLocaleString()}</td></tr>`;
         document.getElementById('displayMonth').innerText = "Payroll Period : " + month;
         document.getElementById('printArea').style.display = "block";
         document.getElementById('printArea').scrollIntoView({ behavior: 'smooth' });
@@ -208,7 +211,7 @@
         });
         const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement("a"); link.href = URL.createObjectURL(blob);
-        link.download = `Nugortech_Salary_Report.csv`; link.click();
+        link.download = `Nugortech_Salary_Report_${document.getElementById('targetMonth').value}.csv`; link.click();
     }
 </script>
 </body>
