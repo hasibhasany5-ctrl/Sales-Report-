@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Finance Hub | Nugortech IT Ltd</title>
+    <title>Finance Command Center | Nugortech IT Ltd</title>
     <!-- Premium Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Montserrat:wght@800;900&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Montserrat:wght@800;900&family=Great+Vibes&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -27,14 +27,17 @@
         .stat-val { font-size: 22px; font-weight: 800; display: block; color: white; margin-bottom: 5px; }
         .stat-lbl { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; }
 
-        /* Form Layout */
-        .panel { background: var(--card); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 35px; backdrop-filter: blur(15px); }
-        label { font-size: 10px; font-weight: 800; color: var(--b); margin-bottom: 8px; display: block; text-transform: uppercase; }
+        /* Form & Table UI */
+        .panel { background: var(--card); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 35px; backdrop-filter: blur(10px); }
         input, select, textarea { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 12px; border-radius: 12px; color: white; outline: none; margin-bottom: 15px; font-size: 14px; }
         .btn-save { width: 100%; padding: 18px; background: linear-gradient(to right, #a11414, #d4a017); border: none; border-radius: 20px; color: white; font-weight: 800; cursor: pointer; transition: 0.3s; }
+        .table-wrap { max-height: 480px; overflow-y: auto; border-radius: 20px; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th { padding: 15px; font-size: 10px; color: #64748b; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; background: #0b1120; z-index: 10; }
+        td { padding: 18px 15px; border-bottom: 1px solid rgba(255,255,255,0.03); font-weight: 600; font-size: 13px; }
         .p-btn { padding: 5px 12px; border-radius: 10px; background: rgba(0,163,255,0.1); color: var(--b); border: 1px solid var(--b); cursor: pointer; font-weight: 800; font-size: 11px; }
 
-        /* --- THE MASTER FULL-PAGE VOUCHER DESIGN --- */
+        /* --- THE ROYAL FULL-PAGE VOUCHER DESIGN --- */
         #voucherPrint { 
             background: #FDF8EE !important; color: #0b0f19 !important; width: 100%; min-height: 100vh; display: none; margin: 0; padding: 0; overflow: hidden; position: relative;
             -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;
@@ -42,7 +45,8 @@
         .v-header { height: 160px; padding: 50px 80px; display: flex; align-items: center; position: relative; color: white !important; }
         .head-pay { background: linear-gradient(90deg, #8B0000 0%, #D4AF37 100%) !important; border-radius: 0 0 150px 0; }
         .head-rec { background: linear-gradient(90deg, #0f172a 0%, #00A3FF 100%) !important; border-radius: 0 0 0 150px; }
-        .v-logo { background: white !important; width: 70px; height: 70px; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 42px; font-weight: 900; color: #D4AF37 !important; font-family: 'Montserrat'; }
+        .v-logo { background: white !important; width: 70px; height: 70px; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 42px; font-weight: 900; color: #D4AF37 !important; font-family: 'Montserrat'; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .v-comp { margin-left: 25px; flex: 1; }
         .v-comp h1 { margin: 0; font-family: 'Montserrat'; font-size: 36px; font-weight: 900; text-transform: uppercase; color: white !important; line-height: 1; }
         .v-comp p { margin: 5px 0 0; font-size: 11px; font-weight: 800; letter-spacing: 3px; color: white !important; }
         .v-body { padding: 60px 80px; }
@@ -52,16 +56,29 @@
         .v-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 15px; font-weight: 900; }
         .v-lbl { color: #666; width: 180px; } .v-val { color: #000; flex: 1; text-transform: uppercase; }
         .v-table { width: 100%; border-collapse: collapse; border: 3px solid #D4AF37; margin: 25px 0; }
-        .v-table th { background: #F1E9D2 !important; padding: 18px; text-align: left; font-size: 15px; font-weight: 900; border: 2px solid #D4AF37; color: #000; }
+        .v-table th { background: #F1E9D2 !important; padding: 18px; text-align: left; font-size: 15px; font-weight: 900; border: 2px solid #D4AF37; color: #000; text-transform: uppercase; }
         .v-table td { padding: 22px 18px; font-weight: 900; border: 2px solid #D4AF37; font-size: 18px; color: #000; }
         .v-total-box { background: white !important; padding: 30px 40px; border-radius: 25px; display: flex; justify-content: space-between; align-items: center; border: 3px solid #00A3FF; margin-top: 30px; }
         .v-amt { font-size: 38px; font-weight: 900; color: #00A3FF !important; }
 
-        /* Elegant Signature (Thin Pechano) */
+        /* Elegant Thin Cursive Signature - Fixed Font */
         .v-footer { margin-top: 100px; display: flex; justify-content: space-between; padding: 0 20px; }
-        .sign-box { text-align: center; width: 240px; border-top: 2px solid #000; padding-top: 10px; font-size: 12px; font-weight: 900; position: relative; color: #000; }
-        .sig-font { font-family: 'Mrs Saint Delafield', cursive; font-size: 45px; color: #1e3a8a !important; position: absolute; top: -55px; left: 0; width: 100%; text-align: center; font-weight: 400; }
+        .sign-box { text-align: center; width: 240px; border-top: 2.5px solid #000; padding-top: 10px; font-size: 12px; font-weight: 900; position: relative; color: #000; }
+        .sig-font { 
+            font-family: 'Great Vibes', cursive; 
+            font-size: 38px; 
+            color: #1e3a8a !important; 
+            position: absolute; 
+            top: -52px; 
+            left: 0; 
+            width: 100%; 
+            text-align: center; 
+            font-weight: 400; 
+            font-style: italic;
+        }
+
         .v-bot-red { position: absolute; bottom: 0; width: 100%; height: 60px; background: #8B0000 !important; display: flex; align-items: center; justify-content: center; }
+        .v-addr-footer { color: white !important; font-size: 10px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; }
 
         @media print { 
             @page { size: portrait; margin: 0; }
@@ -74,44 +91,47 @@
 <body>
 
 <div class="sidebar">
-    <div style="text-align:center; margin-bottom:50px;">
+    <div style="text-align:center; margin-bottom:40px;">
         <h2 style="margin:0; font-weight:800; color:white; font-size: 22px;">Nugortech IT Ltd</h2>
-        <p style="color:var(--p); font-size:9px; font-weight:800; letter-spacing:1px; text-transform: uppercase; margin-top:5px;">Digital Finance</p>
+        <p style="color:var(--p); font-size:9px; font-weight:800; letter-spacing:1px; text-transform: uppercase; margin-top:5px;">Digital Finance Hub</p>
     </div>
-    <button onclick="wipe()" class="w-full p-3 rounded-xl bg-red-500/10 text-red-500 font-bold text-[10px] uppercase">WIPE DATA (8087)</button>
+    <button onclick="wipe()" class="w-full p-3 rounded-xl bg-red-500/10 text-red-500 font-bold text-[10px] uppercase border border-red-500/20">Wipe Data (8087)</button>
 </div>
 
 <div class="main">
-    <!-- দ্য ফোর কালারড ফান্ড বোর্ড (Requested by Boss) -->
+    <!-- Live Financial Fund Board -->
     <div class="stat-grid">
-        <div class="stat-card c-income"><span class="stat-val" id="tInc">৳0</span><span class="stat-lbl">Total Income (Receipts)</span></div>
-        <div class="stat-card c-salary"><span class="stat-val" id="tSal">৳0</span><span class="stat-lbl">Total Salaries Paid</span></div>
+        <div class="stat-card c-income"><span class="stat-val" id="tInc">৳0</span><span class="stat-lbl">Total Income</span></div>
+        <div class="stat-card c-salary"><span class="stat-val" id="tSal">৳0</span><span class="stat-lbl">Salaries Paid</span></div>
         <div class="stat-card c-expense"><span class="stat-val" id="tMisc">৳0</span><span class="stat-lbl">Other Expenses</span></div>
-        <div class="stat-card c-fund"><span class="stat-val" id="tFund" style="color:#00E676">৳0</span><span class="stat-lbl">Current Fund Balance</span></div>
+        <div class="stat-card c-fund"><span class="stat-val" id="tFund" style="color:#00E676">৳0</span><span class="stat-lbl">Current Cash Fund</span></div>
     </div>
 
     <div class="grid-layout" style="display:grid; grid-template-columns: 1fr 2.5fr; gap:25px;">
         <div class="panel">
-            <h3 style="color: var(--b); font-size: 18px; font-weight: 800; margin-bottom: 20px;">Entry Voucher</h3>
+            <h3 style="color: var(--b); font-size: 18px; font-weight: 800; margin-bottom: 25px;">Create Voucher</h3>
             <label>Type</label>
             <select id="vType"><option value="PAYMENT">Payment Voucher</option><option value="RECEIPT">Receipt Voucher</option></select>
-            <label>Recipient / Client</label>
-            <input type="text" id="jName" placeholder="Full Name">
-            <label>Purpose</label>
+            <label>Name</label>
+            <input type="text" id="jName" placeholder="Employee / Client">
+            <label>Head of Account</label>
             <select id="jHead">
                 <option value="Staff Monthly Salary">Staff Monthly Salary</option>
                 <option value="Salary Advance Payment">Salary Advance Payment</option>
                 <option value="Performance Bonus">Performance Bonus</option>
                 <option value="Client Project Payment">Client Project Payment</option>
-                <option value="Others / Bill / Snacks">Others / Bill / Snacks</option>
+                <option value="Office Infrastructure">Office Infrastructure</option>
+                <option value="Others / Food / Bills">Others / Food / Bills</option>
             </select>
             <label>Amount (BDT)</label>
-            <input type="number" id="jAmt" placeholder="Enter Amount">
-            <textarea id="jNote" placeholder="Remarks..." rows="2"></textarea>
+            <input type="number" id="jAmt" placeholder="Enter BDT">
+            <label>Remarks</label>
+            <textarea id="jNote" placeholder="Details..." rows="2"></textarea>
             <button class="btn-save" onclick="saveToCloud()"><i class="fas fa-print"></i> SAVE & GENERATE</button>
         </div>
 
         <div class="panel">
+            <h3 style="margin:0 0 20px 0; font-size: 18px; font-weight: 800;">Master History</h3>
             <div class="table-wrap h-[500px] overflow-y-auto">
                 <table class="w-full text-left">
                     <thead><tr class="text-[10px] text-slate-500 uppercase border-b border-white/10"><th>Date</th><th>Type</th><th>Name</th><th>Amount</th><th>Print</th><th>Del</th></tr></thead>
@@ -122,45 +142,70 @@
     </div>
 </div>
 
-<!-- --- THE MASTER FULL-PAGE VOUCHER --- -->
+<!-- --- THE ROYAL FULL-PAGE VOUCHER --- -->
 <div id="voucherPrint">
     <div id="vHead" class="v-header head-pay">
         <div class="v-logo">N</div>
-        <div class="v-comp"><h1>Nugortech IT Ltd</h1><p>DIFFERENT CREATIVE THINK</p></div>
+        <div class="v-comp">
+            <h1>Nugortech IT Ltd</h1>
+            <p>DIFFERENT CREATIVE THINK</p>
+        </div>
         <div style="background:rgba(0,0,0,0.5); padding:8px 35px; border-radius:50px; font-weight:900; font-size:14px; color:white;">OFFICIAL</div>
     </div>
     
     <div class="v-body">
         <h1 class="v-title" id="vTitle">PAYMENT RECEIPT</h1>
-        <div class="v-meta"><div>No: <strong id="vNo">---</strong></div><div>Date: <strong id="vDate">---</strong></div></div>
-        <div class="v-grid">
-            <div><div class="v-row"><span class="v-lbl">Paid To / Received From:</span> <span class="v-val" id="vDispName" style="font-size:18px;">---</span></div><div class="v-row"><span class="v-lbl">Address:</span> <span class="v-val" style="font-size:11px">HOUSE #85/2, ROAD #4, MOHAMMADIA HOUSING</span></div></div>
-            <div><div class="v-row"><span class="v-lbl">Mode:</span> <span class="v-val">OFFICE FUND SYNC</span></div><div class="v-row"><span class="v-lbl">Status:</span> <span style="color:#2ecc71">SUCCESSFUL</span></div></div>
+        <div class="v-meta">
+            <div>Voucher No: <strong id="vNo" style="color:#000">---</strong></div>
+            <div>Date: <strong id="vDate" style="color:#000">---</strong></div>
         </div>
-        <table class="v-table"><thead><tr><th width="75%">Account Head / Description</th><th width="25%">Amount</th></tr></thead><tbody><tr><td id="vDispNote" style="height:120px; vertical-align:top;">---</td><td id="vDispAmtTable" style="text-align:right;">৳0.00</td></tr></tbody></table>
-        <div class="v-total-box"><span style="font-weight:900; color:#666;">GRAND TOTAL NET PAYABLE</span><span class="v-amt" id="vDispAmt">৳0.00</span></div>
+
+        <div class="v-grid">
+            <div>
+                <div class="v-row"><span class="v-lbl">Billed To:</span> <span class="v-val" id="vDispName" style="font-size:18px;">---</span></div>
+                <div class="v-row"><span class="v-lbl">Office Address:</span> <span class="v-val" style="font-size:11px">HOUSE #85/2, ROAD #4, MOHAMMADIA HOUSING</span></div>
+            </div>
+            <div>
+                <div class="v-row"><span class="v-lbl">Payment Mode:</span> <span class="v-val">OFFICE FUND SYNC</span></div>
+                <div class="v-row"><span class="v-lbl">Status:</span> <span style="color:#2ecc71">SUCCESSFUL</span></div>
+            </div>
+        </div>
+
+        <table class="v-table">
+            <thead><tr><th width="75%">Account Head / Description</th><th width="25%">Amount</th></tr></thead>
+            <tbody><tr><td id="vDispNote" style="height:120px; vertical-align:top;">---</td><td id="vDispAmtTable" style="text-align:right;">৳0.00</td></tr></tbody>
+        </table>
+
+        <div class="v-total-box">
+            <span class="text-sm font-black text-slate-500 uppercase tracking-widest">Grand Total Net Amount</span>
+            <span class="v-amt" id="vDispAmt">৳0.00</span>
+        </div>
+
         <div class="v-footer">
             <div class="sign-box"><div class="sig-font">Hasib</div>Accountant Signature</div>
             <div class="sign-box"><div class="sig-font">Nur Islam</div>Managing Director</div>
             <div class="sign-box"><div class="sig-font" id="vRecSign">---</div>Receiver Signature</div>
         </div>
     </div>
-    <div class="v-bot-red"><div style="color:white; font-size:10px; font-weight:900;">HOUSE #85/2, ROAD #4, MOHAMMADIA HOUSING LTD, MOHAMMADPUR, DHAKA-1207</div></div>
+
+    <div class="v-bot-red">
+        <div class="v-address-footer">HOUSE #85/2, ROAD #4, MOHAMMADIA HOUSING LTD, MOHAMMADPUR, DHAKA-1207</div>
+    </div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 <script>
-    const firebaseConfig = { apiKey: "AIzaSyBrz1xvq4Fpt9-j75-gUS4d8ebqPRLmOK0", databaseURL: "https://sales-report-nugortech-it-default-rtdb.firebaseio.com", projectId: "sales-report-nugortech-it", appId: "1:848643315031:web:e6fbf92153490ea9d31a12" };
+    const firebaseConfig = { apiKey: "AIzaSyB-AWYawVDTCAX0_ocZYQMqUI5ZteoDsIg", databaseURL: "https://sales-report-nugortech-it-default-rtdb.firebaseio.com", projectId: "sales-report-nugortech-it", appId: "1:799184024638:web:82a23c732c074d98e80d6f" };
     firebase.initializeApp(firebaseConfig); const db = firebase.database();
 
     function saveToCloud() {
         const n = document.getElementById('jName').value, a = document.getElementById('jAmt').value;
-        if(!n || !a) return alert("Fill fields!");
-        db.ref('ledger_final_v14').push({ type: document.getElementById('vType').value, name: n, head: document.getElementById('jHead').value, amount: Number(a), note: document.getElementById('jNote').value, date: new Date().toLocaleDateString('en-GB') }).then(() => { location.reload(); });
+        if(!n || !a) return alert("Fill all fields!");
+        db.ref('ledger_final_official_final').push({ type: document.getElementById('vType').value, name: n, head: document.getElementById('jHead').value, amount: Number(a), note: document.getElementById('jNote').value, date: new Date().toLocaleDateString('en-GB') }).then(() => { location.reload(); });
     }
 
-    db.ref('ledger_final_v14').on('value', snap => {
+    db.ref('ledger_final_official_final').on('value', snap => {
         const tbody = document.getElementById('tbody'); tbody.innerHTML = "";
         let income = 0, salary = 0, misc = 0;
         if(snap.val()) {
@@ -168,7 +213,7 @@
                 const d = snap.val()[k];
                 if(d.type === "RECEIPT") income += d.amount;
                 else { if(d.head.includes("Salary")) salary += d.amount; else misc += d.amount; }
-                tbody.innerHTML += `<tr class="border-b border-white/5 hover:bg-white/5 transition-all"><td>${d.date}</td><td><span class="text-[9px] font-bold px-2 py-1 rounded ${d.type==='PAYMENT'?'bg-red-500/10 text-red-500':'bg-blue-500/10 text-blue-500'}">${d.type}</span></td><td>${d.name}</td><td>৳${d.amount.toLocaleString()}</td><td><button onclick="printV('${k}')" class="p-btn">Print</button></td><td><i class="fas fa-trash text-red-500 cursor-pointer" onclick="del('${k}')"></i></td></tr>`;
+                tbody.innerHTML += `<tr class="border-b border-white/5"><td>${d.date}</td><td><span class="text-[9px] font-bold px-2 py-1 rounded ${d.type==='PAYMENT'?'bg-red-500/10 text-red-500':'bg-blue-500/10 text-blue-500'}">${d.type}</span></td><td>${d.name}</td><td>৳${d.amount.toLocaleString()}</td><td><button onclick="printV('${k}')" class="p-btn">Print</button></td><td><i class="fas fa-trash text-red-500 cursor-pointer" onclick="del('${k}')"></i></td></tr>`;
             });
         }
         document.getElementById('tInc').innerText = "৳" + income.toLocaleString();
@@ -178,7 +223,7 @@
     });
 
     function printV(key) {
-        db.ref('ledger_final_v14/'+key).once('value', s => {
+        db.ref('ledger_final_official_final/'+key).once('value', s => {
             const d = s.val(); const h = document.getElementById('vHead'); const t = document.getElementById('vTitle');
             if(d.type === "PAYMENT") { h.className="v-header head-pay"; t.innerText="PAYMENT RECEIPT"; t.style.color="#8B0000"; }
             else { h.className="v-header head-rec"; t.innerText="OFFICIAL RECEIPT"; t.style.color="#1e3a8a"; }
@@ -193,8 +238,8 @@
         });
     }
 
-    function del(k) { if(prompt("Pass?") === "8087") db.ref('ledger_final_v14/'+k).remove(); }
-    function wipe() { if(prompt("Reset PIN?") === "8087") db.ref('ledger_final_v14').remove(); }
+    function del(k) { if(prompt("Pass: 8087") === "8087") db.ref('ledger_final_official_final/'+k).remove(); }
+    function wipe() { if(prompt("8087 Reset PIN?") === "8087") db.ref('ledger_final_official_final').remove(); }
 </script>
 </body>
 </html>
