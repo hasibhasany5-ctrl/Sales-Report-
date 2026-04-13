@@ -3,78 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finance Command Center | Nugortech IT Ltd</title>
-    <!-- Premium Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Dancing+Script:wght@600&family=Montserrat:wght@800;900&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
+    <title>Enterprise Finance Hub | Nugortech IT Ltd</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Montserrat:wght@800;900&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root { --p: #FF6B00; --b: #00A3FF; --s: #10b981; --d: #f43f5e; --bg: #0b1120; --card: rgba(255,255,255,0.03); }
+        :root { --p: #FF6B00; --b: #00A3FF; --bg: #0b1120; --card: rgba(255,255,255,0.03); }
         * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { margin: 0; background: var(--bg); color: white; display: flex; min-height: 100vh; overflow-x: hidden; }
 
-        /* Sidebar UI */
+        /* Sidebar & Main Controls */
         .sidebar { width: 280px; background: rgba(0,0,0,0.3); backdrop-filter: blur(20px); border-right: 1px solid rgba(255,255,255,0.1); padding: 40px 25px; position: fixed; height: 100vh; z-index: 100; }
         .main { margin-left: 280px; width: calc(100% - 280px); padding: 40px; }
-
-        /* Glowing Stat Cards */
-        .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 35px; }
-        .stat-card { padding: 25px 15px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.1); text-align: center; transition: 0.3s; }
-        .stat-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .c-income { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
-        .c-salary { background: linear-gradient(135deg, #00A3FF 0%, #0066FF 100%); }
-        .c-expense { background: linear-gradient(135deg, #FF6B00 0%, #E65100 100%); }
-        .c-fund { background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%); border: 2px solid rgba(255,255,255,0.2); }
-
-        .stat-val { font-size: 22px; font-weight: 800; display: block; margin-bottom: 5px; color: white; }
-        .stat-lbl { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; }
-
-        /* Form Layout */
-        .grid-layout { display: grid; grid-template-columns: 1fr 2.5fr; gap: 25px; }
-        .panel { background: var(--card); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 35px; backdrop-filter: blur(10px); }
+        .panel { background: var(--card); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 35px; backdrop-filter: blur(15px); margin-bottom: 30px; }
+        
         label { font-size: 10px; font-weight: 800; color: var(--b); margin-bottom: 8px; display: block; text-transform: uppercase; }
         input, select, textarea { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 12px; border-radius: 12px; color: white; outline: none; margin-bottom: 15px; font-size: 14px; }
-        .btn-save { width: 100%; padding: 18px; background: linear-gradient(to right, #a11414, #d4a017); border: none; border-radius: 20px; color: white; font-weight: 800; cursor: pointer; transition: 0.3s; }
-
-        /* History Table */
-        .table-wrap { max-height: 480px; overflow-y: auto; border-radius: 20px; }
-        table { width: 100%; border-collapse: collapse; text-align: left; }
-        th { padding: 15px; font-size: 10px; color: #64748b; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; background: #0b1120; z-index: 10; }
-        td { padding: 18px 15px; border-bottom: 1px solid rgba(255,255,255,0.03); font-weight: 600; font-size: 13px; }
+        .btn-save { width: 100%; padding: 18px; background: linear-gradient(135deg, #a11414, #d4a017); border: none; border-radius: 20px; color: white; font-weight: 800; cursor: pointer; transition: 0.3s; }
         .p-btn { padding: 5px 12px; border-radius: 10px; background: rgba(0,163,255,0.1); color: var(--b); border: 1px solid var(--b); cursor: pointer; font-weight: 800; font-size: 11px; }
 
-        /* --- ROYAL VOUCHER DESIGN (PRINT READY) --- */
+        /* --- THE MASTER FULL-PAGE VOUCHER DESIGN --- */
         #voucherPrint { 
-            background: #FDF8EE !important; color: #0b0f19 !important; width: 850px; display: none; margin: 0 auto; overflow: hidden; position: relative;
+            background: #FDF8EE !important; color: #0b0f19 !important; width: 100%; min-height: 100vh; display: none; margin: 0; padding: 0; overflow: hidden; position: relative;
             -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;
         }
-        .v-header { height: 150px; padding: 40px 50px; display: flex; align-items: center; position: relative; color: white !important; }
-        .head-pay { background: linear-gradient(90deg, #8B0000 0%, #D4AF37 100%) !important; border-radius: 0 0 120px 0; }
-        .head-rec { background: linear-gradient(90deg, #0f172a 0%, #00A3FF 100%) !important; border-radius: 0 0 0 120px; }
-        .v-logo { background: white !important; width: 60px; height: 60px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 38px; font-weight: 900; color: #D4AF37 !important; font-family: 'Montserrat'; }
-        .v-comp { margin-left: 20px; flex: 1; }
-        .v-comp h1 { margin: 0; font-family: 'Montserrat'; font-size: 30px; font-weight: 900; text-transform: uppercase; color: white !important; }
-        .v-comp p { margin: 0; font-size: 10px; font-weight: 800; letter-spacing: 2px; color: white !important; }
-        .v-body { padding: 40px 50px; }
-        .v-title { font-size: 40px; font-weight: 900; color: #1a1a1a; margin: 0 0 10px 0; letter-spacing: -2px; font-family: 'Montserrat'; }
-        .v-meta { display: flex; gap: 40px; font-weight: 800; border-bottom: 3px solid #D4AF37; padding-bottom: 10px; margin-bottom: 25px; color: #333; }
-        .v-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; margin-bottom: 20px; }
-        .v-row { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 14px; font-weight: 800; }
-        .v-table { width: 100%; border-collapse: collapse; border: 3px solid #D4AF37; margin: 15px 0; }
-        .v-table th { background: #F1E9D2 !important; padding: 12px; text-align: left; font-size: 13px; font-weight: 900; border: 2px solid #D4AF37; }
-        .v-table td { padding: 18px 12px; font-weight: 800; border: 2px solid #D4AF37; font-size: 16px; }
-        .v-total-box { background: white !important; padding: 25px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; border: 3px solid #00A3FF; margin-top: 20px; }
-        .v-footer { margin-top: 60px; display: flex; justify-content: space-between; padding: 0 10px 140px; }
-        .sign-box { text-align: center; width: 180px; border-top: 2px solid #000; padding-top: 8px; font-size: 10px; font-weight: 800; position: relative; color: #000; }
-        .sig-font { font-family: 'Mrs Saint Delafield', cursive; font-size: 38px; color: #1e3a8a !important; position: absolute; top: -50px; left: 0; width: 100%; text-align: center; font-style: italic; font-weight: 400; }
-        .v-bot { position: absolute; bottom: 0; width: 100%; height: 50px; background: #8B0000 !important; display: flex; align-items: center; justify-content: center; }
+        
+        /* Full Width Curved Header */
+        .v-header { height: 180px; padding: 50px 80px; display: flex; align-items: center; position: relative; color: white !important; }
+        .head-pay { background: linear-gradient(90deg, #8B0000 0%, #D4AF37 100%) !important; border-radius: 0 0 150px 0; }
+        .head-rec { background: linear-gradient(90deg, #0f172a 0%, #00A3FF 100%) !important; border-radius: 0 0 0 150px; }
+        
+        .v-logo { background: white !important; width: 70px; height: 70px; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 42px; font-weight: 900; color: #D4AF37 !important; font-family: 'Montserrat'; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .v-comp { margin-left: 25px; flex: 1; }
+        .v-comp h1 { margin: 0; font-family: 'Montserrat'; font-size: 36px; font-weight: 900; text-transform: uppercase; color: white !important; line-height: 1; }
+        .v-comp p { margin: 5px 0 0; font-size: 11px; font-weight: 800; letter-spacing: 3px; color: white !important; opacity: 0.9; }
+
+        .v-body { padding: 60px 80px; }
+        .v-title { font-size: 48px; font-weight: 900; color: #1a1a1a; margin: 0 0 15px 0; letter-spacing: -2px; font-family: 'Montserrat'; text-transform: uppercase; }
+        .v-meta { display: flex; gap: 50px; font-weight: 900; border-bottom: 4px solid #D4AF37; padding-bottom: 12px; margin-bottom: 40px; color: #333; font-size: 16px; }
+
+        .v-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 60px; margin-bottom: 30px; }
+        .v-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 15px; font-weight: 900; }
+        .v-lbl { color: #666; width: 180px; } .v-val { color: #000; flex: 1; text-transform: uppercase; }
+
+        .v-table { width: 100%; border-collapse: collapse; border: 3px solid #D4AF37; margin: 25px 0; }
+        .v-table th { background: #F1E9D2 !important; padding: 18px; text-align: left; font-size: 15px; font-weight: 900; border: 2px solid #D4AF37; color: #000; text-transform: uppercase; }
+        .v-table td { padding: 22px 18px; font-weight: 900; border: 2px solid #D4AF37; font-size: 18px; color: #000; }
+
+        .v-total-box { background: white !important; padding: 30px 40px; border-radius: 25px; display: flex; justify-content: space-between; align-items: center; border: 3px solid #00A3FF; margin-top: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .v-total-lbl { font-size: 14px; font-weight: 900; color: #64748b; text-transform: uppercase; letter-spacing: 1px; }
+        .v-amt { font-size: 38px; font-weight: 900; color: #00A3FF !important; }
+
+        /* Elegant Thin Pechano Signature */
+        .v-footer { margin-top: 100px; display: flex; justify-content: space-between; padding: 0 20px; }
+        .sign-box { text-align: center; width: 240px; border-top: 2.5px solid #000; padding-top: 10px; font-size: 12px; font-weight: 900; position: relative; color: #000; }
+        .sig-font { 
+            font-family: 'Mrs Saint Delafield', cursive; 
+            font-size: 45px; 
+            color: #1e3a8a !important; 
+            position: absolute; 
+            top: -55px; 
+            left: 0; 
+            width: 100%; 
+            text-align: center; 
+            font-weight: 400; 
+            font-style: italic; 
+        }
+
+        .v-bot-red { position: absolute; bottom: 0; width: 100%; height: 60px; background: #8B0000 !important; display: flex; align-items: center; justify-content: center; }
+        .v-addr-footer { color: white !important; font-size: 10px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; }
 
         @media print { 
-            @page { size: portrait; margin: 0; }
+            @page { size: A4 portrait; margin: 0; }
             body * { visibility: hidden; } 
             #voucherPrint, #voucherPrint * { visibility: visible; } 
-            #voucherPrint { position: absolute; left: 0; top: 0; display: block !important; border: none; }
+            #voucherPrint { position: absolute; left: 0; top: 0; width: 100%; display: block !important; border: none; }
         }
     </style>
 </head>
@@ -83,110 +87,129 @@
 <div class="sidebar">
     <div style="text-align:center; margin-bottom:40px;">
         <h2 style="margin:0; font-weight:800; color:white; font-size: 22px;">Nugortech IT Ltd</h2>
-        <p style="color:var(--p); font-size:9px; font-weight:800; letter-spacing:1px; text-transform: uppercase;">Different Creative Think</p>
+        <p style="color:var(--p); font-size:9px; font-weight:800; letter-spacing:1px; text-transform: uppercase; margin-top:5px;">Finance HUB</p>
     </div>
-    <button onclick="wipe()" class="w-full p-3 rounded-xl bg-red-500/10 text-red-500 font-bold text-[10px] uppercase border border-red-500/20">Wipe Data (8087)</button>
+    <div class="p-4 bg-white/5 border border-white/10 rounded-2xl mb-10 text-center">
+        <span id="tFund" class="text-xl font-black text-emerald-400">৳0</span><br>
+        <small class="text-[9px] uppercase font-bold text-slate-500">Live Office Fund</small>
+    </div>
 </div>
 
 <div class="main">
-    <!-- Live Financial Tracking for Boss -->
-    <div class="stat-grid">
-        <div class="stat-card c-income"><span class="stat-val" id="tInc">৳0</span><span class="stat-lbl">Total Cash Inflow</span></div>
-        <div class="stat-card c-salary"><span class="stat-val" id="tSal">৳0</span><span class="stat-lbl">Salaries Disbursement</span></div>
-        <div class="stat-card c-expense"><span class="stat-val" id="tMisc">৳0</span><span class="stat-lbl">Misc Office Expenses</span></div>
-        <div class="stat-card c-fund"><span class="stat-val" id="tFund" style="color:#00E676">৳0</span><span class="stat-lbl">Cash in Fund</span></div>
-    </div>
-
     <div class="grid-layout">
         <div class="panel">
-            <h3 style="margin-top:0; color: var(--b); font-size: 18px; font-weight: 800;">Ledger Entry</h3>
-            <label>Type</label>
-            <select id="vType"><option value="PAYMENT">Payment Voucher</option><option value="RECEIPT">Receipt Voucher</option></select>
+            <h3 style="margin-top:0; color: var(--b); font-size: 18px; font-weight: 800; margin-bottom: 25px;">Create Voucher</h3>
+            <label>Transaction Type</label>
+            <select id="vType"><option value="PAYMENT">Payment Voucher (খরচ)</option><option value="RECEIPT">Receipt Voucher (জমা)</option></select>
             <label>Name</label>
             <input type="text" id="jName" placeholder="Employee / Client">
-            <label>Account Head</label>
+            <label>Head of Account</label>
             <select id="jHead">
                 <option value="Staff Monthly Salary">Staff Monthly Salary</option>
                 <option value="Salary Advance Payment">Salary Advance Payment</option>
                 <option value="Performance Bonus">Performance Bonus</option>
                 <option value="Client Project Payment">Client Project Payment</option>
-                <option value="Office Rent / Utility Bill">Office Rent / Utility Bill</option>
-                <option value="Others / Food / Snacks">Others / Food / Snacks</option>
+                <option value="Office Infrastructure">Office Infrastructure</option>
+                <option value="Others / Food / Bills">Others / Food / Bills</option>
             </select>
             <label>Amount (BDT)</label>
-            <input type="number" id="jAmt" placeholder="Amount">
+            <input type="number" id="jAmt" placeholder="Enter BDT">
+            <label>Remarks</label>
             <textarea id="jNote" placeholder="Details..." rows="2"></textarea>
-            <button class="btn-save" onclick="saveToCloud()"><i class="fas fa-receipt"></i> POST & PRINT VOUCHER</button>
+            <button class="btn-save" onclick="saveToCloud()"><i class="fas fa-print"></i> SAVE & GENERATE VOUCHER</button>
         </div>
 
         <div class="panel">
-            <h3 style="margin:0 0 20px 0; font-size: 18px; font-weight: 800;">Master History</h3>
+            <h3 style="margin:0 0 20px 0; font-size: 18px; font-weight: 800;">Transaction Logs</h3>
             <div class="table-wrap h-[500px] overflow-y-auto">
-                <table>
-                    <thead><tr class="text-[10px] text-slate-500 uppercase"><th>Date</th><th>Type</th><th>Name</th><th>Amount</th><th>Print</th><th>Del</th></tr></thead>
+                <table class="w-full text-left">
+                    <thead><tr class="text-[10px] text-slate-500 border-b border-white/10 uppercase"><th>Date</th><th>Type</th><th>Name</th><th>Amount</th><th>Print</th></tr></thead>
                     <tbody id="tbody"></tbody>
                 </table>
             </div>
+            <button onclick="wipe()" style="margin-top:20px; color:red; font-size:10px; font-weight:900;">CLEAR ALL (8087)</button>
         </div>
     </div>
 </div>
 
-<!-- --- THE ROYAL VOUCHER --- -->
+<!-- --- THE ROYAL FULL-PAGE VOUCHER --- -->
 <div id="voucherPrint">
     <div id="vHead" class="v-header head-pay">
         <div class="v-logo">N</div>
-        <div class="v-comp"><h1>Nugortech IT Ltd</h1><p>DIFFERENT CREATIVE THINK</p></div>
-        <div style="background:rgba(0,0,0,0.5); padding:5px 25px; border-radius:50px; font-weight:800; font-size:11px; color:white;">OFFICIAL</div>
+        <div class="v-comp">
+            <h1>Nugortech IT Ltd</h1>
+            <p>DIFFERENT CREATIVE THINK</p>
+        </div>
+        <div style="background:rgba(0,0,0,0.5); padding:8px 35px; border-radius:50px; font-weight:900; font-size:14px; color:white;">OFFICIAL</div>
     </div>
+    
     <div class="v-body">
         <h1 class="v-title" id="vTitle">PAYMENT RECEIPT</h1>
-        <div class="v-meta"><div>No: <strong id="vNo">---</strong></div><div>Date: <strong id="vDate">---</strong></div></div>
-        <div class="v-grid">
-            <div><div class="v-row"><span>Paid To / Received From:</span> <span id="vDispName" style="font-weight:900">---</span></div><div class="v-row"><span>Address:</span> <span>HOUSE #85/2, ROAD #4, DHAKA</span></div></div>
-            <div><div class="v-row"><span>Transaction Mode:</span> <span id="vDispMode" style="font-weight:900">---</span></div><div class="v-row"><span>Status:</span> <span style="color:#2ecc71">SUCCESSFUL</span></div></div>
+        <div class="v-meta">
+            <div>Voucher No: <strong id="vNo" style="color:#000">---</strong></div>
+            <div>Date: <strong id="vDate" style="color:#000">---</strong></div>
         </div>
-        <table class="v-table"><thead><tr><th width="70%">Account Head / Description</th><th width="30%">Amount</th></tr></thead><tbody><tr><td id="vDispNote" style="height:60px; vertical-align:top;">---</td><td id="vDispAmtTable" style="text-align:right;">৳0.00</td></tr></tbody></table>
-        <div class="v-total-box"><span style="font-size:12px; font-weight:900; color:#666;">GRAND TOTAL PAYABLE</span><span class="v-amt" id="vDispAmt">৳0.00</span></div>
+
+        <div class="v-grid">
+            <div>
+                <div class="v-row"><span class="v-lbl">Billed To:</span> <span class="v-val" id="vDispName" style="font-size:18px;">---</span></div>
+                <div class="v-row"><span class="v-lbl">Office Address:</span> <span class="v-val" style="font-size:11px">HOUSE #85/2, ROAD #4, MOHAMMADIA HOUSING</span></div>
+            </div>
+            <div>
+                <div class="v-row"><span class="v-lbl">Payment Mode:</span> <span class="v-val">OFFICE FUND SYNC</span></div>
+                <div class="v-row"><span class="v-lbl">Status:</span> <span style="color:#2ecc71">SUCCESSFUL</span></div>
+            </div>
+        </div>
+
+        <table class="v-table">
+            <thead><tr><th width="75%">Account Head / Description</th><th width="25%">Amount</th></tr></thead>
+            <tbody><tr><td id="vDispNote" style="height:120px; vertical-align:top;">---</td><td id="vDispAmtTable" style="text-align:right;">৳0.00</td></tr></tbody>
+        </table>
+
+        <div class="v-total-box">
+            <span class="v-total-lbl">Grand Total Payable Amount</span>
+            <span class="v-amt" id="vDispAmt">৳0.00</span>
+        </div>
+
         <div class="v-footer">
             <div class="sign-box"><div class="sig-font">Hasib</div>Accountant Signature</div>
             <div class="sign-box"><div class="sig-font">Nur Islam</div>Managing Director</div>
             <div class="sign-box"><div class="sig-font" id="vRecSign">---</div>Receiver Signature</div>
         </div>
     </div>
-    <div class="v-bot"><div style="color:white; font-size:8px; font-weight:800;">HOUSE #85/2, ROAD #4, MOHAMMADIA HOUSING LTD, MOHAMMADPUR, DHAKA-1207</div></div>
+
+    <div class="v-bot-red">
+        <div class="v-address-footer">HOUSE #85/2, ROAD #4, MOHAMMADIA HOUSING LTD, MOHAMMADPUR, DHAKA-1207</div>
+    </div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 <script>
-    const firebaseConfig = { apiKey: "AIzaSyBrz1xvq4Fpt9-j75-gUS4d8ebqPRLmOK0", databaseURL: "https://sales-report-nugortech-it-default-rtdb.firebaseio.com", projectId: "sales-report-nugortech-it", appId: "1:848643315031:web:e6fbf92153490ea9d31a12" };
+    const firebaseConfig = { apiKey: "AIzaSyB-AWYawVDTCAX0_ocZYQMqUI5ZteoDsIg", databaseURL: "https://sales-report-nugortech-it-default-rtdb.firebaseio.com", projectId: "sales-report-nugortech-it", appId: "1:848643315031:web:e6fbf92153490ea9d31a12" };
     firebase.initializeApp(firebaseConfig); const db = firebase.database();
 
     function saveToCloud() {
         const n = document.getElementById('jName').value, a = document.getElementById('jAmt').value;
-        if(!n || !a) return alert("Fill fields!");
-        db.ref('ledger_v12_final').push({ type: document.getElementById('vType').value, name: n, head: document.getElementById('jHead').value, amount: Number(a), note: document.getElementById('jNote').value, date: new Date().toLocaleDateString('en-GB') }).then(() => { location.reload(); });
+        if(!n || !a) return alert("Fill all fields!");
+        db.ref('ledger_v13_fullpage').push({ type: document.getElementById('vType').value, name: n, head: document.getElementById('jHead').value, amount: Number(a), note: document.getElementById('jNote').value, date: new Date().toLocaleDateString('en-GB') }).then(() => { location.reload(); });
     }
 
-    db.ref('ledger_v12_final').on('value', snap => {
+    db.ref('ledger_v13_fullpage').on('value', snap => {
         const tbody = document.getElementById('tbody'); tbody.innerHTML = "";
-        let income = 0, salary = 0, misc = 0;
+        let income = 0, expense = 0;
         if(snap.val()) {
             Object.keys(snap.val()).reverse().forEach(k => {
                 const d = snap.val()[k];
-                if(d.type === "RECEIPT") income += d.amount;
-                else { if(d.head.includes("Salary")) salary += d.amount; else misc += d.amount; }
-                tbody.innerHTML += `<tr class="border-b border-white/5"><td>${d.date}</td><td><span class="text-[9px] font-bold px-2 py-1 rounded ${d.type==='PAYMENT'?'bg-red-500/10 text-red-500':'bg-blue-500/10 text-blue-500'}">${d.type}</span></td><td>${d.name}</td><td>৳${d.amount.toLocaleString()}</td><td><button onclick="printV('${k}')" class="p-btn">Print</button></td><td><i class="fas fa-trash" onclick="del('${k}')" style="color:red; cursor:pointer;"></i></td></tr>`;
+                if(d.type === "RECEIPT") income += d.amount; else expense += d.amount;
+                tbody.innerHTML += `<tr class="border-b border-white/5"><td>${d.date}</td><td><span class="text-[9px] font-bold px-2 py-1 rounded ${d.type==='PAYMENT'?'bg-red-500/10 text-red-500':'bg-blue-500/10 text-blue-500'}">${d.type}</span></td><td>${d.name}</td><td>৳${d.amount.toLocaleString()}</td><td><button onclick="printV('${k}')" class="p-btn">Print</button> <i class="fas fa-trash ml-2 text-red-500 cursor-pointer" onclick="del('${k}')"></i></td></tr>`;
             });
         }
-        document.getElementById('tInc').innerText = "৳" + income.toLocaleString();
-        document.getElementById('tSal').innerText = "৳" + salary.toLocaleString();
-        document.getElementById('tMisc').innerText = "৳" + misc.toLocaleString();
-        document.getElementById('tFund').innerText = "৳" + (income - (salary + misc)).toLocaleString();
+        document.getElementById('tFund').innerText = "৳" + (income - expense).toLocaleString();
     });
 
     function printV(key) {
-        db.ref('ledger_v12_final/'+key).once('value', s => {
+        db.ref('ledger_v13_fullpage/'+key).once('value', s => {
             const d = s.val();
             const h = document.getElementById('vHead'); const t = document.getElementById('vTitle');
             if(d.type === "PAYMENT") { h.className="v-header head-pay"; t.innerText="PAYMENT RECEIPT"; t.style.color="#8B0000"; }
@@ -194,7 +217,6 @@
             document.getElementById('vNo').innerText = "NUG-" + key.slice(-6).toUpperCase();
             document.getElementById('vDate').innerText = d.date;
             document.getElementById('vDispName').innerText = d.name.toUpperCase();
-            document.getElementById('vDispMode').innerText = "Office Fund";
             document.getElementById('vDispNote').innerText = d.note || d.head;
             document.getElementById('vDispAmt').innerText = "৳" + d.amount.toLocaleString();
             document.getElementById('vDispAmtTable').innerText = "৳" + d.amount.toLocaleString();
@@ -203,8 +225,8 @@
         });
     }
 
-    function del(k) { if(prompt("Pass: 8087") === "8087") db.ref('ledger_v12_final/'+k).remove(); }
-    function wipe() { if(prompt("8087 PIN?") === "8087") db.ref('ledger_v12_final').remove(); }
+    function del(k) { if(prompt("Pass?") === "8087") db.ref('ledger_v13_fullpage/'+k).remove(); }
+    function wipe() { if(prompt("8087 PIN?") === "8087") db.ref('ledger_v13_fullpage').remove(); }
 </script>
 </body>
 </html>
