@@ -19,20 +19,17 @@
         
         body { margin: 0; background: var(--bg); color: white; min-height: 100vh; overflow-x: hidden; display: flex; flex-direction: column; align-items: center; }
 
-        /* Security Check */
-        #secure-wrapper { display: none; width: 100%; max-width: 1300px; padding: 40px 20px; }
+        /* Security Wrapper Set to Block by Default */
+        #secure-wrapper { display: block; width: 100%; max-width: 1300px; padding: 40px 20px; }
 
         /* Animated Background Glow */
         .bg-glow { position: fixed; width: 600px; height: 600px; background: radial-gradient(circle, rgba(0,163,255,0.1) 0%, transparent 70%); z-index: -1; animation: drift 20s infinite alternate; }
         @keyframes drift { from { top: -10%; left: -10%; } to { bottom: -10%; right: -10%; } }
 
-        /* Header */
+        /* Header (Logout Button Removed) */
         .top-nav { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 50px; }
         .logo-area h1 { font-size: 28px; font-weight: 800; margin: 0; letter-spacing: -1.5px; color: white; }
         .logo-area span { color: var(--orange); font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; }
-
-        .logout-btn { padding: 10px 20px; background: rgba(244, 63, 94, 0.1); border: 1px solid var(--red); color: var(--red); border-radius: 12px; cursor: pointer; font-size: 11px; font-weight: 800; }
-        .logout-btn:hover { background: var(--red); color: white; box-shadow: 0 0 20px rgba(244, 63, 94, 0.4); }
 
         /* Clock & Greetings */
         .hero-section { text-align: center; margin-bottom: 60px; }
@@ -97,8 +94,8 @@
         .t-admin:hover { border-color: #94a3b8; box-shadow: 0 0 30px rgba(148, 163, 184, 0.2); }
         .t-admin i { color: #94a3b8; }
 
-        /* Loading Screen */
-        #loader { position: fixed; inset: 0; background: var(--bg); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 2000; }
+        /* Loader Removed from View */
+        #loader { display: none; }
 
         .footer-text { margin-top: 60px; font-size: 10px; opacity: 0.2; letter-spacing: 4px; text-transform: uppercase; font-weight: 800; text-align: center; width: 100%; }
 
@@ -110,25 +107,18 @@
 
     <div class="bg-glow"></div>
 
-    <!-- Security Overlay -->
-    <div id="loader">
-        <i class="fas fa-shield-check animate-pulse" style="font-size: 40px; color: var(--blue); margin-bottom: 15px;"></i>
-        <div style="font-weight: 800; font-size: 14px; color: var(--blue); letter-spacing: 3px;">VERIFYING ACCESS...</div>
-    </div>
-
     <div id="secure-wrapper">
-        <!-- Top Nav -->
+        <!-- Top Nav (Logout Button Removed) -->
         <nav class="top-nav">
             <div class="logo-area">
                 <h1>NUGORTECH IT</h1>
                 <span>Different Creative Think</span>
             </div>
-            <button class="logout-btn" onclick="signout()">LOGOUT</button>
         </nav>
 
         <!-- Greetings Area -->
         <div class="hero-section">
-            <div id="greet">Secure Connection Active</div>
+            <div id="greet">System Online</div>
             <div id="time">00:00:00</div>
         </div>
 
@@ -171,21 +161,18 @@
                 <span>Expense & Voucher</span>
             </a>
 
-            <!-- 7. NEW: Call Monitoring -->
             <a href="call_admin.html" class="tile t-call">
                 <i class="fas fa-headset"></i>
                 <h3>Call Monitor</h3>
                 <span>Follow-up Logs</span>
             </a>
 
-            <!-- 8. Monthly Master Report -->
             <a href="report.html" class="tile t-report">
                 <i class="fas fa-file-contract"></i>
                 <h3>Monthly Report</h3>
                 <span>Master Summary</span>
             </a>
 
-            <!-- 9. Attendance Admin Logs -->
             <a href="https://nugortech-it-attendance.vercel.app/admin.html" class="tile t-admin" target="_blank">
                 <i class="fas fa-shield-halved"></i>
                 <h3>Admin Logs</h3>
@@ -194,34 +181,14 @@
 
         </div>
 
-        <div class="footer-text">NUGORTECH ENTERPRISE OS | SECURE v9.5 | BOSS EDITION</div>
+        <div class="footer-text">NUGORTECH ENTERPRISE OS | MASTER ACCESS | BOSS EDITION</div>
     </div>
 
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-
     <script>
-        const firebaseConfig = { 
-            apiKey: "AIzaSyBrz1xvq4Fpt9-j75-gUS4d8ebqPRLmOK0", 
-            authDomain: "sales-report-nugortech-it.firebaseapp.com",
-            projectId: "sales-report-nugortech-it",
-            appId: "1:848643315031:web:e6fbf92153490ea9d31a12" 
+        // অটোমেটিক সিস্টেম স্টার্ট
+        window.onload = function() {
+            startSystem();
         };
-        firebase.initializeApp(firebaseConfig);
-
-        // Security Guard
-        firebase.auth().onAuthStateChanged((user) => {
-            if (user) {
-                document.getElementById('loader').style.display = "none";
-                document.getElementById('secure-wrapper').style.display = "block";
-                startSystem();
-            } else {
-                location.href = "login.html";
-            }
-        });
-
-        function signout() { firebase.auth().signOut().then(() => location.href = "login.html"); }
 
         function startSystem() {
             setInterval(() => {
