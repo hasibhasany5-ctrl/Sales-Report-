@@ -2,45 +2,65 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Call Hub Admin | Nugortech IT Ltd</title>
+    <title>Expense Admin | CAR ZEO</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body { background: #050810; font-family: 'Plus Jakarta Sans', sans-serif; color: white; }
         .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        /* পাসওয়ার্ড পপ-আপ ডিজাইন */
-        #pinModal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 1000; }
-        .modal-box { background: #111827; padding: 30px; border-radius: 25px; border: 1px solid #374151; width: 320px; text-align: center; box-shadow: 0 0 50px rgba(0, 163, 255, 0.2); }
+        
+        /* পাসওয়ার্ড পপ-আপ */
+        #pinModal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 1000; }
+        .modal-box { background: #111827; padding: 30px; border-radius: 25px; border: 1px solid #374151; width: 320px; text-align: center; }
+
+        /* প্রিন্ট রিপোর্ট স্টাইল (Compact Word Style) */
+        #printArea { background: white; color: black; display: none; width: 1000px; margin: 0 auto; padding: 30px; }
+        .report-table { width: 100%; border-collapse: collapse; border: 1.5px solid black; }
+        .report-table th { background: #f3f4f6 !important; border: 1.5px solid black; padding: 6px; font-size: 10px; text-transform: uppercase; font-weight: 800; }
+        .report-table td { border: 1.5px solid black; padding: 6px 10px; font-size: 11px; font-weight: 700; color: black; }
+        
+        @media print {
+            .no-print { display: none !important; }
+            #printArea { display: block !important; border: none; width: 100%; margin: 0; padding: 10px; }
+            body { background: white; }
+            @page { size: portrait; margin: 0.5cm; }
+        }
     </style>
 </head>
-<body class="p-10">
-    <div class="max-w-7xl mx-auto">
+<body class="p-4 md:p-10">
+    <div class="max-w-7xl mx-auto no-print">
         <header class="flex justify-between items-center mb-8 glass p-6 rounded-3xl">
-            <div>
-                <h1 class="text-3xl font-black">Call Monitoring Hub</h1>
-                <p class="text-xs text-blue-400 font-bold uppercase tracking-widest mt-1">Boss Monitoring Center</p>
+            <div class="flex items-center gap-4">
+                <img src="https://i.ibb.co.com/MymLgRJG/hasib.jpg" class="h-14 rounded-xl">
+                <div>
+                    <h1 class="text-2xl font-black">Expense Monitoring</h1>
+                    <p class="text-[10px] text-red-500 font-bold uppercase tracking-widest mt-1">CAR ZEO Official Hub</p>
+                </div>
             </div>
             <div class="text-right">
-                <p class="text-[10px] opacity-50 uppercase font-bold">Total Follow-ups</p>
-                <p id="tCount" class="text-4xl font-black text-orange-500">0</p>
+                <p class="text-[10px] opacity-50 uppercase font-bold">Total Expenses (Month)</p>
+                <p id="totalDisplay" class="text-3xl font-black text-orange-500">0 BDT</p>
             </div>
         </header>
 
         <div class="glass p-8 rounded-[40px] shadow-2xl">
-            <div class="flex justify-between mb-8">
-                <input type="text" id="find" onkeyup="filter()" placeholder="Search Staff or Date..." class="bg-white/5 border border-white/10 p-4 rounded-2xl outline-none focus:border-blue-500 w-1/3 text-sm text-white">
+            <div class="flex justify-between mb-8 items-center">
+                <div class="flex gap-4 items-center w-2/3">
+                    <input type="month" id="filterMonth" onchange="loadData()" class="bg-white/5 border border-white/10 p-3 rounded-xl outline-none focus:border-red-500 text-sm text-white w-1/3">
+                    <input type="text" id="find" onkeyup="filter()" placeholder="Search Item..." class="bg-white/5 border border-white/10 p-3 rounded-xl outline-none focus:border-blue-500 flex-1 text-sm text-white">
+                </div>
                 <div class="flex gap-4">
-                    <button onclick="exportCSV()" class="bg-blue-600 px-6 py-2 rounded-xl text-xs font-bold uppercase hover:bg-blue-500 transition-all">Export Excel</button>
-                    <button onclick="askPIN('WIPE')" class="bg-red-600/20 text-red-500 px-6 py-2 rounded-xl text-xs font-bold uppercase border border-red-500/20">Clear (8087)</button>
+                    <button onclick="window.print()" class="bg-blue-600 px-6 py-3 rounded-xl text-[10px] font-black uppercase hover:bg-blue-500 transition-all"><i class="fas fa-print mr-2"></i>Print Report</button>
+                    <button onclick="askPIN('WIPE')" class="bg-red-600/20 text-red-500 px-6 py-3 rounded-xl text-[10px] font-black uppercase border border-red-500/20">Clear All (8087)</button>
                 </div>
             </div>
             
-            <div class="overflow-x-auto max-h-[550px]">
-                <table id="callTable" class="w-full text-left">
+            <div class="overflow-x-auto max-h-[500px]">
+                <table id="expTable" class="w-full text-left">
                     <thead class="sticky top-0 bg-[#050810] border-b border-white/10 z-10">
                         <tr class="text-[10px] text-slate-500 uppercase">
-                            <th class="p-4">Date/Time</th><th class="p-4">Executive</th><th class="p-4">Client Info</th><th class="p-4">Type</th><th class="p-4">Remarks</th><th class="p-4">Del</th>
+                            <th class="p-4">Date</th><th class="p-4">Item Description</th><th class="p-4">Amount</th><th class="p-4 text-center">Del</th>
                         </tr>
                     </thead>
                     <tbody id="tbody" class="text-sm"></tbody>
@@ -49,14 +69,52 @@
         </div>
     </div>
 
-    <!-- গোপন পাসওয়ার্ড পপ-আপ -->
+    <!-- Word File Style Report for Boss -->
+    <div id="printArea">
+        <div class="flex items-center justify-between border-b-4 border-[#002e5b] pb-4 mb-4">
+            <img src="https://i.ibb.co.com/MymLgRJG/hasib.jpg" class="h-20 rounded-lg">
+            <div class="text-center flex-1">
+                <h1 class="text-4xl font-black text-[#002e5b] uppercase">CAR ZEO</h1>
+                <p class="text-[10px] font-bold text-gray-600 mt-1 uppercase">10 Kamal Ataturk Avenue, Dhaka 1213 | 01918-666696</p>
+            </div>
+            <div class="w-20"></div> <!-- Spacer -->
+        </div>
+        
+        <h2 class="text-center text-lg font-black underline uppercase mb-2">Office Maintenance / Expense Report</h2>
+        <p id="pMonth" class="text-center font-bold text-xs mb-4 uppercase"></p>
+
+        <table class="report-table">
+            <thead>
+                <tr>
+                    <th width="8%">SL.No</th>
+                    <th width="15%">Date</th>
+                    <th width="57%">Description</th>
+                    <th width="20%">Amount (Taka)</th>
+                </tr>
+            </thead>
+            <tbody id="ptbody"></tbody>
+            <tfoot>
+                <tr style="background: #f3f4f6; font-weight: 800;">
+                    <td colspan="3" class="text-right pr-6 py-2 border-r-2 border-black">TOTAL TAKA:</td>
+                    <td id="pTotal" class="text-center py-2">0</td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <div class="flex justify-between mt-20 px-10">
+            <div class="text-center border-t-2 border-black w-48 pt-2 font-black text-[10px] uppercase">Prepared By</div>
+            <div class="text-center border-t-2 border-black w-48 pt-2 font-black text-[10px] uppercase">Director Signature</div>
+        </div>
+    </div>
+
+    <!-- PIN পপ-আপ -->
     <div id="pinModal">
         <div class="modal-box">
-            <i class="fas fa-lock text-blue-500 text-3xl mb-4"></i>
-            <h3 class="font-bold mb-4">Enter Admin PIN</h3>
-            <input type="password" id="adminPIN" placeholder="****" class="w-full bg-black/50 border border-white/10 p-3 rounded-xl text-center text-xl tracking-[1em] mb-6 outline-none focus:border-blue-500">
+            <i class="fas fa-shield-alt text-red-500 text-3xl mb-4"></i>
+            <h3 class="font-bold mb-4 text-white">Enter Admin PIN</h3>
+            <input type="password" id="adminPIN" placeholder="****" class="w-full bg-black/50 border border-white/10 p-3 rounded-xl text-center text-xl tracking-[1em] mb-6 outline-none focus:border-red-500 text-white">
             <div class="flex gap-3">
-                <button onclick="confirmAction()" class="flex-1 bg-blue-600 py-3 rounded-xl font-bold">OK</button>
+                <button onclick="confirmAction()" class="flex-1 bg-red-600 py-3 rounded-xl font-bold">OK</button>
                 <button onclick="closeModal()" class="flex-1 bg-slate-800 py-3 rounded-xl font-bold">Cancel</button>
             </div>
         </div>
@@ -66,36 +124,53 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script>
-        const firebaseConfig = { apiKey: "AIzaSyBrz1xvq4Fpt9-j75-gUS4d8ebqPRLmOK0", databaseURL: "https://sales-report-nugortech-it-default-rtdb.firebaseio.com", projectId: "sales-report-nugortech-it", appId: "1:848643315031:web:e6fbf92153490ea9d31a12" };
+        const firebaseConfig = { 
+            apiKey: "AIzaSyBrz1xvq4Fpt9-j75-gUS4d8ebqPRLmOK0", 
+            databaseURL: "https://sales-report-nugortech-it-default-rtdb.firebaseio.com", 
+            projectId: "sales-report-nugortech-it", 
+            appId: "1:848643315031:web:e6fbf92153490ea9d31a12" 
+        };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        let pendingAction = null;
-        let pendingKey = null;
+        let pendingAction = null, pendingKey = null;
+        document.getElementById('filterMonth').value = new Date().toISOString().slice(0, 7);
 
-        // ডাটা লোড
-        db.ref('customer_calls').on('value', snap => {
-            const tbody = document.getElementById('tbody'); tbody.innerHTML = "";
-            let count = 0; const today = new Date().toLocaleDateString('en-GB').replace(/\//g, "-");
-            if(snap.val()) {
-                Object.keys(snap.val()).reverse().forEach(k => {
-                    const d = snap.val()[k];
-                    if(d.date === today) count++;
-                    let badge = d.type === 'Regular' ? 'text-green-500 bg-green-500/10' : (d.type === 'Irregular' ? 'text-red-500 bg-red-500/10' : 'text-yellow-500 bg-yellow-500/10');
-                    tbody.innerHTML += `<tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
-                        <td class="p-4 opacity-50 text-[10px]">${d.date}<br>${d.time}</td>
-                        <td class="p-4 font-bold text-orange-500 uppercase">${d.staff}</td>
-                        <td class="p-4"><strong>${d.client}</strong><br><span class="text-blue-400 font-medium">${d.phone}</span></td>
-                        <td class="p-4"><span class="px-2 py-1 rounded-md text-[9px] font-black uppercase ${badge}">${d.type}</span></td>
-                        <td class="p-4 opacity-70 italic text-xs max-w-xs">${d.remarks}</td>
-                        <td class="p-4"><button onclick="askPIN('DEL', '${k}')" class="text-slate-700 hover:text-red-500"><i class="fas fa-trash"></i></button></td>
-                    </tr>`;
-                });
-            }
-            document.getElementById('tCount').innerText = count;
-        });
+        function loadData() {
+            const filter = document.getElementById('filterMonth').value;
+            const tbody = document.getElementById('tbody');
+            const ptbody = document.getElementById('ptbody');
+            tbody.innerHTML = ""; ptbody.innerHTML = "";
 
-        // পাসওয়ার্ড হ্যান্ডেলিং
+            db.ref('car_zeo_expenses').once('value', snap => {
+                let total = 0, sl = 1;
+                if(snap.val()) {
+                    const sorted = Object.entries(snap.val()).sort((a,b) => new Date(a[1].date) - new Date(b[1].date));
+                    sorted.forEach(([k, d]) => {
+                        if(d.date.startsWith(filter)) {
+                            total += d.taka;
+                            tbody.innerHTML += `<tr class="border-b border-white/5 hover:bg-white/5">
+                                <td class="p-4 font-bold text-slate-400 text-xs">${d.date}</td>
+                                <td class="p-4 uppercase font-semibold">${d.desc}</td>
+                                <td class="p-4 text-red-500 font-black">${d.taka.toLocaleString()}</td>
+                                <td class="p-4 text-center"><button onclick="askPIN('DEL', '${k}')" class="text-slate-700 hover:text-red-500"><i class="fas fa-trash"></i></button></td>
+                            </tr>`;
+
+                            ptbody.innerHTML += `<tr>
+                                <td class="text-center">${sl++}</td>
+                                <td class="text-center">${d.date}</td>
+                                <td class="px-3">${d.desc}</td>
+                                <td class="text-center font-bold">${d.taka.toLocaleString()}</td>
+                            </tr>`;
+                        }
+                    });
+                }
+                document.getElementById('totalDisplay').innerText = total.toLocaleString() + " BDT";
+                document.getElementById('pTotal').innerText = total.toLocaleString() + " BDT";
+                document.getElementById('pMonth').innerText = "For the Month of: " + filter;
+            });
+        }
+
         function askPIN(action, key) {
             pendingAction = action; pendingKey = key;
             document.getElementById('pinModal').style.display = "flex";
@@ -104,12 +179,11 @@
         function closeModal() { document.getElementById('pinModal').style.display = "none"; document.getElementById('adminPIN').value = ""; }
 
         function confirmAction() {
-            const pin = document.getElementById('adminPIN').value;
-            if(pin === "8087") {
-                if(pendingAction === "DEL") db.ref('customer_calls/' + pendingKey).remove();
-                else if(pendingAction === "WIPE") db.ref('customer_calls').remove();
-                closeModal();
-            } else { alert("Wrong PIN!"); }
+            if(document.getElementById('adminPIN').value === "8087") {
+                if(pendingAction === "DEL") db.ref('car_zeo_expenses/' + pendingKey).remove();
+                else if(pendingAction === "WIPE") db.ref('car_zeo_expenses').remove();
+                closeModal(); loadData();
+            } else alert("Wrong PIN!");
         }
 
         function filter() {
@@ -118,16 +192,7 @@
             for (let r of rows) { r.style.display = r.innerText.toUpperCase().includes(val) ? "" : "none"; }
         }
 
-        function exportCSV() {
-            let csv = "\uFEFFDate,Time,Executive,Client,Phone,Type,Remarks\n";
-            document.querySelectorAll("#callTable tr").forEach((row, i) => {
-                if(i === 0) return;
-                let cols = row.querySelectorAll("td");
-                csv += Array.from(cols).slice(0, 5).map(c => c.innerText.replace(/\n/g, " ")).join(",") + "," + cols[5].innerText + "\n";
-            });
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "Call_Report.csv"; link.click();
-        }
+        loadData();
     </script>
 </body>
 </html>
