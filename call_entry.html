@@ -3,117 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bulk Call Entry | Nugortech IT Ltd</title>
+    <title>Expense Entry | CAR ZEO</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background: #0b1120; font-family: 'Plus Jakarta Sans', sans-serif; color: white; }
         .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        input, select, textarea { background: rgba(255, 255, 255, 0.05) !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; color: white !important; font-size: 12px !important; padding: 10px !important; border-radius: 10px !important; width: 100%; outline: none; }
-        input:focus, select:focus { border-color: #00A3FF !important; }
-        th { font-size: 10px; color: #64748b; text-transform: uppercase; padding: 10px; text-align: left; }
+        input, textarea { background: rgba(255, 255, 255, 0.05) !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; color: white !important; font-size: 14px !important; padding: 14px !important; border-radius: 12px !important; width: 100%; outline: none; transition: 0.3s; }
+        input:focus, textarea:focus { border-color: #e31e24 !important; background: rgba(255, 255, 255, 0.08) !important; }
+        label { font-size: 11px; color: #64748b; text-transform: uppercase; font-weight: 800; margin-left: 8px; margin-bottom: 5px; display: block; }
     </style>
 </head>
-<body class="p-6">
-    <div class="max-w-6xl mx-auto">
-        <div class="text-center mb-10">
-            <h1 class="text-3xl font-black tracking-tight">NUGORTECH <span class="text-blue-500">IT</span></h1>
-            <p class="text-[10px] text-orange-500 font-bold uppercase tracking-[0.3em] mt-2">Daily 5-Call Follow-up Portal</p>
+<body class="p-4 md:p-10 flex items-center justify-center min-h-screen">
+    <div class="w-full max-w-md">
+        <!-- Brand Header -->
+        <div class="text-center mb-8">
+            <img src="https://i.ibb.co.com/MymLgRJG/hasib.jpg" class="h-20 mx-auto rounded-2xl shadow-xl mb-4">
+            <h1 class="text-3xl font-black tracking-tighter text-white">CAR <span class="text-red-600">ZEO</span></h1>
+            <p class="text-[10px] text-blue-400 font-bold uppercase tracking-[0.3em] mt-1">Daily Expense Entry Portal</p>
         </div>
 
-        <div class="glass p-8 rounded-[40px] shadow-2xl">
-            <!-- Executive Info -->
-            <div class="mb-8 max-w-sm">
-                <label class="text-[10px] font-bold text-blue-400 ml-2 uppercase">Executive Name</label>
-                <input type="text" id="staffName" placeholder="Enter Your Name" class="mt-1">
+        <div class="glass p-8 rounded-[35px] shadow-2xl">
+            <!-- Simplified Expense Form -->
+            <div class="space-y-6">
+                <div>
+                    <label>Date (তারিখ)</label>
+                    <input type="date" id="expDate">
+                </div>
+
+                <div>
+                    <label>Item Description (খরচের বিবরণ)</label>
+                    <textarea id="expDesc" rows="3" placeholder="Description লিখুন..."></textarea>
+                </div>
+
+                <div>
+                    <label>Taka (টাকার পরিমাণ)</label>
+                    <input type="number" id="expTaka" placeholder="0">
+                </div>
+
+                <div class="pt-2">
+                    <button onclick="submitExpense()" id="submitBtn" class="w-full bg-gradient-to-r from-red-600 to-blue-700 py-4 rounded-2xl font-black uppercase text-sm shadow-xl hover:opacity-90 active:scale-95 transition-all">
+                        Submit Expense
+                    </button>
+                </div>
             </div>
 
-            <!-- Bulk Entry Table -->
-            <div class="overflow-x-auto">
-                <table class="w-full">
-                    <thead>
-                        <tr>
-                            <th width="5%">#</th>
-                            <th width="20%">Client Name</th>
-                            <th width="15%">Phone Number</th>
-                            <th width="20%">Customer Type</th>
-                            <th width="40%">Remarks (Conversation Details)</th>
-                        </tr>
-                    </thead>
-                    <tbody id="callRows">
-                        <!-- 5 Rows for Bulk Entry -->
-                        <script>
-                            for(let i=1; i<=5; i++) {
-                                document.write(`
-                                    <tr class="call-entry-row">
-                                        <td class="p-2 text-slate-500 font-bold">${i}</td>
-                                        <td class="p-2"><input type="text" class="c-name" placeholder="Name"></td>
-                                        <td class="p-2"><input type="number" class="c-phone" placeholder="017..."></td>
-                                        <td class="p-2">
-                                            <select class="c-type">
-                                                <option value="Regular">Regular (নিমিত)</option>
-                                                <option value="Irregular">Irregular (অনিয়মিত)</option>
-                                                <option value="Occasional">Occasional Service (মাঝে মাঝে নেয়)</option>
-                                            </select>
-                                        </td>
-                                        <td class="p-2"><textarea class="c-notes" rows="1" placeholder="What happened on call?"></textarea></td>
-                                    </tr>
-                                `);
-                            }
-                        </script>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="mt-10 flex justify-center">
-                <button onclick="submitBulkCalls()" class="bg-gradient-to-r from-orange-600 to-blue-600 px-12 py-4 rounded-2xl font-black uppercase text-sm shadow-xl hover:scale-[1.05] transition-all">
-                    Sync All 5 Records to Hub
-                </button>
-            </div>
             <p id="status" class="mt-6 text-center font-bold text-sm"></p>
         </div>
+
+        <p class="text-center text-slate-600 text-[9px] mt-8 uppercase font-bold tracking-widest">Powered by CAR ZEO Hub</p>
     </div>
 
-    <!-- Firebase -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    
     <script>
-        const firebaseConfig = { apiKey: "AIzaSyBrz1xvq4Fpt9-j75-gUS4d8ebqPRLmOK0", databaseURL: "https://sales-report-nugortech-it-default-rtdb.firebaseio.com", projectId: "sales-report-nugortech-it", appId: "1:848643315031:web:e6fbf92153490ea9d31a12" };
+        // আপনার Firebase Config (আগের প্রজেক্টের সাথে মিল রেখে)
+        const firebaseConfig = { 
+            apiKey: "AIzaSyBrz1xvq4Fpt9-j75-gUS4d8ebqPRLmOK0", 
+            databaseURL: "https://sales-report-nugortech-it-default-rtdb.firebaseio.com", 
+            projectId: "sales-report-nugortech-it"
+        };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        async function submitBulkCalls() {
-            const staff = document.getElementById('staffName').value;
-            if(!staff) return alert("Executive Name is required!");
+        // আজকের তারিখ ডিফল্ট সেট করা
+        document.getElementById('expDate').valueAsDate = new Date();
 
-            const rows = document.querySelectorAll('.call-entry-row');
-            let promises = [];
-            const date = new Date().toLocaleDateString('en-GB').replace(/\//g, "-");
-            const time = new Date().toLocaleTimeString();
+        function submitExpense() {
+            const date = document.getElementById('expDate').value;
+            const desc = document.getElementById('expDesc').value;
+            const taka = document.getElementById('expTaka').value;
+            const status = document.getElementById('status');
+            const btn = document.getElementById('submitBtn');
 
-            rows.forEach(row => {
-                const name = row.querySelector('.c-name').value;
-                const phone = row.querySelector('.c-phone').value;
-                const type = row.querySelector('.c-type').value;
-                const remarks = row.querySelector('.c-notes').value;
+            if(!desc || !taka) {
+                status.className = "mt-6 text-center font-bold text-sm text-red-500";
+                status.innerText = "❌ ডেসক্রিপশন এবং টাকা পূরণ করুন!";
+                return;
+            }
 
-                // শুধু সেই রোগুলো সেভ হবে যেগুলোতে নাম আর ফোন আছে
-                if(name && phone) {
-                    const data = { staff, client: name, phone, type, remarks, time, date };
-                    promises.push(db.ref('customer_calls').push(data));
-                }
+            btn.disabled = true;
+            btn.innerText = "Syncing...";
+            status.className = "mt-6 text-center font-bold text-sm text-blue-400";
+            status.innerText = "⏳ Submitting to Cloud...";
+
+            // ডাটাবেজে সাবমিট করা
+            db.ref('car_zeo_expenses').push({
+                date: date,
+                desc: desc,
+                taka: parseFloat(taka),
+                timestamp: Date.now()
+            }).then(() => {
+                status.className = "mt-6 text-center font-bold text-sm text-green-500";
+                status.innerText = "✅ Expense Submitted Successfully!";
+                
+                // ইনপুট ক্লিয়ার করা
+                document.getElementById('expDesc').value = "";
+                document.getElementById('expTaka').value = "";
+                
+                setTimeout(() => {
+                    status.innerText = "";
+                    btn.disabled = false;
+                    btn.innerText = "Submit Expense";
+                }, 3000);
+            }).catch(err => {
+                alert("Error: " + err.message);
+                btn.disabled = false;
             });
-
-            if(promises.length === 0) return alert("Please fill at least one client info!");
-
-            document.getElementById('status').innerText = "⏳ Syncing with Cloud...";
-            
-            Promise.all(promises).then(() => {
-                document.getElementById('status').className = "mt-6 text-center font-bold text-sm text-green-500";
-                document.getElementById('status').innerText = "✅ All Records Submitted Successfully!";
-                // ফর্ম ক্লিয়ার করা
-                document.querySelectorAll('.c-name, .c-phone, .c-notes').forEach(i => i.value = "");
-            }).catch(err => alert("Error: " + err.message));
         }
     </script>
 </body>
