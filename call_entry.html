@@ -9,108 +9,90 @@
     <style>
         body { background: #0b1120; font-family: 'Plus Jakarta Sans', sans-serif; color: white; }
         .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        input, textarea { background: rgba(255, 255, 255, 0.05) !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; color: white !important; font-size: 14px !important; padding: 14px !important; border-radius: 12px !important; width: 100%; outline: none; transition: 0.3s; }
-        input:focus, textarea:focus { border-color: #e31e24 !important; background: rgba(255, 255, 255, 0.08) !important; }
-        label { font-size: 11px; color: #64748b; text-transform: uppercase; font-weight: 800; margin-left: 8px; margin-bottom: 5px; display: block; }
+        input, select, textarea { background: rgba(255, 255, 255, 0.05) !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; color: white !important; font-size: 14px !important; padding: 12px !important; border-radius: 12px !important; width: 100%; outline: none; transition: 0.3s; }
+        input:focus, select:focus, textarea:focus { border-color: #e31e24 !important; background: rgba(255, 255, 255, 0.08) !important; }
+        label { font-size: 10px; color: #64748b; text-transform: uppercase; font-weight: 800; margin-left: 8px; margin-bottom: 4px; display: block; }
     </style>
 </head>
 <body class="p-4 md:p-10 flex items-center justify-center min-h-screen">
     <div class="w-full max-w-md">
-        <!-- Brand Header -->
         <div class="text-center mb-8">
             <img src="https://i.ibb.co.com/MymLgRJG/hasib.jpg" class="h-20 mx-auto rounded-2xl shadow-xl mb-4">
             <h1 class="text-3xl font-black tracking-tighter text-white">CAR <span class="text-red-600">ZEO</span></h1>
-            <p class="text-[10px] text-blue-400 font-bold uppercase tracking-[0.3em] mt-1">Daily Expense Entry Portal</p>
+            <p class="text-[10px] text-blue-400 font-bold uppercase tracking-[0.3em] mt-1">Categorized Expense Portal</p>
         </div>
 
         <div class="glass p-8 rounded-[35px] shadow-2xl">
-            <!-- Simplified Expense Form -->
-            <div class="space-y-6">
+            <div class="space-y-5">
                 <div>
                     <label>Date (তারিখ)</label>
                     <input type="date" id="expDate">
                 </div>
 
                 <div>
-                    <label>Item Description (খরচের বিবরণ)</label>
-                    <textarea id="expDesc" rows="3" placeholder="Description লিখুন..."></textarea>
+                    <label>Category (খরচের খাত)</label>
+                    <select id="expCat">
+                        <option value="Transport">Transport (যাতায়াত)</option>
+                        <option value="Office Maintenance">Office Maintenance (অফিস মেইনটেন্যান্স)</option>
+                        <option value="Snacks">Snacks (নাস্তা)</option>
+                        <option value="Courier">Courier (কুরিয়ার)</option>
+                        <option value="Other">Other (অন্যান্য)</option>
+                    </select>
                 </div>
 
                 <div>
-                    <label>Taka (টাকার পরিমাণ)</label>
+                    <label>Item Description (বিবরণ)</label>
+                    <textarea id="expDesc" rows="2" placeholder="Description..."></textarea>
+                </div>
+
+                <div>
+                    <label>Taka (টাকা)</label>
                     <input type="number" id="expTaka" placeholder="0">
                 </div>
 
                 <div class="pt-2">
                     <button onclick="submitExpense()" id="submitBtn" class="w-full bg-gradient-to-r from-red-600 to-blue-700 py-4 rounded-2xl font-black uppercase text-sm shadow-xl hover:opacity-90 active:scale-95 transition-all">
-                        Submit Expense
+                        Submit Records
                     </button>
                 </div>
             </div>
-
-            <p id="status" class="mt-6 text-center font-bold text-sm"></p>
+            <p id="status" class="mt-4 text-center font-bold text-xs"></p>
         </div>
-
-        <p class="text-center text-slate-600 text-[9px] mt-8 uppercase font-bold tracking-widest">Powered by CAR ZEO Hub</p>
     </div>
 
-    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    
     <script>
-        // আপনার Firebase Config (আগের প্রজেক্টের সাথে মিল রেখে)
         const firebaseConfig = { 
             apiKey: "AIzaSyBrz1xvq4Fpt9-j75-gUS4d8ebqPRLmOK0", 
-            databaseURL: "https://sales-report-nugortech-it-default-rtdb.firebaseio.com", 
-            projectId: "sales-report-nugortech-it"
+            databaseURL: "https://sales-report-nugortech-it-default-rtdb.firebaseio.com"
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // আজকের তারিখ ডিফল্ট সেট করা
         document.getElementById('expDate').valueAsDate = new Date();
 
         function submitExpense() {
             const date = document.getElementById('expDate').value;
+            const cat = document.getElementById('expCat').value;
             const desc = document.getElementById('expDesc').value;
             const taka = document.getElementById('expTaka').value;
             const status = document.getElementById('status');
             const btn = document.getElementById('submitBtn');
 
-            if(!desc || !taka) {
-                status.className = "mt-6 text-center font-bold text-sm text-red-500";
-                status.innerText = "❌ ডেসক্রিপশন এবং টাকা পূরণ করুন!";
-                return;
-            }
+            if(!desc || !taka) return alert("Fill all fields!");
 
             btn.disabled = true;
-            btn.innerText = "Syncing...";
-            status.className = "mt-6 text-center font-bold text-sm text-blue-400";
-            status.innerText = "⏳ Submitting to Cloud...";
+            status.innerText = "⏳ Syncing...";
 
-            // ডাটাবেজে সাবমিট করা
             db.ref('car_zeo_expenses').push({
-                date: date,
-                desc: desc,
-                taka: parseFloat(taka),
-                timestamp: Date.now()
+                date, cat, desc, taka: parseFloat(taka), timestamp: Date.now()
             }).then(() => {
-                status.className = "mt-6 text-center font-bold text-sm text-green-500";
-                status.innerText = "✅ Expense Submitted Successfully!";
-                
-                // ইনপুট ক্লিয়ার করা
+                status.className = "mt-4 text-center font-bold text-xs text-green-500";
+                status.innerText = "✅ Submitted!";
                 document.getElementById('expDesc').value = "";
                 document.getElementById('expTaka').value = "";
-                
-                setTimeout(() => {
-                    status.innerText = "";
-                    btn.disabled = false;
-                    btn.innerText = "Submit Expense";
-                }, 3000);
-            }).catch(err => {
-                alert("Error: " + err.message);
-                btn.disabled = false;
+                setTimeout(() => { status.innerText = ""; btn.disabled = false; }, 2000);
             });
         }
     </script>
