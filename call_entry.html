@@ -3,66 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Expense Entry | CAR ZEO</title>
+    <title>DHAKA Entry | CAR ZEO</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { background: #0b1120; font-family: 'Plus Jakarta Sans', sans-serif; color: white; }
-        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        input, select, textarea { background: rgba(255, 255, 255, 0.05) !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; color: white !important; font-size: 14px !important; padding: 12px !important; border-radius: 12px !important; width: 100%; outline: none; transition: 0.3s; }
+        body { background: #050810; font-family: 'Plus Jakarta Sans', sans-serif; color: white; }
+        .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        
+        input, select, textarea { 
+            background: rgba(255, 255, 255, 0.05) !important; 
+            border: 1px solid rgba(255, 255, 255, 0.1) !important; 
+            color: white !important; font-size: 14px !important; padding: 12px !important; border-radius: 12px !important; width: 100%; outline: none; transition: 0.3s; 
+        }
         input:focus, select:focus, textarea:focus { border-color: #e31e24 !important; background: rgba(255, 255, 255, 0.08) !important; }
-        label { font-size: 10px; color: #64748b; text-transform: uppercase; font-weight: 800; margin-left: 8px; margin-bottom: 4px; display: block; }
+        
+        /* ক্যালেন্ডার আইকন সাদা */
+        input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
+
+        /* ড্রপডাউন কালার */
+        #expCat option { background: #0b1120; color: white; }
+        option[value="Salary"] { color: #22c55e; }
+        option[value="Vehicle Maintenance"] { color: #f43f5e; }
+        option[value="Transport"] { color: #3b82f6; }
+
+        label { font-size: 10px; color: #64748b; text-transform: uppercase; font-weight: 800; margin-left: 10px; margin-bottom: 4px; display: block; }
+        #pinModal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 1000; }
     </style>
 </head>
-<body class="p-4 md:p-10 flex items-center justify-center min-h-screen">
-    <div class="w-full max-w-md">
-        <div class="text-center mb-8">
-            <img src="https://i.ibb.co.com/MymLgRJG/hasib.jpg" class="h-20 mx-auto rounded-2xl shadow-xl mb-4">
-            <h1 class="text-3xl font-black tracking-tighter text-white">CAR <span class="text-red-600">ZEO</span></h1>
-            <p class="text-[10px] text-blue-400 font-bold uppercase tracking-[0.3em] mt-1">Categorized Expense Portal</p>
+<body class="p-4 flex flex-col items-center min-h-screen">
+    
+    <!-- Entry Form -->
+    <div class="w-full max-w-md glass p-8 rounded-[40px] shadow-2xl mb-8">
+        <div class="text-center mb-6">
+            <!-- আপনার দেওয়া নতুন লোগো -->
+            <img src="https://i.ibb.co.com/C3hMvPDz/IMG-5204-JPG.jpg" class="w-36 mx-auto rounded-2xl mb-4 border border-white/10 shadow-xl">
+            <h1 class="text-2xl font-black uppercase italic tracking-tighter text-white">CAR ZEO <span class="text-red-600">DHAKA</span></h1>
+            <p class="text-[9px] text-blue-400 font-bold uppercase tracking-widest">Dhaka Branch Expense Portal</p>
         </div>
 
-        <div class="glass p-8 rounded-[35px] shadow-2xl">
-            <div class="space-y-5">
-                <div>
-                    <label>Date (তারিখ)</label>
-                    <input type="date" id="expDate">
-                </div>
-
-                <div>
-                    <label>Category (খরচের খাত)</label>
-                    <select id="expCat">
-                        <option value="Transport">Transport (যাতায়াত)</option>
-                        <option value="Office Maintenance">Office Maintenance (অফিস মেইনটেন্যান্স)</option>
-                        <option value="Snacks">Snacks (নাস্তা)</option>
-                        <option value="Courier">Courier (কুরিয়ার)</option>
-                        <option value="Other">Other (অন্যান্য)</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label>Item Description (বিবরণ)</label>
-                    <textarea id="expDesc" rows="2" placeholder="Description..."></textarea>
-                </div>
-
-                <div>
-                    <label>Taka (টাকা)</label>
-                    <input type="number" id="expTaka" placeholder="0">
-                </div>
-
-                <div class="pt-2">
-                    <button onclick="submitExpense()" id="submitBtn" class="w-full bg-gradient-to-r from-red-600 to-blue-700 py-4 rounded-2xl font-black uppercase text-sm shadow-xl hover:opacity-90 active:scale-95 transition-all">
-                        Submit Records
-                    </button>
-                </div>
+        <div class="space-y-4">
+            <div><label>Date</label><input type="date" id="expDate"></div>
+            <div><label>Category</label>
+                <select id="expCat">
+                    <option value="Transaction">Transaction</option>
+                    <option value="Other bill">Other bill</option>
+                    <option value="Transport">Transport</option>
+                    <option value="Snacks">Snacks</option>
+                    <option value="Courier">Courier</option>
+                    <option value="Office Maintenance">Office Maintenance</option>
+                    <option value="Rent">Rent</option>
+                    <option value="Salary">Salary</option>
+                    <option value="Vehicle Maintenance">Vehicle Maintenance</option>
+                    <option value="Fuel Cost">Fuel Cost</option>
+                    <option value="Paper Work">Paper Work</option>
+                </select>
             </div>
-            <p id="status" class="mt-4 text-center font-bold text-xs"></p>
+            <div><label>Description</label><textarea id="expDesc" rows="2" placeholder="খরচের বিবরণ..."></textarea></div>
+            <div><label>Taka</label><input type="number" id="expTaka" placeholder="0.00"></div>
+            
+            <button onclick="submitExpense()" id="submitBtn" class="w-full bg-gradient-to-r from-red-600 to-blue-700 py-4 rounded-xl font-black uppercase text-sm mt-2 hover:scale-95 transition-all">Submit records</button>
+        </div>
+        <p id="status" class="mt-4 text-center font-bold text-xs"></p>
+    </div>
+
+    <!-- History Table (ঢাকার ডাটা আলাদা দেখাবে) -->
+    <div class="w-full max-w-4xl glass p-6 rounded-3xl overflow-hidden">
+        <h2 class="text-sm font-bold mb-4 opacity-50 uppercase tracking-widest"><i class="fas fa-history mr-2"></i> Dhaka Recent History</h2>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+                <thead><tr class="text-gray-500 border-b border-white/10"><th class="p-3">Date</th><th>Category</th><th>Details</th><th>Taka</th><th class="text-center">Del</th></tr></thead>
+                <tbody id="historyBody"></tbody>
+            </table>
         </div>
     </div>
 
+    <!-- PIN Modal -->
+    <div id="pinModal"><div class="bg-[#111827] p-8 rounded-3xl border border-gray-800 text-center w-72">
+        <h3 class="font-bold mb-4">Enter Delete PIN</h3>
+        <input type="password" id="adminPIN" class="w-full bg-black/50 border border-white/10 p-2 rounded-xl text-center text-white outline-none mb-4">
+        <div class="flex gap-2"><button onclick="confirmDelete()" class="flex-1 bg-red-600 py-2 rounded-lg font-bold text-sm">OK</button><button onclick="closeModal()" class="flex-1 bg-gray-700 py-2 rounded-lg font-bold text-sm">No</button></div>
+    </div></div>
+
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    
     <script>
+        // আপনার দেওয়া পুরাতন Firebase Config (Nugortech IT)
         const firebaseConfig = { 
             apiKey: "AIzaSyBrz1xvq4Fpt9-j75-gUS4d8ebqPRLmOK0", 
             databaseURL: "https://sales-report-nugortech-it-default-rtdb.firebaseio.com"
@@ -70,30 +98,72 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        document.getElementById('expDate').valueAsDate = new Date();
+        // --- Auto-save & Local Persistence ---
+        const fields = ['expDate', 'expCat', 'expDesc', 'expTaka'];
+        window.onload = () => {
+            fields.forEach(id => {
+                const saved = localStorage.getItem('dhaka_fix_' + id);
+                if (saved) document.getElementById(id).value = saved;
+            });
+            if(!document.getElementById('expDate').value) document.getElementById('expDate').valueAsDate = new Date();
+            loadHistory();
+        };
+        fields.forEach(id => document.getElementById(id).addEventListener('input', () => localStorage.setItem('dhaka_fix_' + id, document.getElementById(id).value)));
 
         function submitExpense() {
-            const date = document.getElementById('expDate').value;
-            const cat = document.getElementById('expCat').value;
-            const desc = document.getElementById('expDesc').value;
-            const taka = document.getElementById('expTaka').value;
-            const status = document.getElementById('status');
-            const btn = document.getElementById('submitBtn');
+            const date = document.getElementById('expDate').value,
+                  cat = document.getElementById('expCat').value,
+                  desc = document.getElementById('expDesc').value,
+                  taka = document.getElementById('expTaka').value;
 
-            if(!desc || !taka) return alert("Fill all fields!");
+            if(!desc || !taka) return alert("সব ঘর পূরণ করুন!");
 
-            btn.disabled = true;
-            status.innerText = "⏳ Syncing...";
+            document.getElementById('submitBtn').disabled = true;
 
-            db.ref('car_zeo_expenses').push({
+            // পুরাতন ডাটাবেজের 'expenses_dhaka' নোডে সেভ হবে যাতে মেইন ডাটা না মুছে
+            db.ref('expenses_dhaka').push({
                 date, cat, desc, taka: parseFloat(taka), timestamp: Date.now()
             }).then(() => {
-                status.className = "mt-4 text-center font-bold text-xs text-green-500";
-                status.innerText = "✅ Submitted!";
-                document.getElementById('expDesc').value = "";
-                document.getElementById('expTaka').value = "";
-                setTimeout(() => { status.innerText = ""; btn.disabled = false; }, 2000);
+                document.getElementById('status').className = "mt-4 text-center font-bold text-xs text-green-500";
+                document.getElementById('status').innerText = "✅ Submitted to Cloud!";
+                
+                document.getElementById('expDesc').value = ""; document.getElementById('expTaka').value = "";
+                localStorage.removeItem('dhaka_fix_expDesc'); localStorage.removeItem('dhaka_fix_expTaka');
+                
+                setTimeout(() => { 
+                    document.getElementById('status').innerText = ""; 
+                    document.getElementById('submitBtn').disabled = false; 
+                }, 2000);
             });
+        }
+
+        function loadHistory() {
+            db.ref('expenses_dhaka').on('value', snap => {
+                const body = document.getElementById('historyBody');
+                body.innerHTML = "";
+                if(snap.val()) {
+                    Object.keys(snap.val()).reverse().slice(0, 15).forEach(key => {
+                        const d = snap.val()[key];
+                        body.innerHTML += `<tr class="border-b border-white/5 hover:bg-white/5">
+                            <td class="p-3 opacity-60">${d.date}</td>
+                            <td class="text-blue-400 font-bold">${d.cat}</td>
+                            <td>${d.desc}</td>
+                            <td class="font-black text-red-500">${d.taka.toLocaleString()}</td>
+                            <td class="text-center"><button onclick="askDelete('${key}')" class="text-gray-600 hover:text-red-500"><i class="fas fa-trash"></i></button></td>
+                        </tr>`;
+                    });
+                }
+            });
+        }
+
+        let delKey = null;
+        function askDelete(key) { delKey = key; document.getElementById('pinModal').style.display="flex"; document.getElementById('adminPIN').focus(); }
+        function closeModal() { document.getElementById('pinModal').style.display="none"; document.getElementById('adminPIN').value=""; }
+        function confirmDelete() {
+            if(document.getElementById('adminPIN').value === "8087") {
+                db.ref('expenses_dhaka/' + delKey).remove();
+                closeModal();
+            } else alert("Wrong PIN!");
         }
     </script>
 </body>
