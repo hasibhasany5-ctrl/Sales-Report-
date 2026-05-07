@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Expense Admin | CAR ZEO</title>
+    <title>Dhaka Admin Hub | CAR ZEO</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -10,16 +10,17 @@
         body { background: #050810; font-family: 'Plus Jakarta Sans', sans-serif; color: white; }
         .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); }
         
-        /* Word File Table Style */
+        /* Word File Table Style for Boss */
         #printArea { background: white; color: black; display: none; width: 1050px; margin: 0 auto; padding: 40px; }
-        .category-block { page-break-after: always; margin-bottom: 40px; } /* প্রতিটি খাতের পর নতুন পেজ */
+        .category-block { page-break-after: always; margin-bottom: 30px; }
         .category-block:last-child { page-break-after: auto; }
         
-        .report-table { width: 100%; border-collapse: collapse; border: 1.5px solid black; margin-top: 10px; }
-        .report-table th { background: #f3f4f6 !important; border: 1.5px solid black; padding: 6px; font-size: 10px; text-transform: uppercase; }
-        .report-table td { border: 1.5px solid black; padding: 6px 10px; font-size: 11px; font-weight: 700; color: black; }
+        .report-table { width: 100%; border-collapse: collapse; border: 1.5px solid black; }
+        .report-table th { background: #f2f2f2 !important; border: 1.5px solid black; padding: 5px; font-size: 9px; text-transform: uppercase; }
+        .report-table td { border: 1.5px solid black; padding: 5px 8px; font-size: 10px; font-weight: 700; color: black; }
         
-        .total-box { border: 2px solid black; padding: 10px; margin-top: 20px; font-weight: 900; text-align: center; font-size: 18px; }
+        .total-box { border: 3px solid black; padding: 15px; margin-top: 30px; font-weight: 900; text-align: center; font-size: 20px; }
+        #pinModal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 1000; }
 
         @media print {
             .no-print { display: none !important; }
@@ -29,21 +30,24 @@
         }
     </style>
 </head>
-<body class="p-4 md:p-10">
+<body class="p-6">
     <div class="max-w-7xl mx-auto no-print">
         <header class="flex justify-between items-center mb-8 glass p-6 rounded-3xl">
             <div class="flex items-center gap-4">
-                <img src="https://i.ibb.co.com/MymLgRJG/hasib.jpg" class="h-14 rounded-xl">
-                <h1 class="text-2xl font-black">Admin Expense Hub</h1>
+                <img src="https://i.ibb.co.com/C3hMvPDz/IMG-5204-JPG.jpg" class="h-14 rounded-xl">
+                <div>
+                    <h1 class="text-2xl font-black">Dhaka Admin Hub</h1>
+                    <p class="text-[9px] text-red-500 font-bold uppercase tracking-widest">Dhaka Branch Management</p>
+                </div>
             </div>
             <div class="flex gap-4 items-center">
-                <input type="month" id="filterMonth" onchange="loadData()" class="bg-white/5 border border-white/10 p-2 rounded-xl text-white text-sm outline-none">
-                <button onclick="window.print()" class="bg-red-600 px-6 py-2 rounded-xl text-xs font-black uppercase"><i class="fas fa-print mr-2"></i>Export Final Report</button>
+                <input type="month" id="filterMonth" onchange="loadData()" class="bg-white/5 border border-white/10 p-2 rounded-xl text-white text-xs outline-none">
+                <button onclick="window.print()" class="bg-blue-600 px-6 py-2 rounded-xl text-[10px] font-black uppercase"><i class="fas fa-print mr-2"></i>Export Final Report</button>
             </div>
         </header>
 
-        <div class="glass p-8 rounded-[35px]">
-            <table class="w-full text-left text-sm">
+        <div class="glass p-6 rounded-[30px]">
+            <table class="w-full text-left text-xs">
                 <thead><tr class="text-slate-500 border-b border-white/10">
                     <th class="p-4">Date</th><th class="p-4">Category</th><th class="p-4">Description</th><th class="p-4">Taka</th><th class="p-4 text-center">Action</th>
                 </tr></thead>
@@ -53,13 +57,19 @@
     </div>
 
     <!-- Print Report Section -->
-    <div id="printArea">
-        <!-- JS will dynamically inject tables here -->
-    </div>
+    <div id="printArea"></div>
+
+    <!-- PIN Modal -->
+    <div id="pinModal"><div class="bg-[#111827] p-8 rounded-3xl border border-gray-800 text-center w-72">
+        <h3 class="font-bold mb-4">Enter Admin PIN</h3>
+        <input type="password" id="adminPIN" class="w-full bg-black/50 border border-white/10 p-2 rounded-xl text-center text-white outline-none mb-4">
+        <div class="flex gap-2"><button onclick="confirmAction()" class="flex-1 bg-red-600 py-2 rounded-lg font-bold">OK</button><button onclick="closeModal()" class="flex-1 bg-gray-700 py-2 rounded-lg font-bold">No</button></div>
+    </div></div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script>
+        // আপনার পুরাতন Firebase Config (sales-report-nugortech-it)
         const firebaseConfig = { 
             apiKey: "AIzaSyBrz1xvq4Fpt9-j75-gUS4d8ebqPRLmOK0", 
             databaseURL: "https://sales-report-nugortech-it-default-rtdb.firebaseio.com"
@@ -68,40 +78,49 @@
         const db = firebase.database();
 
         document.getElementById('filterMonth').value = new Date().toISOString().slice(0, 7);
-        const categories = ["Transport", "Office Maintenance", "Snacks", "Courier", "Other"];
+        
+        // সব ক্যাটাগরি লিস্ট
+        const categories = ["Transaction", "Other bill", "Transport", "Snacks", "Courier", "Office Maintenance", "Rent", "Salary", "Vehicle Maintenance", "Fuel Cost", "Paper Work"];
 
         function loadData() {
-            const filter = document.getElementById('filterMonth').value;
+            const monthFilter = document.getElementById('filterMonth').value;
             const tbody = document.getElementById('tbody');
             const printArea = document.getElementById('printArea');
-            tbody.innerHTML = ""; printArea.innerHTML = "";
+            tbody.innerHTML = "<tr><td colspan='5' class='text-center p-10'>Syncing Dhaka Data...</td></tr>"; 
+            printArea.innerHTML = "";
 
-            db.ref('car_zeo_expenses').once('value', snap => {
+            // ঢাকার ডাটাবেজ নোড রিড করা
+            db.ref('expenses_dhaka').once('value', snap => {
                 const data = snap.val();
                 let grandTotal = 0;
                 let categoryData = {};
                 categories.forEach(c => categoryData[c] = []);
 
+                tbody.innerHTML = "";
+
                 if(data) {
-                    Object.keys(data).forEach(k => {
-                        const d = data[k];
-                        if(d.date.startsWith(filter)) {
-                            // Dashboard List
+                    // তারিখ অনুযায়ী সর্ট করা
+                    const sortedEntries = Object.entries(data).sort((a,b) => new Date(a[1].date) - new Date(b[1].date));
+
+                    sortedEntries.forEach(([key, d]) => {
+                        if(d.date.startsWith(monthFilter)) {
+                            // ড্যাশবোর্ড টেবিল
                             tbody.innerHTML += `<tr class="border-b border-white/5">
                                 <td class="p-4 opacity-70">${d.date}</td>
                                 <td class="p-4 text-blue-400 font-bold">${d.cat}</td>
-                                <td class="p-4">${d.desc}</td>
+                                <td class="p-4 uppercase">${d.desc}</td>
                                 <td class="p-4 text-red-500 font-black">${d.taka.toLocaleString()}</td>
-                                <td class="p-4 text-center"><button onclick="deleteExp('${k}')" class="text-slate-700 hover:text-red-500"><i class="fas fa-trash"></i></button></td>
+                                <td class="p-4 text-center"><button onclick="askPIN('DEL', '${key}')" class="text-slate-700 hover:text-red-500"><i class="fas fa-trash"></i></button></td>
                             </tr>`;
-                            // Group for Printing
+                            
+                            // প্রিন্ট গ্রুপের জন্য ডাটা রাখা
                             if(categoryData[d.cat]) categoryData[d.cat].push(d);
                             grandTotal += d.taka;
                         }
                     });
                 }
 
-                // Generate Individual Category Tables for Printing
+                // প্রিন্ট সেকশন তৈরি (প্রতিটি ক্যাটাগরি আলাদা পেজ)
                 let printHtml = "";
                 categories.forEach(catName => {
                     const items = categoryData[catName];
@@ -109,55 +128,60 @@
                         let subTotal = 0;
                         printHtml += `
                         <div class="category-block">
-                            <div class="flex items-center justify-between border-b-2 border-black pb-2 mb-4">
-                                <img src="https://i.ibb.co.com/MymLgRJG/hasib.jpg" height="60" style="height: 60px">
+                            <div class="flex items-center justify-between border-b-2 border-black pb-2 mb-3">
+                                <img src="https://i.ibb.co.com/C3hMvPDz/IMG-5204-JPG.jpg" height="50" style="height: 50px">
                                 <div class="text-center">
-                                    <h1 class="text-3xl font-black">CAR ZEO</h1>
-                                    <p class="text-[9px] font-bold">EXPENDITURE REPORT: ${catName.toUpperCase()}</p>
+                                    <h1 class="text-2xl font-black">CAR ZEO</h1>
+                                    <p style="font-size: 8px; font-weight: 800;">DHAKA BRANCH OFFICE REPORT</p>
                                 </div>
-                                <div style="width: 60px"></div>
+                                <div style="width: 50px"></div>
                             </div>
+                            <h3 class="text-center text-xs font-bold underline mb-2 uppercase">EXPENSE CATEGORY: ${catName}</h3>
                             <table class="report-table">
-                                <thead><tr><th width="10%">SL</th><th width="15%">Date</th><th width="55%">Description</th><th width="20%">Taka</th></tr></thead>
+                                <thead><tr><th width="8%">SL</th><th width="12%">Date</th><th width="60%">Description</th><th width="20%">Amount (Taka)</th></tr></thead>
                                 <tbody>
                                     ${items.map((it, idx) => {
                                         subTotal += it.taka;
                                         return `<tr><td align="center">${idx+1}</td><td align="center">${it.date}</td><td>${it.desc}</td><td align="center"><strong>${it.taka.toLocaleString()}</strong></td></tr>`;
                                     }).join('')}
                                 </tbody>
-                                <tfoot><tr style="background:#f2f2f2; font-weight:800"><td colspan="3" align="right" style="padding-right:15px">TOTAL ${catName.toUpperCase()}:</td><td align="center">${subTotal.toLocaleString()}</td></tr></tfoot>
+                                <tfoot><tr style="background:#f2f2f2; font-weight:800"><td colspan="3" align="right" style="padding-right:15px">SUB TOTAL:</td><td align="center">${subTotal.toLocaleString()}</td></tr></tfoot>
                             </table>
                             <div class="flex justify-between mt-10">
-                                <div class="border-t border-black w-32 text-center text-[9px] pt-1">Prepared By</div>
-                                <div class="border-t border-black w-32 text-center text-[9px] pt-1">Checked By</div>
+                                <div class="border-t border-black w-32 text-center text-[9px] pt-1 font-bold">Prepared By</div>
+                                <div class="border-t border-black w-32 text-center text-[9px] pt-1 font-bold">Checked By</div>
                             </div>
                         </div>`;
                     }
                 });
 
-                // Final Grand Total Page
+                // গ্র্যান্ড টোটাল সামারি পেজ (একদম শেষে)
                 if(grandTotal > 0) {
                     printHtml += `
-                    <div class="category-block text-center flex flex-col justify-center h-full">
-                        <img src="https://i.ibb.co.com/MymLgRJG/hasib.jpg" height="80" style="height: 80px; margin: 0 auto">
+                    <div class="category-block text-center flex flex-col justify-center h-[90vh]">
+                        <img src="https://i.ibb.co.com/C3hMvPDz/IMG-5204-JPG.jpg" height="80" style="margin: 0 auto; height: 80px">
                         <h1 class="text-4xl font-black mt-4">CAR ZEO</h1>
-                        <h2 class="text-xl underline font-bold mt-10">MONTHLY CONSOLIDATED SUMMARY</h2>
-                        <p class="mt-2 font-bold">Month: ${filter}</p>
-                        <div class="total-box mx-auto w-3/4 mt-20">
+                        <h2 class="text-xl underline font-bold mt-10">DHAKA BRANCH: CONSOLIDATED SUMMARY</h2>
+                        <p class="mt-2 font-bold uppercase">Month: ${monthFilter}</p>
+                        <div class="total-box mx-auto w-2/3 mt-20">
                             GRAND TOTAL EXPENDITURE: ${grandTotal.toLocaleString()} BDT
                         </div>
                         <div class="flex justify-around mt-40">
-                            <div class="border-t border-black w-48 text-center pt-2 font-bold uppercase text-xs">Director Signature</div>
-                            <div class="border-t border-black w-48 text-center pt-2 font-bold uppercase text-xs">Managing Partner</div>
+                            <div class="border-t border-black w-48 text-center pt-1 font-bold text-[10px]">Director Signature</div>
+                            <div class="border-t border-black w-48 text-center pt-1 font-bold text-[10px]">Managing Partner</div>
                         </div>
                     </div>`;
                 }
 
-                printArea.innerHTML = printHtml;
+                printArea.innerHTML = printHtml || "<h2 class='text-center p-20'>No Dhaka records found for this month.</h2>";
             });
         }
 
-        function deleteExp(key) { if(confirm("Delete?")) db.ref('car_zeo_expenses/' + key).remove().then(() => loadData()); }
+        let pAction = null, pKey = null;
+        function askPIN(a, k) { pAction=a; pKey=k; document.getElementById('pinModal').style.display="flex"; document.getElementById('adminPIN').focus(); }
+        function closeModal() { document.getElementById('pinModal').style.display="none"; document.getElementById('adminPIN').value=""; }
+        function confirmAction() { if(document.getElementById('adminPIN').value==="8087"){ if(pAction==="DEL") db.ref('expenses_dhaka/'+pKey).remove(); closeModal(); loadData(); } else alert("Wrong PIN!"); }
+
         loadData();
     </script>
 </body>
