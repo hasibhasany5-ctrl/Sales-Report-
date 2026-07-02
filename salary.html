@@ -13,7 +13,7 @@
         body { margin: 0; background: var(--bg); color: white; padding: 20px; }
 
         /* Dashboard UI */
-        .card { background: var(--glass); backdrop-filter: blur(30px); border: 1px solid rgba(255, 255, 255, 0.1); width: 100%; max-width: 1400px; border-radius: 30px; padding: 30px; box-shadow: 0 30px 60px rgba(0,0,0,0.6); margin: 0 auto; }
+        .card { background: var(--glass); backdrop-filter: blur(30px); border: 1px solid rgba(255, 255, 255, 0.1); width: 100%; max-width: 1400px; border-radius: 25px; padding: 30px; box-shadow: 0 30px 60px rgba(0,0,0,0.6); margin: 0 auto; }
         .header { text-align: center; margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; }
         .logo-img { height: 80px; border-radius: 12px; margin-bottom: 10px; }
         
@@ -30,8 +30,14 @@
         .btn-add { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); }
         .btn-gen { background: linear-gradient(135deg, var(--b), var(--p)); flex: 1; justify-content: center; }
 
-        /* Print Setup (Unique Header) */
-        #printArea { background: white; color: #000; display: none; width: 1150px; margin: 20px auto; padding: 40px; border: 1px solid #ddd; position: relative; }
+        /* Print Setup (Correct Color Fix) */
+        #printArea { 
+            background: white; color: #000; display: none; width: 1150px; 
+            margin: 20px auto; padding: 40px; border: 1px solid #ddd; position: relative; 
+            /* প্রিন্টে কালার ধরে রাখার জন্য */
+            -webkit-print-color-adjust: exact; 
+            print-color-adjust: exact;
+        }
         
         .report-header-wrapper { display: flex; align-items: center; justify-content: center; position: relative; border-bottom: 3px solid var(--b); padding-bottom: 15px; margin-bottom: 20px; }
         .report-logo-side { position: absolute; left: 0; height: 90px; border-radius: 10px; border: 1px solid #eee; }
@@ -43,19 +49,33 @@
         .display-month { font-weight: 800; margin: 5px 0; font-size: 14px; text-align: center; color: #333; }
 
         .final-table { width: 100%; border-collapse: collapse; }
-        .final-table th { background: #002e5b !important; color: white !important; border: 1px solid #000; padding: 8px 2px; font-size: 9px; text-transform: uppercase; }
-        .final-table td { border: 1px solid #000; padding: 8px 2px; text-align: center; font-size: 10px; font-weight: 800; }
+        
+        /* হেডলাইন কালার একদম গাঢ় নীল করা হয়েছে */
+        .final-table th { 
+            background-color: #001a35 !important; /* Solid Darker Navy */
+            color: white !important; 
+            border: 1px solid #000; 
+            padding: 8px 2px; 
+            font-size: 9px; 
+            text-transform: uppercase;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        
+        .final-table td { border: 1px solid #000; padding: 8px 2px; text-align: center; font-size: 10px; font-weight: 800; color: #000; }
         .net-pay-box { background: #f8fafc; color: var(--p) !important; font-size: 11px !important; }
 
         .footer-signs { display: flex; justify-content: space-between; margin-top: 60px; }
-        .sign-line { border-top: 1.5px solid #000; width: 180px; text-align: center; padding-top: 8px; font-weight: 800; font-size: 10px; text-transform: uppercase; }
+        .sign-line { border-top: 1.5px solid #000; width: 180px; text-align: center; padding-top: 8px; font-weight: 800; font-size: 10px; text-transform: uppercase; color: #000; }
 
         @media print {
             .no-print { display: none !important; }
-            #printArea { display: block !important; box-shadow: none; width: 100%; margin: 0; padding: 10px; border: none; }
-            body { background: white; padding: 0; }
+            #printArea { display: block !important; border: none; width: 100%; margin: 0; padding: 10px; }
+            body { background: white; }
             @page { size: landscape; margin: 0.5cm; }
             .final-table td { padding: 6px 2px; }
+            /* প্রিন্টারের কালি বাঁচানোর সেটিং ওভাররাইড করা */
+            .final-table th { background-color: #001a35 !important; color: white !important; }
         }
     </style>
 </head>
@@ -195,7 +215,6 @@
                 const absDed = Math.round(perDay * (absDays > 0 ? absDays : 0));
                 const otPay = Math.round(perDay * otDays);
 
-                // ক্যালকুলেশন: বেসিক থেকে কামানো টাকা + ইনক্রিমেন্ট + ওটি - অ্যাডভান্স - লোন
                 const earnedFromBasic = perDay * att;
                 const net = Math.round(earnedFromBasic + otPay + increase - adv - adj);
                 gTotal += net;
