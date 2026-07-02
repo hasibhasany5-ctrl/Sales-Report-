@@ -3,78 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CAR ZEO | Premium Payroll Hub</title>
+    <title>CAR ZEO | Accurate Payroll System</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root { --p: #e31e24; --b: #002e5b; --bg: #0f172a; --glass: rgba(255, 255, 255, 0.03); }
         * { box-sizing: border-box; font-family: 'Outfit', sans-serif; }
-        body { margin: 0; background: var(--bg); color: white; padding: 20px; }
+        body { margin: 0; background: var(--bg); color: white; padding: 15px; }
 
         /* Dashboard UI */
-        .card { background: var(--glass); backdrop-filter: blur(30px); border: 1px solid rgba(255, 255, 255, 0.1); width: 100%; max-width: 1400px; border-radius: 25px; padding: 30px; box-shadow: 0 30px 60px rgba(0,0,0,0.6); margin: 0 auto; }
-        .header { text-align: center; margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; }
-        .logo-img { height: 80px; border-radius: 12px; margin-bottom: 10px; }
+        .card { background: var(--glass); backdrop-filter: blur(30px); border: 1px solid rgba(255, 255, 255, 0.1); width: 100%; max-width: 1380px; border-radius: 25px; padding: 25px; box-shadow: 0 30px 60px rgba(0,0,0,0.6); margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; }
+        .logo-img { height: 70px; margin-bottom: 5px; }
         
-        .top-row { display: flex; gap: 20px; margin-bottom: 20px; max-width: 300px; }
-        label { font-size: 11px; color: var(--b); font-weight: 800; display: block; margin-bottom: 5px; text-transform: uppercase; margin-left: 10px; }
+        .top-row { display: flex; gap: 20px; margin-bottom: 15px; max-width: 280px; }
+        label { font-size: 10px; color: var(--b); font-weight: 800; display: block; margin-bottom: 4px; text-transform: uppercase; margin-left: 8px; }
 
         .input-table { width: 100%; border-collapse: collapse; }
-        .input-table th { text-align: left; font-size: 10px; padding: 12px 5px; color: #94a3b8; text-transform: uppercase; }
-        input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 10px; border-radius: 10px; color: white; outline: none; transition: 0.3s; font-size: 12px; }
+        .input-table th { text-align: left; font-size: 9px; padding: 10px 4px; color: #94a3b8; text-transform: uppercase; }
+        input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 8px; border-radius: 10px; color: white; outline: none; transition: 0.3s; font-size: 11px; }
         input:focus { border-color: var(--p); background: rgba(255,255,255,0.08); }
 
-        .btn-box { display: flex; gap: 15px; margin-top: 25px; }
-        .btn { padding: 14px 22px; border: none; border-radius: 14px; color: white; font-weight: 800; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px; font-size: 13px; }
+        .btn-box { display: flex; gap: 12px; margin-top: 20px; }
+        .btn { padding: 12px 20px; border: none; border-radius: 12px; color: white; font-weight: 800; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 6px; font-size: 12px; }
         .btn-add { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); }
         .btn-gen { background: linear-gradient(135deg, var(--b), var(--p)); flex: 1; justify-content: center; }
 
         /* Print Setup (Correct Color Fix) */
         #printArea { 
-            background: white; color: #000; display: none; width: 1150px; 
-            margin: 20px auto; padding: 40px; border: 1px solid #ddd; position: relative; 
-            /* প্রিন্টে কালার ধরে রাখার জন্য */
+            background: white; color: #000; display: none; width: 1080px; 
+            margin: 10px auto; padding: 25px 35px; border: 1px solid #ddd; position: relative; 
             -webkit-print-color-adjust: exact; 
             print-color-adjust: exact;
         }
         
-        .report-header-wrapper { display: flex; align-items: center; justify-content: center; position: relative; border-bottom: 3px solid var(--b); padding-bottom: 15px; margin-bottom: 20px; }
-        .report-logo-side { position: absolute; left: 0; height: 90px; border-radius: 10px; border: 1px solid #eee; }
+        .report-header-wrapper { display: flex; align-items: center; justify-content: center; position: relative; border-bottom: 2.5px solid var(--b); padding-bottom: 10px; margin-bottom: 12px; }
+        .report-logo-side { position: absolute; left: 0; height: 75px; border-radius: 8px; }
         .report-center-text { text-align: center; }
-        .company-name { font-size: 45px; font-weight: 800; color: #002e5b; margin: 0; line-height: 1; }
-        .company-info { font-size: 11px; font-weight: 700; color: #555; margin-top: 5px; text-transform: uppercase; }
-
-        .sheet-title { margin-top: 15px; text-decoration: underline; font-size: 20px; font-weight: 800; text-align: center; }
-        .display-month { font-weight: 800; margin: 5px 0; font-size: 14px; text-align: center; color: #333; }
+        .company-name { font-size: 32px; font-weight: 800; color: #002e5b; margin: 0; line-height: 1; }
+        .company-info { font-size: 10px; font-weight: 700; color: #555; margin-top: 3px; text-transform: uppercase; }
+        .sheet-title { margin-top: 10px; text-decoration: underline; font-size: 16px; font-weight: 800; text-align: center; color: #000; }
+        .display-month { font-weight: 800; margin: 3px 0 10px 0; font-size: 12px; text-align: center; color: #444; }
 
         .final-table { width: 100%; border-collapse: collapse; }
         
-        /* হেডলাইন কালার একদম গাঢ় নীল করা হয়েছে */
+        /* হেডলাইন কালার গাঢ় নীল */
         .final-table th { 
-            background-color: #001a35 !important; /* Solid Darker Navy */
+            background-color: #001a35 !important; 
             color: white !important; 
             border: 1px solid #000; 
-            padding: 8px 2px; 
-            font-size: 9px; 
-            text-transform: uppercase;
-            -webkit-print-color-adjust: exact;
+            padding: 6px 1px; 
+            font-size: 8.5px; 
+            text-transform: uppercase; 
+            -webkit-print-color-adjust: exact; 
             print-color-adjust: exact;
         }
-        
-        .final-table td { border: 1px solid #000; padding: 8px 2px; text-align: center; font-size: 10px; font-weight: 800; color: #000; }
-        .net-pay-box { background: #f8fafc; color: var(--p) !important; font-size: 11px !important; }
 
-        .footer-signs { display: flex; justify-content: space-between; margin-top: 60px; }
-        .sign-line { border-top: 1.5px solid #000; width: 180px; text-align: center; padding-top: 8px; font-weight: 800; font-size: 10px; text-transform: uppercase; color: #000; }
+        .final-table td { border: 1px solid #000; padding: 5px 1px; text-align: center; font-size: 9.5px; font-weight: 800; line-height: 1.1; color: #000; }
+        .net-pay-box { background: #f0f0f0; color: var(--p) !important; font-size: 10.5px !important; border: 1px solid #000 !important; }
+
+        .footer-signs { display: flex; justify-content: space-between; margin-top: 50px; }
+        .sign-line { border-top: 1.2px solid #000; width: 160px; text-align: center; padding-top: 6px; font-weight: 800; font-size: 9px; text-transform: uppercase; color: #000; }
 
         @media print {
             .no-print { display: none !important; }
-            #printArea { display: block !important; border: none; width: 100%; margin: 0; padding: 10px; }
+            #printArea { display: block !important; border: none; width: 100%; margin: 0; padding: 5px; }
             body { background: white; }
-            @page { size: landscape; margin: 0.5cm; }
-            .final-table td { padding: 6px 2px; }
-            /* প্রিন্টারের কালি বাঁচানোর সেটিং ওভাররাইড করা */
+            @page { size: landscape; margin: 0.3cm; }
+            .final-table td { padding: 4px 1px; }
             .final-table th { background-color: #001a35 !important; color: white !important; }
         }
     </style>
@@ -84,7 +81,7 @@
     <div class="card no-print">
         <div class="header">
             <img src="https://i.ibb.co.com/MymLgRJG/hasib.jpg" class="logo-img" alt="CAR ZEO">
-            <h1 style="margin:0; font-size: 28px;">CAR ZEO DASHBOARD</h1>
+            <h1 style="margin:0; font-size: 24px; letter-spacing: -0.5px;">CAR ZEO PAYROLL</h1>
         </div>
 
         <div class="top-row">
@@ -98,19 +95,19 @@
             <thead>
                 <tr>
                     <th width="15%">Employee Name</th>
-                    <th width="8%">Attendance</th>
-                    <th width="10%">Basic Salary</th>
+                    <th width="8%">Att. (Days)</th>
+                    <th width="12%">Basic Salary</th>
                     <th width="10%">Increase (Inc.)</th>
                     <th width="8%">OT (Days)</th>
                     <th width="10%">Advance</th>
                     <th width="10%">Loan Adj.</th>
-                    <th width="10%">Total Loan</th>
-                    <th width="10%">Rem. Loan</th>
+                    <th width="10%">Tot Loan</th>
+                    <th width="10%">Rem Loan</th>
                 </tr>
             </thead>
             <tbody id="inputBody">
                 <tr class="emp-row">
-                    <td><input type="text" class="row-name" placeholder="Type Name"></td>
+                    <td><input type="text" class="row-name" placeholder="Full Name"></td>
                     <td><input type="number" class="row-att" value="30"></td>
                     <td><input type="number" class="row-basic" value="0"></td>
                     <td><input type="number" class="row-increase" value="0"></td>
@@ -146,7 +143,7 @@
             <thead>
                 <tr>
                     <th>SL</th>
-                    <th style="text-align:left; padding-left:10px;">Name of Employee</th>
+                    <th style="text-align:left; padding-left:8px;">Employee Name</th>
                     <th>Att.</th>
                     <th>Abs.</th>
                     <th>Basic</th>
@@ -161,9 +158,9 @@
             </thead>
             <tbody id="finalBody"></tbody>
             <tfoot>
-                <tr style="background: #eee;">
-                    <td colspan="11" style="text-align:right; padding-right:15px; font-weight:800; border:1px solid #000;">GRAND TOTAL PAYABLE:</td>
-                    <td id="grandTotal" style="font-weight:900; color: #e31e24; border:1px solid #000; font-size: 12px;">0 BDT</td>
+                <tr style="background: #f0f0f0;">
+                    <td colspan="11" style="text-align:right; padding-right:12px; font-weight:800; border:1px solid #000; font-size: 10px;">GRAND TOTAL PAYABLE:</td>
+                    <td id="grandTotal" style="font-weight:900; color: #e31e24; border:1px solid #000; font-size: 11px;">0 BDT</td>
                 </tr>
             </tfoot>
         </table>
@@ -174,8 +171,8 @@
             <div class="sign-line">Authorized Signature</div>
         </div>
 
-        <div style="text-align:center; margin-top: 30px;" class="no-print">
-            <button class="btn" style="background:#000; margin: 0 auto;" onclick="window.print()"><i class="fas fa-print"></i> PRINT SALARY SHEET</button>
+        <div style="text-align:center; margin-top: 25px;" class="no-print">
+            <button class="btn" style="background:#000; margin: 0 auto; padding: 10px 30px;" onclick="window.print()"><i class="fas fa-print"></i> PRINT SALARY SHEET</button>
         </div>
     </div>
 
@@ -193,7 +190,7 @@
 
         function calculatePayroll() {
             const month = document.getElementById('targetMonth').value;
-            if(!month) return alert("Enter Salary Month!");
+            if(!month) return alert("Enter Month!");
 
             const rows = document.querySelectorAll('.emp-row');
             const finalBody = document.getElementById('finalBody');
@@ -208,20 +205,29 @@
                 const adv = parseFloat(row.querySelector('.row-adv').value || 0);
                 const adj = parseFloat(row.querySelector('.row-adj').value || 0);
 
-                if(!name || basic <= 0) return;
+                if(!name || (basic + increase) <= 0) return;
 
-                const perDay = basic / 30;
+                // নতুন সঠিক ক্যালকুলেশন:
+                // ১. গ্রস স্যালারি = বেসিক + ইনক্রিজ
+                const totalGross = basic + increase;
+                
+                // ২. প্রতিদিনের রেট = গ্রস / ৩০
+                const perDay = totalGross / 30;
+                
+                // ৩. অ্যাবসেন্ট ডিডাকশন = (৩০ - উপস্থিতি) * প্রতিদিনের রেট
                 const absDays = 30 - att;
                 const absDed = Math.round(perDay * (absDays > 0 ? absDays : 0));
+                
+                // ৪. ওটি পে = ওটি দিন * প্রতিদিনের রেট
                 const otPay = Math.round(perDay * otDays);
 
-                const earnedFromBasic = perDay * att;
-                const net = Math.round(earnedFromBasic + otPay + increase - adv - adj);
+                // ৫. নিট পে = গ্রস + ওটি - অ্যাবসেন্ট ডিডাকশন - অ্যাডভান্স - লোন
+                const net = Math.round(totalGross + otPay - absDed - adv - adj);
                 gTotal += net;
 
                 html += `<tr>
                     <td>${sl++}</td>
-                    <td style="text-align:left; padding-left:10px;">${name.toUpperCase()}</td>
+                    <td style="text-align:left; padding-left:8px;">${name.toUpperCase()}</td>
                     <td>${att}</td>
                     <td>${absDays > 0 ? absDays : 0}</td>
                     <td>${basic.toLocaleString()}</td>
